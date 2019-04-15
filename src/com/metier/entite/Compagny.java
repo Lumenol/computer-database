@@ -2,40 +2,40 @@ package com.metier.entite;
 
 import java.util.Objects;
 
-public class Manufacturer {
+public class Compagny {
 
-	public static class ManufacturerBuilder {
+	public static class CompagnyBuilder {
 
-		private ManufacturerBuilder() {
+		private CompagnyBuilder() {
 		}
 
 		private Long id;
 		private String name;
 
-		public Manufacturer build() {
-			return new Manufacturer(id, name);
+		public Compagny build() {
+			return new Compagny(id, name);
 		}
 
-		public ManufacturerBuilder name(String name) {
+		public CompagnyBuilder name(String name) {
 			this.name = name;
 			return this;
 		}
 
-		public ManufacturerBuilder id(long id) {
+		public CompagnyBuilder id(long id) {
 			this.id = id;
 			return this;
 		}
 
 	}
 
-	public static ManufacturerBuilder builder() {
-		return new ManufacturerBuilder();
+	public static CompagnyBuilder builder() {
+		return new CompagnyBuilder();
 	}
 
 	private final Long id;
 	private final String name;
 
-	private Manufacturer(Long id, String name) {
+	private Compagny(Long id, String name) {
 		Objects.requireNonNull(name);
 		this.id = id;
 		this.name = name;
@@ -57,7 +57,7 @@ public class Manufacturer {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Manufacturer other = (Manufacturer) obj;
+		Compagny other = (Compagny) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -72,7 +72,7 @@ public class Manufacturer {
 
 	@Override
 	public String toString() {
-		return "Manufacturer [id=" + id + ", name=" + name + "]";
+		return "Compagny [id=" + id + ", name=" + name + "]";
 	}
 
 	public Long getId() {

@@ -9,7 +9,7 @@ public class Computer {
 	public static class ComputerBuilder {
 		private Long id;
 		private String name;
-		private Manufacturer manufacturer;
+		private Compagny manufacturer;
 		private LocalDate introduced;
 		private LocalDate discontinued;
 
@@ -27,7 +27,7 @@ public class Computer {
 			return this;
 		}
 
-		public ComputerBuilder manufacturer(Manufacturer manufacturer) {
+		public ComputerBuilder manufacturer(Compagny manufacturer) {
 			this.manufacturer = manufacturer;
 			return this;
 		}
@@ -46,7 +46,7 @@ public class Computer {
 
 	private final Long id;
 	private final String name;
-	private final Manufacturer manufacturer;
+	private final Compagny manufacturer;
 	private final LocalDate introduced;
 	private final Optional<LocalDate> discontinued;
 
@@ -85,7 +85,7 @@ public class Computer {
 		return name;
 	}
 
-	public Manufacturer getManufacturer() {
+	public Compagny getManufacturer() {
 		return manufacturer;
 	}
 
@@ -97,7 +97,7 @@ public class Computer {
 		return discontinued;
 	}
 
-	private Computer(Long id, String name, Manufacturer manufacturer, LocalDate introduced,
+	private Computer(Long id, String name, Compagny manufacturer, LocalDate introduced,
 			Optional<LocalDate> discontinued) {
 		Objects.requireNonNull(manufacturer);
 
