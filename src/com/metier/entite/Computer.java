@@ -97,6 +97,10 @@ public class Computer {
 		return discontinued;
 	}
 
+	public static ComputerBuilder builder() {
+		return new ComputerBuilder();
+	}
+
 	private Computer(Long id, String name, Compagny manufacturer, LocalDate introduced,
 			Optional<LocalDate> discontinued) {
 		Objects.requireNonNull(manufacturer);
