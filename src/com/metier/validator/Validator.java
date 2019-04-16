@@ -1,5 +1,11 @@
 package com.metier.validator;
 
+import java.util.Map;
+
 public interface Validator<T> {
-	boolean isValid(T in);
+	default boolean isValid() {
+		return errors().isEmpty();
+	}
+
+	Map<String, String> errors();
 }

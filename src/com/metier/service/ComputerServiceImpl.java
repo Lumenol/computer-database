@@ -6,13 +6,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.metier.ValidatorFactory;
-import com.metier.dao.CompagnyDAO;
+import com.metier.dao.CompanyDAO;
 import com.metier.dao.ComputerDAO;
 import com.metier.dto.CompagnyDTO;
 import com.metier.dto.ComputerDTO;
 import com.metier.dto.CreateComputerDTO;
 import com.metier.dto.UpdateComputerDTO;
-import com.metier.entite.Compagny;
+import com.metier.entite.Company;
 import com.metier.entite.Computer;
 import com.metier.exception.CompagnyNotFoundException;
 import com.metier.exception.ComputerNotFoundException;
@@ -21,7 +21,7 @@ import com.metier.validator.Validator;
 public class ComputerServiceImpl implements ComputerService {
 
     private final ComputerDAO computerDAO;
-    private final CompagnyDAO compagnyDAO;
+    private final CompanyDAO compagnyDAO;
     private final ValidatorFactory<CreateComputerDTO> createComputerValidatorFactory;
     private final ValidatorFactory<UpdateComputerDTO> updateComputerValidatorFactory;
 
@@ -42,7 +42,7 @@ public class ComputerServiceImpl implements ComputerService {
     }
 
     private Computer from(UpdateComputerDTO dto) {
-	Optional<Compagny> mannufacturer = compagnyDAO.findById(dto.getMannufacturerId());
+	Optional<Company> mannufacturer = compagnyDAO.findById(dto.getMannufacturerId());
 	if (mannufacturer.isPresent()) {
 	    return Computer.builder().id(dto.getId()).name(dto.getName()).introduced(dto.getIntroduced())
 		    .discontinued(dto.getDiscontinued()).manufacturer(mannufacturer.get()).build();
@@ -52,16 +52,16 @@ public class ComputerServiceImpl implements ComputerService {
     }
 
     private Computer from(CreateComputerDTO dto) {
-	Optional<Compagny> mannufacturer = compagnyDAO.findById(dto.getMannufacturerId());
+	Optional<Company> mannufacturer = compagnyDAO.findById(dto.getMannufacturerId());
 	if (mannufacturer.isPresent()) {
-	    return Computer.builder().id(dto.getId()).name(dto.getName()).introduced(dto.getIntroduced())
+	    return Computer.builder().name(dto.getName()).introduced(dto.getIntroduced())
 		    .discontinued(dto.getDiscontinued()).manufacturer(mannufacturer.get()).build();
 	} else {
 	    throw new CompagnyNotFoundException(dto.getMannufacturerId());
 	}
     }
 
-    public ComputerServiceImpl(ComputerDAO computerDAO, CompagnyDAO compagnyDAO,
+    public ComputerServiceImpl(ComputerDAO computerDAO, CompanyDAO compagnyDAO,
 	    ValidatorFactory<CreateComputerDTO> createComputerValidatorFactory,
 	    ValidatorFactory<UpdateComputerDTO> updateComputerValidatorFactory) {
 	super();
@@ -97,7 +97,7 @@ public class ComputerServiceImpl implements ComputerService {
     public void create(CreateComputerDTO computer) {
 	Validator<CreateComputerDTO> validator = createComputerValidatorFactory.get(computer);
 	if (validator.isValid()) {
-	    computerDAO.update(from(computer));
+	    computerDAO.create(from(computer));
 	}
     }
 

@@ -2,7 +2,7 @@ package com.metier.entite;
 
 import java.util.Objects;
 
-public class Compagny {
+public class Company {
 
 	public static class CompagnyBuilder {
 
@@ -12,8 +12,8 @@ public class Compagny {
 		private Long id;
 		private String name;
 
-		public Compagny build() {
-			return new Compagny(id, name);
+		public Company build() {
+			return new Company(id, name);
 		}
 
 		public CompagnyBuilder name(String name) {
@@ -35,7 +35,7 @@ public class Compagny {
 	private final Long id;
 	private final String name;
 
-	private Compagny(Long id, String name) {
+	private Company(Long id, String name) {
 		Objects.requireNonNull(name);
 		this.id = id;
 		this.name = name;
@@ -57,7 +57,7 @@ public class Compagny {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Compagny other = (Compagny) obj;
+		Company other = (Company) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

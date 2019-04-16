@@ -4,24 +4,19 @@ import java.time.LocalDate;
 
 public class CreateComputerDTO {
     private LocalDate discontinued;
-    private long id;
     private LocalDate introduced;
-    private long mannufacturerId;
+    private Long mannufacturerId;
     private String name;
 
     public LocalDate getDiscontinued() {
 	return discontinued;
     }
 
-    public long getId() {
-	return id;
-    }
-
     public LocalDate getIntroduced() {
 	return introduced;
     }
 
-    public long getMannufacturerId() {
+    public Long getMannufacturerId() {
 	return mannufacturerId;
     }
 
@@ -33,15 +28,11 @@ public class CreateComputerDTO {
 	this.discontinued = discontinued;
     }
 
-    public void setId(long id) {
-	this.id = id;
-    }
-
     public void setIntroduced(LocalDate introduced) {
 	this.introduced = introduced;
     }
 
-    public void setMannufacturerId(long mannufacturerId) {
+    public void setMannufacturerId(Long mannufacturerId) {
 	this.mannufacturerId = mannufacturerId;
     }
 

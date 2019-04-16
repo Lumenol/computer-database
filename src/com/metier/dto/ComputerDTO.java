@@ -2,7 +2,7 @@ package com.metier.dto;
 
 import java.time.LocalDate;
 
-import com.metier.entite.Compagny;
+import com.metier.entite.Company;
 
 public class ComputerDTO {
 	private LocalDate discontinued;
