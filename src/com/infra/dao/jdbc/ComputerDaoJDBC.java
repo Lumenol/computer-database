@@ -16,11 +16,12 @@ import com.infra.dao.ConnectionFactory;
 import com.metier.dao.ComputerDAO;
 import com.metier.entite.Company;
 import com.metier.entite.Computer;
+import com.metier.entite.Computer.ComputerBuilder;
 
 public class ComputerDaoJDBC implements ComputerDAO {
 
-    private static final String SQL_FIND_BY_ID = "SELECT A.id AS id,A.name AS name ,A.introduced AS introduced ,A.discontinued AS discontinued ,B.name AS company_name FROM computer AS A JOIN company AS B ON A.company_id = B.id WHERE A.id = ?";
-    private static final String SQL_FIND_ALL = "SELECT A.id AS id,A.name AS name ,A.introduced AS introduced ,A.discontinued AS discontinued ,B.name AS company_name FROM computer AS A JOIN company AS B ON A.company_id = B.id ORDER BY A.id";
+    private static final String SQL_FIND_BY_ID = "SELECT A.id AS id,A.name AS name ,A.introduced AS introduced ,A.discontinued AS discontinued ,B.id AS company_id,B.name AS company_name FROM computer AS A LEFT JOIN company AS B ON A.company_id = B.id WHERE A.id = ?";
+    private static final String SQL_FIND_ALL = "SELECT A.id AS id,A.name AS name ,A.introduced AS introduced ,A.discontinued AS discontinued ,B.id AS company_id,B.name AS company_name FROM computer AS A LEFT JOIN company AS B ON A.company_id = B.id ORDER BY A.id";
     private static final String SQL_CREATE = "INSERT INTO computer (name, introduced,discontinued,company_id) VALUES (?,?,?,?)";
     private static final String SQL_UPDATE = "UPDATE computer SET(name, introduced,discontinued,company_id) VALUES (?,?,?,?) WHERE id=?";
     private static final String SQL_DELETE = "DELETE FROM computer WHERE id=?";
@@ -40,11 +41,15 @@ public class ComputerDaoJDBC implements ComputerDAO {
 		    .orElse(null);
 	    LocalDate discontinued = Optional.ofNullable(resultSet.getDate("discontinued")).map(Date::toLocalDate)
 		    .orElse(null);
-	    String compagnyName = resultSet.getString("company_name");
-
-	    Company mannufacturer = Company.builder().name(compagnyName).build();
-	    return Computer.builder().id(id).name(name).introduced(introduced).discontinued(discontinued)
-		    .manufacturer(mannufacturer).build();
+	    ComputerBuilder computerBuilder = Computer.builder().id(id).name(name).introduced(introduced)
+		    .discontinued(discontinued);
+	    Long companyId = resultSet.getLong("company_id");
+	    if (Objects.nonNull(companyId)) {
+		String compagnyName = resultSet.getString("company_name");
+		Company mannufacturer = Company.builder().id(companyId).name(compagnyName).build();
+		computerBuilder.manufacturer(mannufacturer);
+	    }
+	    return computerBuilder.build();
 
 	} catch (SQLException e) {
 	    // TODO Auto-generated catch block

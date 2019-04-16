@@ -21,7 +21,8 @@ import com.ui.dto.CreateComputerDTO;
 public class Controller {
 
     private static enum State {
-	SHOW_MENU, SHOW_LIST_COMPUTER, SHOW_DETAIL_COMPUTER, DELETE_COMPUTER, CREATE_COMPUTER, SHOW_LIST_COMPANY
+	SHOW_MENU, SHOW_LIST_COMPUTER, SHOW_DETAIL_COMPUTER, DELETE_COMPUTER, CREATE_COMPUTER, SHOW_LIST_COMPANY,
+	UPDATE_COMPUTER
     }
 
     private final Ui ui;
@@ -51,10 +52,40 @@ public class Controller {
 	    case SHOW_LIST_COMPANY:
 		showListCampany();
 		break;
+	    case UPDATE_COMPUTER:
+		updateComputer();
+		break;
 	    default:
 		break;
 	    }
 	}
+    }
+
+    private void updateComputer() {
+	CreateComputerDTO dtoUi = ui.getUpdateComputerDTO();
+	com.metier.dto.CreateComputerDTO dtoMetier = new com.metier.dto.CreateComputerDTO();
+
+	dtoMetier.setName(dtoUi.getName());
+	try {
+	    dtoMetier.setMannufacturerId(Long.valueOf(dtoUi.getMannufacturer()));
+	} catch (NumberFormatException e) {
+	    e.printStackTrace();
+	}
+
+	try {
+	    dtoMetier.setIntroduced(LocalDate.parse(dtoUi.getIntroduced()));
+	} catch (DateTimeException e) {
+	    e.printStackTrace();
+	}
+
+	try {
+	    dtoMetier.setIntroduced(LocalDate.parse(dtoUi.getDiscontinued()));
+	} catch (DateTimeException e) {
+	    e.printStackTrace();
+	}
+
+	computerService.create(dtoMetier);
+	state = State.SHOW_MENU;
     }
 
     private void showListCampany() {
@@ -171,6 +202,8 @@ public class Controller {
 	case LIST_COMPANY:
 	    state = State.SHOW_LIST_COMPANY;
 	    break;
+	case UPDATE_COMPUTER:
+	    state = State.UPDATE_COMPUTER;
 	default:
 	    break;
 	}

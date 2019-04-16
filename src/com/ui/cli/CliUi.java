@@ -25,13 +25,16 @@ public class CliUi implements Ui {
 	System.out.println("2 - Lister les ordinateurs");
 	System.out.println("3 - Détail d'un ordinateur");
 	System.out.println("4 - Supprimer un ordinateur");
-	System.out.println("5 - Crée un ordinateur");
+	System.out.println("5 - Supprimer un ordinateur");
+	System.out.println("6 - Crée un ordinateur");
     }
 
     @Override
     public Action getInput() {
 	int input = scanner.nextInt();
 	switch (input) {
+	case 1:
+	    return Action.LIST_COMPANY;
 	case 2:
 	    return Action.LIST_COMPUTER;
 	case 3:
@@ -40,8 +43,8 @@ public class CliUi implements Ui {
 	    return Action.DELETE_COMPUTER;
 	case 5:
 	    return Action.CREATE_COMPUTER;
-	case 1:
-	    return Action.LIST_COMPANY;
+	case 6:
+	    return Action.UPDATE_COMPUTER;
 	default:
 	    return Action.UNKNOW;
 	}
@@ -55,8 +58,9 @@ public class CliUi implements Ui {
 
     @Override
     public void showDetail(ComputerDetailDTO computer) {
-	System.out.println("id: " + computer.getId() + "\tnom:" + computer.getName() + "\tmise en service:"
-		+ computer.getIntroduced()+"\tmise hors service:"+computer.getDiscontinued());
+	System.out.println("id: " + computer.getId() + "\tnom:" + computer.getName() + "\t fabricant:"
+		+ computer.getMannufacturer() + "\tmise en service:" + computer.getIntroduced() + "\tmise hors service:"
+		+ computer.getDiscontinued());
     }
 
     @Override
@@ -73,20 +77,19 @@ public class CliUi implements Ui {
 
     @Override
     public CreateComputerDTO getCreateComputerDTO() {
-	// TODO ne marche pas pour lire sur plusieurs ligne
 	CreateComputerDTO createComputerDTO = new CreateComputerDTO();
 
-	System.out.println("Nom");
-	createComputerDTO.setName("Le nouveau");
+	System.out.print("Nom: ");
+	createComputerDTO.setName(scanner.next());
 
-	System.out.println("Date de mise en service aaaa-mm-jj");
-	createComputerDTO.setIntroduced("2017-01-04");
+	System.out.print("Date de mise en service aaaa-mm-jj: ");
+	createComputerDTO.setIntroduced(scanner.next());
 
-	System.out.println("Date de mise hors service aaaa-mm-jj");
-	createComputerDTO.setDiscontinued("");
+	System.out.print("Date de mise hors service aaaa-mm-jj: ");
+	createComputerDTO.setDiscontinued(scanner.next());
 
-	System.out.println("Identifiant du fabricant");
-	createComputerDTO.setMannufacturer("1");
+	System.out.print("Identifiant du fabricant: ");
+	createComputerDTO.setMannufacturer(scanner.next());
 
 	return createComputerDTO;
     }
