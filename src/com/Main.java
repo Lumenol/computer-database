@@ -32,7 +32,9 @@ import com.infra.dao.jdbc.CompanyDaoJDBC;
 import com.infra.dao.jdbc.ComputerDaoJDBC;
 import com.infra.dao.mapper.ResultSetMapper;
 import com.infra.dao.mapper.ResultSetToCompanyMapper;
+import com.infra.dao.mapper.ResultSetToComputerMapper;
 import com.infra.dao.mapper.ResultSetToListCompanyMapper;
+import com.infra.dao.mapper.ResultSetToListComputerMapper;
 import com.ui.Ui;
 import com.ui.cli.CliUi;
 
@@ -50,7 +52,10 @@ public class Main {
     }
 
     private static ComputerService computerService(ConnectionFactory connectionFactory, CompanyDAO companyDAO) {
-	ComputerDAO computerDAO = new ComputerDaoJDBC(connectionFactory);
+	ResultSetMapper<Computer> resultSetToComputerMapper = new ResultSetToComputerMapper();
+	ResultSetMapper<List<Computer>> resultSetToListComputerMapper = new ResultSetToListComputerMapper(
+		resultSetToComputerMapper);
+	ComputerDAO computerDAO = new ComputerDaoJDBC(connectionFactory, resultSetToListComputerMapper);
 
 	ValidatorFactory<CreateComputerDTO> createValidatorFactory = CreateComputerValidator::new;
 	ValidatorFactory<UpdateComputerDTO> updateValidatorFactory = UpdateComputerValidator::new;
