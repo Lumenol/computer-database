@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import com.business.dto.CompanyDTO;
 import com.business.dto.ComputerDTO;
+import com.business.dto.UpdateComputerDTO;
 import com.business.exception.ComputerNotFoundException;
 import com.business.service.CompanyService;
 import com.business.service.ComputerService;
@@ -22,7 +23,7 @@ public class Controller {
 
     private static enum State {
 	SHOW_MENU, SHOW_LIST_COMPUTER, SHOW_DETAIL_COMPUTER, DELETE_COMPUTER, CREATE_COMPUTER, SHOW_LIST_COMPANY,
-	UPDATE_COMPUTER
+	UPDATE_COMPUTER, QUIT
     }
 
     private static CompanyListDTO toCompanyListDTO(CompanyDTO company) {
@@ -31,6 +32,7 @@ public class Controller {
 	companyListDTO.setName(company.getName());
 	return companyListDTO;
     }
+
     private static ComputerDetailDTO toComputerDetailDTO(ComputerDTO computer) {
 	ComputerDetailDTO computerDetailDTO = new ComputerDetailDTO();
 	computerDetailDTO.setId(Long.toString(computer.getId()));
@@ -50,6 +52,7 @@ public class Controller {
 
 	return computerDetailDTO;
     }
+
     private static ComputerListDTO toComputerListDTO(ComputerDTO computer) {
 	ComputerListDTO computerListDTO = new ComputerListDTO();
 	computerListDTO.setId(Long.toString(computer.getId()));
@@ -136,7 +139,7 @@ public class Controller {
 
     private void showMenu() {
 	ui.showMenu();
-	Action action = ui.getInput();
+	Action action = ui.getInputMenu();
 	switch (action) {
 	case LIST_COMPUTER:
 	    state = State.SHOW_LIST_COMPUTER;
@@ -155,6 +158,10 @@ public class Controller {
 	    break;
 	case UPDATE_COMPUTER:
 	    state = State.UPDATE_COMPUTER;
+	    break;
+	case QUIT:
+	    state = State.QUIT;
+	    break;
 	default:
 	    break;
 	}
@@ -184,6 +191,9 @@ public class Controller {
 	    case UPDATE_COMPUTER:
 		updateComputer();
 		break;
+	    case QUIT:
+		ui.showGoodBye();
+		return;
 	    default:
 		break;
 	    }
@@ -191,7 +201,31 @@ public class Controller {
     }
 
     private void updateComputer() {
-	// TODO a faire
+	com.ui.dto.UpdateComputerDTO dtoUi = ui.getUpdateComputerDTO();
+	UpdateComputerDTO dtoMetier = new UpdateComputerDTO();
+
+	dtoMetier.setId(Long.valueOf(dtoUi.getId()));
+	dtoMetier.setName(dtoUi.getName());
+	try {
+	    dtoMetier.setMannufacturerId(Long.valueOf(dtoUi.getMannufacturer()));
+	} catch (NumberFormatException e) {
+	    e.printStackTrace();
+	}
+
+	try {
+	    dtoMetier.setIntroduced(LocalDate.parse(dtoUi.getIntroduced()));
+	} catch (DateTimeException e) {
+	    e.printStackTrace();
+	}
+
+	try {
+	    dtoMetier.setIntroduced(LocalDate.parse(dtoUi.getDiscontinued()));
+	} catch (DateTimeException e) {
+	    e.printStackTrace();
+	}
+	
+	computerService.update(dtoMetier);
+
 	state = State.SHOW_MENU;
     }
 

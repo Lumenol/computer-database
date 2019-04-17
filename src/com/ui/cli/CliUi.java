@@ -50,9 +50,11 @@ public class CliUi implements Ui {
     }
 
     @Override
-    public Action getInput() {
+    public Action getInputMenu() {
 	int input = scanner.nextInt();
 	switch (input) {
+	case 0:
+	    return Action.QUIT;
 	case 1:
 	    return Action.LIST_COMPANY;
 	case 2:
@@ -71,9 +73,25 @@ public class CliUi implements Ui {
     }
 
     @Override
-    public UpdateComputerDTO getUpdateComputerDTO() {
-	// TODO Auto-generated method stub
-	return null;
+    public com.ui.dto.UpdateComputerDTO getUpdateComputerDTO() {
+	com.ui.dto.UpdateComputerDTO dto = new com.ui.dto.UpdateComputerDTO();
+
+	System.out.print("Id: ");
+	dto.setId(scanner.next());
+
+	System.out.print("Nom: ");
+	dto.setName(scanner.next());
+
+	System.out.print("Date de mise en service aaaa-mm-jj: ");
+	dto.setIntroduced(scanner.next());
+
+	System.out.print("Date de mise hors service aaaa-mm-jj: ");
+	dto.setDiscontinued(scanner.next());
+
+	System.out.print("Identifiant du fabricant: ");
+	dto.setMannufacturer(scanner.next());
+
+	return dto;
     }
 
     @Override
@@ -103,12 +121,18 @@ public class CliUi implements Ui {
     @Override
     public void showMenu() {
 	System.out.println("Le menu");
+	System.out.println("0 - Quitter");
 	System.out.println("1 - Lister les companies");
 	System.out.println("2 - Lister les ordinateurs");
 	System.out.println("3 - Détail d'un ordinateur");
 	System.out.println("4 - Supprimer un ordinateur");
 	System.out.println("5 - Crée un ordinateur");
 	System.out.println("6 - Mettre à jour un ordinateur");
+    }
+
+    @Override
+    public void showGoodBye() {
+	System.out.println("Au revoir");
     }
 
 }

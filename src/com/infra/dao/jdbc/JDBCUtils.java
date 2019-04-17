@@ -48,6 +48,11 @@ public class JDBCUtils {
     private static ResultProvider resultSet = PreparedStatement::getResultSet;
     private static ResultProvider generatedKeys = PreparedStatement::getGeneratedKeys;
 
+    public static ResultSetMapper<Long> keyMapper = ps -> {
+	ps.first();
+	return ps.getLong(1);
+    };
+
     public static void delete(ConnectionFactory connectionFactory, String sql, Object... args) throws SQLException {
 	execute(ResultSetMapper.identity(), connectionFactory, simpleStatementFactory, executeUpdate, noResult, sql,
 		args);
@@ -63,9 +68,8 @@ public class JDBCUtils {
 	return execute(mapper, connectionFactory, simpleStatementFactory, execute, resultSet, sql, args);
     }
 
-    public static <T> T insert(ResultSetMapper<T> mapper, ConnectionFactory connectionFactory, String sql,
-	    Object... args) throws SQLException {
-	return execute(mapper, connectionFactory, generetedKeysStatementFactory, executeUpdate, generatedKeys, sql,
+    public static Long insert(ConnectionFactory connectionFactory, String sql, Object... args) throws SQLException {
+	return execute(keyMapper, connectionFactory, generetedKeysStatementFactory, executeUpdate, generatedKeys, sql,
 		args);
     }
 }
