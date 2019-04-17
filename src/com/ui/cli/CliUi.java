@@ -107,8 +107,8 @@ public class CliUi implements Ui {
 	System.out.println("2 - Lister les ordinateurs");
 	System.out.println("3 - Détail d'un ordinateur");
 	System.out.println("4 - Supprimer un ordinateur");
-	System.out.println("5 - Supprimer un ordinateur");
-	System.out.println("6 - Crée un ordinateur");
+	System.out.println("5 - Crée un ordinateur");
+	System.out.println("6 - Mettre à jour un ordinateur");
     }
 
 }
