@@ -103,7 +103,6 @@ public class Computer {
 
 	private Computer(Long id, String name, Company manufacturer, LocalDate introduced,
 			Optional<LocalDate> discontinued) {
-		Objects.requireNonNull(manufacturer);
 
 		this.id = id;
 		this.name = name;

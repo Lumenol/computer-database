@@ -44,8 +44,8 @@ public class ComputerDaoJDBC implements ComputerDAO {
 	    ComputerBuilder computerBuilder = Computer.builder().id(id).name(name).introduced(introduced)
 		    .discontinued(discontinued);
 	    Long companyId = resultSet.getLong("company_id");
-	    if (Objects.nonNull(companyId)) {
-		String compagnyName = resultSet.getString("company_name");
+	    String compagnyName = resultSet.getString("company_name");
+	    if (Objects.nonNull(companyId) && Objects.nonNull(compagnyName)) {
 		Company mannufacturer = Company.builder().id(companyId).name(compagnyName).build();
 		computerBuilder.manufacturer(mannufacturer);
 	    }
