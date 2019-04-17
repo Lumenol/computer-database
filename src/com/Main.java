@@ -9,6 +9,7 @@ import com.controller.Controller;
 import com.infra.dao.ConnectionFactory;
 import com.infra.dao.jdbc.CompanyDaoJDBC;
 import com.infra.dao.jdbc.ComputerDaoJDBC;
+import com.infra.dao.mapper.ResultSetToCompanyMapper;
 import com.metier.ValidatorFactory;
 import com.metier.dao.CompanyDAO;
 import com.metier.dao.ComputerDAO;
@@ -21,20 +22,36 @@ import com.metier.entite.Computer;
 import com.metier.exception.CompanyNotFoundException;
 import com.metier.mapper.CompanyToCompanyDTOMapper;
 import com.metier.mapper.ComputerToComputerDTOMapper;
-import com.metier.mapper.CreateComputerDTOToComputer;
-import com.metier.mapper.UpdateComputerDTOToComputer;
+import com.metier.mapper.CreateComputerDTOToComputerMapper;
+import com.metier.mapper.UpdateComputerDTOToComputerMapper;
 import com.metier.service.CompanyService;
 import com.metier.service.CompanyServiceImpl;
+import com.metier.service.ComputerService;
 import com.metier.service.ComputerServiceImpl;
 import com.metier.validator.CreateComputerValidator;
 import com.metier.validator.UpdateComputerValidator;
+import com.ui.Ui;
 import com.ui.cli.CliUi;
 
 public class Main {
 
     public static void main(String[] args) {
-	CliUi ui = new CliUi();
-	ConnectionFactory connectionFactory = () -> {
+	Ui ui = ui();
+	ConnectionFactory connectionFactory = connectionFactory();
+	CompanyDAO companyDAO = companyDAO(connectionFactory);
+	ComputerService computerService = computerService(connectionFactory, companyDAO);
+	CompanyService companyService = companyService(connectionFactory, companyDAO);
+
+	Controller controller = controller(ui, computerService, companyService);
+	controller.start();
+    }
+
+    private static Controller controller(Ui ui, ComputerService computerService, CompanyService companyService) {
+	return new Controller(ui, computerService, companyService);
+    }
+
+    private static ConnectionFactory connectionFactory() {
+	return () -> {
 	    try {
 		return DriverManager.getConnection(
 			"jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=UTC",
@@ -44,9 +61,24 @@ public class Main {
 	    }
 	    return null;
 	};
+    }
 
+    private static Ui ui() {
+	return new CliUi();
+    }
+
+    private static CompanyDAO companyDAO(ConnectionFactory connectionFactory) {
+	ResultSetToCompanyMapper resultSetToCompany = new ResultSetToCompanyMapper();
+	return new CompanyDaoJDBC(connectionFactory, resultSetToCompany);
+    }
+
+    private static CompanyService companyService(ConnectionFactory connectionFactory, CompanyDAO companyDAO) {
+	Function<Company, CompanyDTO> companyToCompanyDTO = new CompanyToCompanyDTOMapper();
+	return new CompanyServiceImpl(companyDAO, companyToCompanyDTO);
+    }
+
+    private static ComputerService computerService(ConnectionFactory connectionFactory, CompanyDAO companyDAO) {
 	ComputerDAO computerDAO = new ComputerDaoJDBC(connectionFactory);
-	CompanyDAO companyDAO = new CompanyDaoJDBC(connectionFactory);
 
 	ValidatorFactory<CreateComputerDTO> createValidatorFactory = CreateComputerValidator::new;
 	ValidatorFactory<UpdateComputerDTO> updateValidatorFactory = UpdateComputerValidator::new;
@@ -55,20 +87,15 @@ public class Main {
 		.orElseThrow(() -> new CompanyNotFoundException(id));
 
 	Function<Computer, ComputerDTO> computerToComputerDTO = new ComputerToComputerDTOMapper();
-	Function<UpdateComputerDTO, Computer> updateComputerDTOToComputer = new UpdateComputerDTOToComputer(
+
+	Function<UpdateComputerDTO, Computer> updateComputerDTOToComputer = new UpdateComputerDTOToComputerMapper(
 		findCompanyById);
-	Function<CreateComputerDTO, Computer> createComputerDTOToComputer = new CreateComputerDTOToComputer(
+
+	Function<CreateComputerDTO, Computer> createComputerDTOToComputer = new CreateComputerDTOToComputerMapper(
 		findCompanyById);
 
-	ComputerServiceImpl computerService = new ComputerServiceImpl(computerDAO, createValidatorFactory,
-		updateValidatorFactory, computerToComputerDTO, updateComputerDTOToComputer,
-		createComputerDTOToComputer);
-
-	Function<Company, CompanyDTO> companyToCompanyDTO = new CompanyToCompanyDTOMapper();
-	CompanyService companyService = new CompanyServiceImpl(companyDAO, companyToCompanyDTO);
-
-	Controller controller = new Controller(ui, computerService, companyService);
-	controller.start();
+	return new ComputerServiceImpl(computerDAO, createValidatorFactory, updateValidatorFactory,
+		computerToComputerDTO, updateComputerDTOToComputer, createComputerDTOToComputer);
     }
 
 }
