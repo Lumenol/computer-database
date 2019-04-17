@@ -1,9 +1,9 @@
-package com.metier.service;
+package com.business.service;
 
 import java.util.List;
 
-import com.metier.dto.CompanyDTO;
+import com.business.dto.CompanyDTO;
 
 public interface CompanyService {
-List<CompanyDTO> findAll();
+    List<CompanyDTO> findAll();
 }

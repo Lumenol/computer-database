@@ -1,4 +1,4 @@
-package com.metier.dto;
+package com.business.dto;
 
 import java.time.LocalDate;
 

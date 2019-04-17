@@ -4,8 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.function.Function;
 
-import com.metier.entite.Company;
-import com.metier.exception.MappingException;
+import com.business.entite.Company;
+import com.business.exception.MappingException;
 
 public class ResultSetToCompanyMapper implements Function<ResultSet, Company> {
 

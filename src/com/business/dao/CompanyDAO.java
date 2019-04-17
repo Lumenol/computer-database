@@ -1,11 +1,12 @@
-package com.metier.dao;
+package com.business.dao;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.metier.entite.Company;
+import com.business.entite.Company;
 
 public interface CompanyDAO {
-	List<Company> findAll();
-	Optional<Company> findById(long id);
+    List<Company> findAll();
+
+    Optional<Company> findById(long id);
 }

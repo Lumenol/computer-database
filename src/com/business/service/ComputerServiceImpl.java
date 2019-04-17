@@ -1,17 +1,17 @@
-package com.metier.service;
+package com.business.service;
 
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.metier.ValidatorFactory;
-import com.metier.dao.ComputerDAO;
-import com.metier.dto.ComputerDTO;
-import com.metier.dto.CreateComputerDTO;
-import com.metier.dto.UpdateComputerDTO;
-import com.metier.entite.Computer;
-import com.metier.exception.ComputerNotFoundException;
-import com.metier.validator.Validator;
+import com.business.ValidatorFactory;
+import com.business.dao.ComputerDAO;
+import com.business.dto.ComputerDTO;
+import com.business.dto.CreateComputerDTO;
+import com.business.dto.UpdateComputerDTO;
+import com.business.entite.Computer;
+import com.business.exception.ComputerNotFoundException;
+import com.business.validator.Validator;
 
 public class ComputerServiceImpl implements ComputerService {
 
@@ -38,6 +38,19 @@ public class ComputerServiceImpl implements ComputerService {
     }
 
     @Override
+    public void create(CreateComputerDTO computer) {
+	Validator<CreateComputerDTO> validator = createComputerValidatorFactory.get(computer);
+	if (validator.isValid()) {
+	    computerDAO.create(createComputerDTOToComputer.apply(computer));
+	}
+    }
+
+    @Override
+    public void delete(long id) {
+	computerDAO.deleteById(id);
+    }
+
+    @Override
     public List<ComputerDTO> findAll() {
 	return computerDAO.findAll().stream().map(computerToComputerDTO::apply).collect(Collectors.toList());
     }
@@ -57,19 +70,6 @@ public class ComputerServiceImpl implements ComputerService {
 	if (validator.isValid()) {
 	    computerDAO.update(updateComputerDTOToComputer.apply(computer));
 	}
-    }
-
-    @Override
-    public void create(CreateComputerDTO computer) {
-	Validator<CreateComputerDTO> validator = createComputerValidatorFactory.get(computer);
-	if (validator.isValid()) {
-	    computerDAO.create(createComputerDTOToComputer.apply(computer));
-	}
-    }
-
-    @Override
-    public void delete(long id) {
-	computerDAO.deleteById(id);
     }
 
 }

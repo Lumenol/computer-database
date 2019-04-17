@@ -1,13 +1,13 @@
-package com.metier.dto;
+package com.business.dto;
 
 public class CompagnyDTO {
-private String name;
+    private String name;
 
-public String getName() {
+    public String getName() {
 	return name;
-}
+    }
 
-public void setName(String name) {
+    public void setName(String name) {
 	this.name = name;
-}
+    }
 }

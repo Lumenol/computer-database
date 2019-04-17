@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import com.business.dao.CompanyDAO;
+import com.business.entite.Company;
 import com.infra.dao.ConnectionFactory;
-import com.metier.dao.CompanyDAO;
-import com.metier.entite.Company;
 
 public class CompanyDaoJDBC implements CompanyDAO {
 
@@ -25,11 +25,6 @@ public class CompanyDaoJDBC implements CompanyDAO {
 	super();
 	this.connectionFactory = connectionFactory;
 	this.resultSetToCompany = resultSetToCompany;
-    }
-
-    @Override
-    public List<Company> findAll() {
-	return execute(this::mappingToCompany, SQL_FIND_ALL);
     }
 
     private <T> T execute(Function<ResultSet, T> doSomething, String sql, Object... args) {
@@ -47,16 +42,9 @@ public class CompanyDaoJDBC implements CompanyDAO {
 	}
     }
 
-    private List<Company> mappingToCompany(ResultSet rs) {
-	List<Company> companies = new ArrayList<>();
-	try {
-	    while (rs.next()) {
-		companies.add(resultSetToCompany.apply(rs));
-	    }
-	} catch (SQLException e) {
-	    throw new RuntimeException(e);
-	}
-	return companies;
+    @Override
+    public List<Company> findAll() {
+	return execute(this::mappingToCompany, SQL_FIND_ALL);
     }
 
     @Override
@@ -67,6 +55,18 @@ public class CompanyDaoJDBC implements CompanyDAO {
 	} else {
 	    return Optional.of(companies.get(0));
 	}
+    }
+
+    private List<Company> mappingToCompany(ResultSet rs) {
+	List<Company> companies = new ArrayList<>();
+	try {
+	    while (rs.next()) {
+		companies.add(resultSetToCompany.apply(rs));
+	    }
+	} catch (SQLException e) {
+	    throw new RuntimeException(e);
+	}
+	return companies;
     }
 
 }

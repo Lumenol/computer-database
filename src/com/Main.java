@@ -5,67 +5,35 @@ import java.sql.SQLException;
 import java.util.function.Function;
 import java.util.function.LongFunction;
 
+import com.business.ValidatorFactory;
+import com.business.dao.CompanyDAO;
+import com.business.dao.ComputerDAO;
+import com.business.dto.CompanyDTO;
+import com.business.dto.ComputerDTO;
+import com.business.dto.CreateComputerDTO;
+import com.business.dto.UpdateComputerDTO;
+import com.business.entite.Company;
+import com.business.entite.Computer;
+import com.business.exception.CompanyNotFoundException;
+import com.business.mapper.CompanyToCompanyDTOMapper;
+import com.business.mapper.ComputerToComputerDTOMapper;
+import com.business.mapper.CreateComputerDTOToComputerMapper;
+import com.business.mapper.UpdateComputerDTOToComputerMapper;
+import com.business.service.CompanyService;
+import com.business.service.CompanyServiceImpl;
+import com.business.service.ComputerService;
+import com.business.service.ComputerServiceImpl;
+import com.business.validator.CreateComputerValidator;
+import com.business.validator.UpdateComputerValidator;
 import com.controller.Controller;
 import com.infra.dao.ConnectionFactory;
 import com.infra.dao.jdbc.CompanyDaoJDBC;
 import com.infra.dao.jdbc.ComputerDaoJDBC;
 import com.infra.dao.mapper.ResultSetToCompanyMapper;
-import com.metier.ValidatorFactory;
-import com.metier.dao.CompanyDAO;
-import com.metier.dao.ComputerDAO;
-import com.metier.dto.CompanyDTO;
-import com.metier.dto.ComputerDTO;
-import com.metier.dto.CreateComputerDTO;
-import com.metier.dto.UpdateComputerDTO;
-import com.metier.entite.Company;
-import com.metier.entite.Computer;
-import com.metier.exception.CompanyNotFoundException;
-import com.metier.mapper.CompanyToCompanyDTOMapper;
-import com.metier.mapper.ComputerToComputerDTOMapper;
-import com.metier.mapper.CreateComputerDTOToComputerMapper;
-import com.metier.mapper.UpdateComputerDTOToComputerMapper;
-import com.metier.service.CompanyService;
-import com.metier.service.CompanyServiceImpl;
-import com.metier.service.ComputerService;
-import com.metier.service.ComputerServiceImpl;
-import com.metier.validator.CreateComputerValidator;
-import com.metier.validator.UpdateComputerValidator;
 import com.ui.Ui;
 import com.ui.cli.CliUi;
 
 public class Main {
-
-    public static void main(String[] args) {
-	Ui ui = ui();
-	ConnectionFactory connectionFactory = connectionFactory();
-	CompanyDAO companyDAO = companyDAO(connectionFactory);
-	ComputerService computerService = computerService(connectionFactory, companyDAO);
-	CompanyService companyService = companyService(connectionFactory, companyDAO);
-
-	Controller controller = controller(ui, computerService, companyService);
-	controller.start();
-    }
-
-    private static Controller controller(Ui ui, ComputerService computerService, CompanyService companyService) {
-	return new Controller(ui, computerService, companyService);
-    }
-
-    private static ConnectionFactory connectionFactory() {
-	return () -> {
-	    try {
-		return DriverManager.getConnection(
-			"jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=UTC",
-			"admincdb", "qwerty1234");
-	    } catch (SQLException e) {
-		e.printStackTrace();
-	    }
-	    return null;
-	};
-    }
-
-    private static Ui ui() {
-	return new CliUi();
-    }
 
     private static CompanyDAO companyDAO(ConnectionFactory connectionFactory) {
 	ResultSetToCompanyMapper resultSetToCompany = new ResultSetToCompanyMapper();
@@ -96,6 +64,38 @@ public class Main {
 
 	return new ComputerServiceImpl(computerDAO, createValidatorFactory, updateValidatorFactory,
 		computerToComputerDTO, updateComputerDTOToComputer, createComputerDTOToComputer);
+    }
+
+    private static ConnectionFactory connectionFactory() {
+	return () -> {
+	    try {
+		return DriverManager.getConnection(
+			"jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=UTC",
+			"admincdb", "qwerty1234");
+	    } catch (SQLException e) {
+		e.printStackTrace();
+	    }
+	    return null;
+	};
+    }
+
+    private static Controller controller(Ui ui, ComputerService computerService, CompanyService companyService) {
+	return new Controller(ui, computerService, companyService);
+    }
+
+    public static void main(String[] args) {
+	Ui ui = ui();
+	ConnectionFactory connectionFactory = connectionFactory();
+	CompanyDAO companyDAO = companyDAO(connectionFactory);
+	ComputerService computerService = computerService(connectionFactory, companyDAO);
+	CompanyService companyService = companyService(connectionFactory, companyDAO);
+
+	Controller controller = controller(ui, computerService, companyService);
+	controller.start();
+    }
+
+    private static Ui ui() {
+	return new CliUi();
     }
 
 }

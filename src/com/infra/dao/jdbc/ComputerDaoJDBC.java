@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import com.business.dao.ComputerDAO;
+import com.business.entite.Company;
+import com.business.entite.Computer;
+import com.business.entite.Computer.ComputerBuilder;
 import com.infra.dao.ConnectionFactory;
-import com.metier.dao.ComputerDAO;
-import com.metier.entite.Company;
-import com.metier.entite.Computer;
-import com.metier.entite.Computer.ComputerBuilder;
 
 public class ComputerDaoJDBC implements ComputerDAO {
 
@@ -25,13 +25,6 @@ public class ComputerDaoJDBC implements ComputerDAO {
     private static final String SQL_CREATE = "INSERT INTO computer (name, introduced,discontinued,company_id) VALUES (?,?,?,?)";
     private static final String SQL_UPDATE = "UPDATE computer SET(name, introduced,discontinued,company_id) VALUES (?,?,?,?) WHERE id=?";
     private static final String SQL_DELETE = "DELETE FROM computer WHERE id=?";
-
-    private final ConnectionFactory connectionFactory;
-
-    public ComputerDaoJDBC(ConnectionFactory connectionFactory) {
-	super();
-	this.connectionFactory = connectionFactory;
-    }
 
     private static Computer from(ResultSet resultSet) {
 	try {
@@ -57,6 +50,51 @@ public class ComputerDaoJDBC implements ComputerDAO {
 	}
 
 	return null;
+    }
+
+    private final ConnectionFactory connectionFactory;
+
+    public ComputerDaoJDBC(ConnectionFactory connectionFactory) {
+	super();
+	this.connectionFactory = connectionFactory;
+    }
+
+    @Override
+    public long create(Computer computer) {
+	try (Connection connection = connectionFactory.getConnection()) {
+	    try (PreparedStatement statement = connection.prepareStatement(SQL_CREATE,
+		    Statement.RETURN_GENERATED_KEYS)) {
+		statement.setString(1, computer.getName());
+		statement.setDate(2,
+			Objects.nonNull(computer.getIntroduced()) ? Date.valueOf(computer.getIntroduced()) : null);
+		statement.setDate(3, computer.getDiscontinued().map(Date::valueOf).orElse(null));
+		statement.setLong(4,
+			Objects.nonNull(computer.getManufacturer()) ? computer.getManufacturer().getId() : null);
+
+		statement.executeUpdate();
+		try (ResultSet keys = statement.getGeneratedKeys()) {
+		    keys.next();
+		    return keys.getLong(1);
+		}
+	    }
+	} catch (SQLException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	return -1;
+    }
+
+    @Override
+    public void deleteById(long id) {
+	try (Connection connection = connectionFactory.getConnection()) {
+	    try (PreparedStatement statement = connection.prepareStatement(SQL_DELETE)) {
+		statement.setLong(1, id);
+		statement.executeUpdate();
+	    }
+	} catch (SQLException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
     }
 
     @Override
@@ -100,31 +138,6 @@ public class ComputerDaoJDBC implements ComputerDAO {
     }
 
     @Override
-    public long create(Computer computer) {
-	try (Connection connection = connectionFactory.getConnection()) {
-	    try (PreparedStatement statement = connection.prepareStatement(SQL_CREATE,
-		    Statement.RETURN_GENERATED_KEYS)) {
-		statement.setString(1, computer.getName());
-		statement.setDate(2,
-			Objects.nonNull(computer.getIntroduced()) ? Date.valueOf(computer.getIntroduced()) : null);
-		statement.setDate(3, computer.getDiscontinued().map(Date::valueOf).orElse(null));
-		statement.setLong(4,
-			Objects.nonNull(computer.getManufacturer()) ? computer.getManufacturer().getId() : null);
-
-		statement.executeUpdate();
-		try (ResultSet keys = statement.getGeneratedKeys()) {
-		    keys.next();
-		    return keys.getLong(1);
-		}
-	    }
-	} catch (SQLException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-	return -1;
-    }
-
-    @Override
     public void update(Computer computer) {
 	try (Connection connection = connectionFactory.getConnection()) {
 	    try (PreparedStatement statement = connection.prepareStatement(SQL_UPDATE)) {
@@ -136,19 +149,6 @@ public class ComputerDaoJDBC implements ComputerDAO {
 			Objects.nonNull(computer.getManufacturer()) ? computer.getManufacturer().getId() : null);
 		statement.setLong(5, computer.getId());
 
-		statement.executeUpdate();
-	    }
-	} catch (SQLException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-    }
-
-    @Override
-    public void deleteById(long id) {
-	try (Connection connection = connectionFactory.getConnection()) {
-	    try (PreparedStatement statement = connection.prepareStatement(SQL_DELETE)) {
-		statement.setLong(1, id);
 		statement.executeUpdate();
 	    }
 	} catch (SQLException e) {

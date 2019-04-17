@@ -1,15 +1,19 @@
-package com.metier.service;
+package com.business.service;
 
 import java.util.List;
 
-import com.metier.dto.ComputerDTO;
-import com.metier.dto.CreateComputerDTO;
-import com.metier.dto.UpdateComputerDTO;
+import com.business.dto.ComputerDTO;
+import com.business.dto.CreateComputerDTO;
+import com.business.dto.UpdateComputerDTO;
 
 public interface ComputerService {
-List<ComputerDTO> findAll();
-ComputerDTO findById(long id);
-void update(UpdateComputerDTO computer);
-void create(CreateComputerDTO computer);
-void delete(long id);
+    void create(CreateComputerDTO computer);
+
+    void delete(long id);
+
+    List<ComputerDTO> findAll();
+
+    ComputerDTO findById(long id);
+
+    void update(UpdateComputerDTO computer);
 }

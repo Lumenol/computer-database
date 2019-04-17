@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import com.metier.dto.CompanyDTO;
-import com.metier.dto.ComputerDTO;
-import com.metier.exception.ComputerNotFoundException;
-import com.metier.service.CompanyService;
-import com.metier.service.ComputerService;
+import com.business.dto.CompanyDTO;
+import com.business.dto.ComputerDTO;
+import com.business.exception.ComputerNotFoundException;
+import com.business.service.CompanyService;
+import com.business.service.ComputerService;
 import com.ui.Action;
 import com.ui.Ui;
 import com.ui.dto.CompanyListDTO;
@@ -25,79 +25,57 @@ public class Controller {
 	UPDATE_COMPUTER
     }
 
+    private static CompanyListDTO toCompanyListDTO(CompanyDTO company) {
+	CompanyListDTO companyListDTO = new CompanyListDTO();
+	companyListDTO.setId(Long.toString(company.getId()));
+	companyListDTO.setName(company.getName());
+	return companyListDTO;
+    }
+    private static ComputerDetailDTO toComputerDetailDTO(ComputerDTO computer) {
+	ComputerDetailDTO computerDetailDTO = new ComputerDetailDTO();
+	computerDetailDTO.setId(Long.toString(computer.getId()));
+	computerDetailDTO.setName(computer.getName());
+
+	if (Objects.nonNull(computer.getIntroduced())) {
+	    computerDetailDTO.setIntroduced(computer.getIntroduced().toString());
+	}
+
+	if (Objects.nonNull(computer.getDiscontinued())) {
+	    computerDetailDTO.setIntroduced(computer.getDiscontinued().toString());
+	}
+
+	if (Objects.nonNull(computer.getMannufacturer())) {
+	    computerDetailDTO.setMannufacturer(computer.getMannufacturer().getName());
+	}
+
+	return computerDetailDTO;
+    }
+    private static ComputerListDTO toComputerListDTO(ComputerDTO computer) {
+	ComputerListDTO computerListDTO = new ComputerListDTO();
+	computerListDTO.setId(Long.toString(computer.getId()));
+	computerListDTO.setName(computer.getName());
+	return computerListDTO;
+    }
+
     private final Ui ui;
+
     private final ComputerService computerService;
+
     private final CompanyService companyService;
 
     private State state;
 
-    public void start() {
-	while (true) {
-	    switch (state) {
-	    case SHOW_MENU:
-		showMenu();
-		break;
-	    case SHOW_LIST_COMPUTER:
-		showListComputer();
-		break;
-	    case SHOW_DETAIL_COMPUTER:
-		showDetailComputer();
-		break;
-	    case DELETE_COMPUTER:
-		deleteComputer();
-		break;
-	    case CREATE_COMPUTER:
-		createComputer();
-		break;
-	    case SHOW_LIST_COMPANY:
-		showListCampany();
-		break;
-	    case UPDATE_COMPUTER:
-		updateComputer();
-		break;
-	    default:
-		break;
-	    }
-	}
-    }
-
-    private void updateComputer() {
-	CreateComputerDTO dtoUi = ui.getUpdateComputerDTO();
-	com.metier.dto.CreateComputerDTO dtoMetier = new com.metier.dto.CreateComputerDTO();
-
-	dtoMetier.setName(dtoUi.getName());
-	try {
-	    dtoMetier.setMannufacturerId(Long.valueOf(dtoUi.getMannufacturer()));
-	} catch (NumberFormatException e) {
-	    e.printStackTrace();
-	}
-
-	try {
-	    dtoMetier.setIntroduced(LocalDate.parse(dtoUi.getIntroduced()));
-	} catch (DateTimeException e) {
-	    e.printStackTrace();
-	}
-
-	try {
-	    dtoMetier.setIntroduced(LocalDate.parse(dtoUi.getDiscontinued()));
-	} catch (DateTimeException e) {
-	    e.printStackTrace();
-	}
-
-	computerService.create(dtoMetier);
-	state = State.SHOW_MENU;
-    }
-
-    private void showListCampany() {
-	List<CompanyDTO> findAll = companyService.findAll();
-	List<CompanyListDTO> listDTO = findAll.stream().map(Controller::toCompanyListDTO).collect(Collectors.toList());
-	ui.showListCompany(listDTO);
+    public Controller(Ui ui, ComputerService computerService, CompanyService companyService) {
+	super();
+	this.ui = ui;
+	this.computerService = computerService;
+	this.companyService = companyService;
 	state = State.SHOW_MENU;
     }
 
     private void createComputer() {
 	CreateComputerDTO dtoUi = ui.getCreateComputerDTO();
-	com.metier.dto.CreateComputerDTO dtoMetier = new com.metier.dto.CreateComputerDTO();
+	com.business.dto.CreateComputerDTO dtoMetier = new com.business.dto.CreateComputerDTO();
 
 	dtoMetier.setName(dtoUi.getName());
 	try {
@@ -141,38 +119,11 @@ public class Controller {
 
     }
 
-    private static ComputerListDTO toComputerListDTO(ComputerDTO computer) {
-	ComputerListDTO computerListDTO = new ComputerListDTO();
-	computerListDTO.setId(Long.toString(computer.getId()));
-	computerListDTO.setName(computer.getName());
-	return computerListDTO;
-    }
-
-    private static CompanyListDTO toCompanyListDTO(CompanyDTO company) {
-	CompanyListDTO companyListDTO = new CompanyListDTO();
-	companyListDTO.setId(Long.toString(company.getId()));
-	companyListDTO.setName(company.getName());
-	return companyListDTO;
-    }
-
-    private static ComputerDetailDTO toComputerDetailDTO(ComputerDTO computer) {
-	ComputerDetailDTO computerDetailDTO = new ComputerDetailDTO();
-	computerDetailDTO.setId(Long.toString(computer.getId()));
-	computerDetailDTO.setName(computer.getName());
-
-	if (Objects.nonNull(computer.getIntroduced())) {
-	    computerDetailDTO.setIntroduced(computer.getIntroduced().toString());
-	}
-
-	if (Objects.nonNull(computer.getDiscontinued())) {
-	    computerDetailDTO.setIntroduced(computer.getDiscontinued().toString());
-	}
-
-	if (Objects.nonNull(computer.getMannufacturer())) {
-	    computerDetailDTO.setMannufacturer(computer.getMannufacturer().getName());
-	}
-
-	return computerDetailDTO;
+    private void showListCampany() {
+	List<CompanyDTO> findAll = companyService.findAll();
+	List<CompanyListDTO> listDTO = findAll.stream().map(Controller::toCompanyListDTO).collect(Collectors.toList());
+	ui.showListCompany(listDTO);
+	state = State.SHOW_MENU;
     }
 
     private void showListComputer() {
@@ -209,11 +160,38 @@ public class Controller {
 	}
     }
 
-    public Controller(Ui ui, ComputerService computerService, CompanyService companyService) {
-	super();
-	this.ui = ui;
-	this.computerService = computerService;
-	this.companyService = companyService;
+    public void start() {
+	while (true) {
+	    switch (state) {
+	    case SHOW_MENU:
+		showMenu();
+		break;
+	    case SHOW_LIST_COMPUTER:
+		showListComputer();
+		break;
+	    case SHOW_DETAIL_COMPUTER:
+		showDetailComputer();
+		break;
+	    case DELETE_COMPUTER:
+		deleteComputer();
+		break;
+	    case CREATE_COMPUTER:
+		createComputer();
+		break;
+	    case SHOW_LIST_COMPANY:
+		showListCampany();
+		break;
+	    case UPDATE_COMPUTER:
+		updateComputer();
+		break;
+	    default:
+		break;
+	    }
+	}
+    }
+
+    private void updateComputer() {
+	// TODO a faire
 	state = State.SHOW_MENU;
     }
 

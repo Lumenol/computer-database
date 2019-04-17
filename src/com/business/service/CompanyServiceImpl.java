@@ -1,12 +1,12 @@
-package com.metier.service;
+package com.business.service;
 
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.metier.dao.CompanyDAO;
-import com.metier.dto.CompanyDTO;
-import com.metier.entite.Company;
+import com.business.dao.CompanyDAO;
+import com.business.dto.CompanyDTO;
+import com.business.entite.Company;
 
 public class CompanyServiceImpl implements CompanyService {
     private final CompanyDAO companyDao;

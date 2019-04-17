@@ -1,17 +1,22 @@
-package com.metier.mapper;
+package com.business.mapper;
 
 import java.util.function.Function;
 import java.util.function.LongFunction;
 
-import com.metier.dto.UpdateComputerDTO;
-import com.metier.entite.Company;
-import com.metier.entite.Computer;
-import com.metier.exception.CompanyNotFoundException;
-import com.metier.exception.MappingException;
+import com.business.dto.UpdateComputerDTO;
+import com.business.entite.Company;
+import com.business.entite.Computer;
+import com.business.exception.CompanyNotFoundException;
+import com.business.exception.MappingException;
 
 public class UpdateComputerDTOToComputerMapper implements Function<UpdateComputerDTO, Computer> {
 
     private final LongFunction<Company> findCompanyById;
+
+    public UpdateComputerDTOToComputerMapper(LongFunction<Company> findCompanyById) {
+	super();
+	this.findCompanyById = findCompanyById;
+    }
 
     @Override
     public Computer apply(UpdateComputerDTO dto) {
@@ -22,11 +27,6 @@ public class UpdateComputerDTOToComputerMapper implements Function<UpdateCompute
 	} catch (CompanyNotFoundException e) {
 	    throw new MappingException(e);
 	}
-    }
-
-    public UpdateComputerDTOToComputerMapper(LongFunction<Company> findCompanyById) {
-	super();
-	this.findCompanyById = findCompanyById;
     }
 
 }

@@ -1,9 +1,9 @@
-package com.metier.mapper;
+package com.business.mapper;
 
 import java.util.function.Function;
 
-import com.metier.dto.CompanyDTO;
-import com.metier.entite.Company;
+import com.business.dto.CompanyDTO;
+import com.business.entite.Company;
 
 public class CompanyToCompanyDTOMapper implements Function<Company, CompanyDTO> {
 

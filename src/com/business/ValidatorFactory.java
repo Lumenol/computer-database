@@ -1,7 +1,7 @@
-package com.metier;
+package com.business;
 
-import com.metier.validator.Validator;
+import com.business.validator.Validator;
 
 public interface ValidatorFactory<T> {
-	Validator<T> get(T dto);
+    Validator<T> get(T dto);
 }

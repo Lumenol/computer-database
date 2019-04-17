@@ -1,9 +1,9 @@
-package com.metier.validator;
+package com.business.validator;
 
 import java.util.Map;
 import java.util.Objects;
 
-import com.metier.dto.CreateComputerDTO;
+import com.business.dto.CreateComputerDTO;
 
 public class CreateComputerValidator extends AbstractValidator<CreateComputerDTO> {
 

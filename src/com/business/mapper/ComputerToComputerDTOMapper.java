@@ -1,11 +1,11 @@
-package com.metier.mapper;
+package com.business.mapper;
 
 import java.util.Objects;
 import java.util.function.Function;
 
-import com.metier.dto.CompagnyDTO;
-import com.metier.dto.ComputerDTO;
-import com.metier.entite.Computer;
+import com.business.dto.CompagnyDTO;
+import com.business.dto.ComputerDTO;
+import com.business.entite.Computer;
 
 public class ComputerToComputerDTOMapper implements Function<Computer, ComputerDTO> {
 
