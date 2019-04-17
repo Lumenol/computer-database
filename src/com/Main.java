@@ -2,6 +2,7 @@ package com;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.LongFunction;
 
@@ -29,15 +30,18 @@ import com.controller.Controller;
 import com.infra.dao.ConnectionFactory;
 import com.infra.dao.jdbc.CompanyDaoJDBC;
 import com.infra.dao.jdbc.ComputerDaoJDBC;
+import com.infra.dao.mapper.ResultSetMapper;
 import com.infra.dao.mapper.ResultSetToCompanyMapper;
+import com.infra.dao.mapper.ResultSetToListCompanyMapper;
 import com.ui.Ui;
 import com.ui.cli.CliUi;
 
 public class Main {
 
     private static CompanyDAO companyDAO(ConnectionFactory connectionFactory) {
-	ResultSetToCompanyMapper resultSetToCompany = new ResultSetToCompanyMapper();
-	return new CompanyDaoJDBC(connectionFactory, resultSetToCompany);
+	ResultSetMapper<Company> resultSetToCompany = new ResultSetToCompanyMapper();
+	ResultSetMapper<List<Company>> resultSetToListCompany = new ResultSetToListCompanyMapper(resultSetToCompany);
+	return new CompanyDaoJDBC(connectionFactory, resultSetToListCompany);
     }
 
     private static CompanyService companyService(ConnectionFactory connectionFactory, CompanyDAO companyDAO) {
