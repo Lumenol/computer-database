@@ -1,26 +1,22 @@
 package com.metier.validator;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import com.metier.dto.UpdateComputerDTO;
 
-public class UpdateComputerValidator implements Validator<UpdateComputerDTO> {
-    private Map<String, String> errors;
+public class UpdateComputerValidator extends AbstractValidator<UpdateComputerDTO> {
 
-	public UpdateComputerValidator(UpdateComputerDTO updateComputerDTO) {
-		errors = check(updateComputerDTO);
-	}
+    public UpdateComputerValidator(UpdateComputerDTO t) {
+	super(t);
+    }
 
-	private Map<String, String> check(UpdateComputerDTO updateComputerDTO) {
-		Map<String, String> errors = new HashMap<>();
-		//TODO check
-		return Collections.unmodifiableMap(errors);
+    @Override
+    protected void check(UpdateComputerDTO t, Map<String, String> errors) {
+	if (Objects.nonNull(t.getIntroduced()) && Objects.nonNull(t.getDiscontinued())
+		&& t.getIntroduced().isAfter(t.getDiscontinued())) {
+	    errors.put("discontinued", "Discontinued ne peux pas être avant Introduced");
 	}
+    }
 
-	@Override
-	public Map<String, String> errors() {
-		return errors;
-	}
 }

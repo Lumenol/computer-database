@@ -1,28 +1,22 @@
 package com.metier.validator;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import com.metier.dto.CreateComputerDTO;
 
-public class CreateComputerValidator implements Validator<CreateComputerDTO> {
+public class CreateComputerValidator extends AbstractValidator<CreateComputerDTO> {
 
-	private Map<String, String> errors;
+    public CreateComputerValidator(CreateComputerDTO t) {
+	super(t);
+    }
 
-	public CreateComputerValidator(CreateComputerDTO createComputerDTO) {
-		errors = check(createComputerDTO);
+    @Override
+    protected void check(CreateComputerDTO t, Map<String, String> errors) {
+	if (Objects.nonNull(t.getIntroduced()) && Objects.nonNull(t.getDiscontinued())
+		&& t.getIntroduced().isAfter(t.getDiscontinued())) {
+	    errors.put("discontinued", "Discontinued ne peux pas être avant Introduced");
 	}
-
-	private Map<String, String> check(CreateComputerDTO createComputerDTO) {
-		Map<String, String> errors = new HashMap<>();
-		//TODO check
-		return Collections.unmodifiableMap(errors);
-	}
-
-	@Override
-	public Map<String, String> errors() {
-		return errors;
-	}
+    }
 
 }
