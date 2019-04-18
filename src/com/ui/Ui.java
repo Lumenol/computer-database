@@ -13,7 +13,7 @@ public interface Ui {
 
     CreateComputerDTO getCreateComputerDTO();
 
-    Action getInputMenu();
+    Action getInputPage(boolean previous, boolean next);
 
     UpdateComputerDTO getUpdateComputerDTO();
 
@@ -27,5 +27,7 @@ public interface Ui {
 
     void showListComputer(List<ComputerListDTO> computers);
 
-    void showMenu();
+    Action getInputMenu();
+
+    void showMessage(String message);
 }

@@ -8,6 +8,7 @@ import com.business.dto.CompanyDTO;
 import com.business.dto.ComputerDTO;
 import com.business.dto.UpdateComputerDTO;
 import com.business.exception.ComputerNotFoundException;
+import com.business.exception.ValidatorException;
 import com.business.service.CompanyService;
 import com.business.service.ComputerService;
 import com.ui.Action;
@@ -18,6 +19,8 @@ import com.ui.dto.ComputerListDTO;
 import com.ui.dto.CreateComputerDTO;
 
 public class Controller {
+
+    private static final int PAGE_SIZE = 10;
 
     private static enum State {
 	CREATE_COMPUTER, DELETE_COMPUTER, QUIT, SHOW_DETAIL_COMPUTER, SHOW_LIST_COMPANY, SHOW_LIST_COMPUTER, SHOW_MENU,
@@ -55,7 +58,11 @@ public class Controller {
 
     private void createComputer() {
 	CreateComputerDTO dtoUi = ui.getCreateComputerDTO();
-	computerService.create(createComputerDTOUiToBusiness.apply(dtoUi));
+	try {
+	    computerService.create(createComputerDTOUiToBusiness.apply(dtoUi));
+	} catch (ValidatorException e) {
+	    ui.showMessage(e.getMessage());
+	}
 	state = State.SHOW_MENU;
     }
 
@@ -77,11 +84,27 @@ public class Controller {
     }
 
     private void showListCampany() {
-	List<CompanyDTO> findAll = companyService.findAll();
-	List<CompanyListDTO> listDTO = findAll.stream().map(companyDTOToCompanyListDTO::apply)
-		.collect(Collectors.toList());
-	ui.showListCompany(listDTO);
-	state = State.SHOW_MENU;
+	long from = 0;
+	while (true) {
+	    List<CompanyDTO> findAll = companyService.findAll(from, from + PAGE_SIZE);
+	    List<CompanyListDTO> listDTO = findAll.stream().map(companyDTOToCompanyListDTO::apply)
+		    .collect(Collectors.toList());
+	    ui.showListCompany(listDTO);
+	    Action input = ui.getInputPage(from > 0, listDTO.size() == PAGE_SIZE);
+	    switch (input) {
+	    case PREVIOUS:
+		from = Math.max(0, from - PAGE_SIZE);
+		break;
+	    case NEXT:
+		from += PAGE_SIZE;
+		break;
+	    case RETURN:
+		state = State.SHOW_MENU;
+		return;
+	    default:
+		break;
+	    }
+	}
     }
 
     private void showListComputer() {
@@ -93,9 +116,7 @@ public class Controller {
     }
 
     private void showMenu() {
-	ui.showMenu();
-	Action action = ui.getInputMenu();
-	switch (action) {
+	switch (ui.getInputMenu()) {
 	case LIST_COMPUTER:
 	    state = State.SHOW_LIST_COMPUTER;
 	    break;
@@ -161,6 +182,8 @@ public class Controller {
 	    computerService.update(updateComputerDTOUiToBusiness.apply(dtoUi));
 	} catch (ComputerNotFoundException e) {
 	    ui.showComputerNotFound();
+	} catch (ValidatorException e) {
+	    ui.showMessage(e.getMessage());
 	}
 	state = State.SHOW_MENU;
     }

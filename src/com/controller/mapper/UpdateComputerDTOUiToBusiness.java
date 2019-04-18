@@ -27,7 +27,7 @@ public class UpdateComputerDTOUiToBusiness implements Function<com.ui.dto.Update
 	}
 
 	try {
-	    dtoMetier.setIntroduced(LocalDate.parse(dtoUi.getDiscontinued()));
+	    dtoMetier.setDiscontinued((LocalDate.parse(dtoUi.getDiscontinued())));
 	} catch (DateTimeException e) {
 	}
 	return dtoMetier;

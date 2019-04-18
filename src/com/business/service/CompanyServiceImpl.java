@@ -25,7 +25,16 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public List<CompanyDTO> findAll() {
-	return companyDao.findAll().stream().map(companyToCompanyDTO::apply).collect(Collectors.toList());
+	return mapAll(companyDao.findAll());
+    }
+
+    private List<CompanyDTO> mapAll(List<Company> companies) {
+	return companies.stream().map(companyToCompanyDTO::apply).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CompanyDTO> findAll(long from, long to) {
+	return mapAll(companyDao.findAll(from, to));
     }
 
 }

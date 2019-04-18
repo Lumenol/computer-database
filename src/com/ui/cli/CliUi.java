@@ -20,13 +20,10 @@ public class CliUi implements Ui {
     @Override
     public long getComputerId() {
 	System.out.println("Entrer le numero de l'ordinateur");
-	while (true) {
-	    try {
-		return scanner.nextLong();
-	    } catch (Exception e) {
-		e.printStackTrace();
-	    }
+	while (!scanner.hasNextLong()) {
+	    scanner.nextLine();
 	}
+	return scanner.nextLong();
     }
 
     @Override
@@ -50,25 +47,38 @@ public class CliUi implements Ui {
 
     @Override
     public Action getInputMenu() {
-	int input = scanner.nextInt();
-	switch (input) {
-	case 0:
-	    return Action.QUIT;
-	case 1:
-	    return Action.LIST_COMPANY;
-	case 2:
-	    return Action.LIST_COMPUTER;
-	case 3:
-	    return Action.DETAIL_COMPUTER;
-	case 4:
-	    return Action.DELETE_COMPUTER;
-	case 5:
-	    return Action.CREATE_COMPUTER;
-	case 6:
-	    return Action.UPDATE_COMPUTER;
-	default:
-	    return Action.UNKNOW;
+	while (true) {
+	    System.out.println("Le menu");
+	    System.out.println("0 - Quitter");
+	    System.out.println("1 - Lister les companies");
+	    System.out.println("2 - Lister les ordinateurs");
+	    System.out.println("3 - Détail d'un ordinateur");
+	    System.out.println("4 - Supprimer un ordinateur");
+	    System.out.println("5 - Crée un ordinateur");
+	    System.out.println("6 - Mettre à jour un ordinateur");
+	    while (!scanner.hasNextInt()) {
+		scanner.nextLine();
+	    }
+	    switch (scanner.nextInt()) {
+	    case 0:
+		return Action.QUIT;
+	    case 1:
+		return Action.LIST_COMPANY;
+	    case 2:
+		return Action.LIST_COMPUTER;
+	    case 3:
+		return Action.DETAIL_COMPUTER;
+	    case 4:
+		return Action.DELETE_COMPUTER;
+	    case 5:
+		return Action.CREATE_COMPUTER;
+	    case 6:
+		return Action.UPDATE_COMPUTER;
+	    default:
+		break;
+	    }
 	}
+
     }
 
     @Override
@@ -76,6 +86,9 @@ public class CliUi implements Ui {
 	com.ui.dto.UpdateComputerDTO dto = new com.ui.dto.UpdateComputerDTO();
 
 	System.out.print("Id: ");
+	while (!scanner.hasNextLong()) {
+	    scanner.nextLine();
+	}
 	dto.setId(scanner.nextLong());
 
 	System.out.print("Nom: ");
@@ -123,15 +136,38 @@ public class CliUi implements Ui {
     }
 
     @Override
-    public void showMenu() {
-	System.out.println("Le menu");
-	System.out.println("0 - Quitter");
-	System.out.println("1 - Lister les companies");
-	System.out.println("2 - Lister les ordinateurs");
-	System.out.println("3 - Détail d'un ordinateur");
-	System.out.println("4 - Supprimer un ordinateur");
-	System.out.println("5 - Crée un ordinateur");
-	System.out.println("6 - Mettre à jour un ordinateur");
+    public Action getInputPage(boolean previous, boolean next) {
+	while (true) {
+	    System.out.println("0 - Menu");
+	    if (previous) {
+		System.out.println("1 - Précédent");
+	    }
+	    if (next) {
+		System.out.println("2 - Suivant");
+	    }
+	    while (!scanner.hasNextInt()) {
+		scanner.nextLine();
+	    }
+	    switch (scanner.nextInt()) {
+	    case 0:
+		return Action.RETURN;
+	    case 1:
+		if (previous) {
+		    return Action.PREVIOUS;
+		}
+	    case 2:
+		if (next) {
+		    return Action.NEXT;
+		}
+	    default:
+		break;
+	    }
+	}
+    }
+
+    @Override
+    public void showMessage(String message) {
+	System.out.println(message);
     }
 
 }
