@@ -28,13 +28,13 @@ public class CompanyServiceImpl implements CompanyService {
 	return mapAll(companyDao.findAll());
     }
 
-    private List<CompanyDTO> mapAll(List<Company> companies) {
-	return companies.stream().map(companyToCompanyDTO::apply).collect(Collectors.toList());
-    }
-
     @Override
     public List<CompanyDTO> findAll(long from, long to) {
 	return mapAll(companyDao.findAll(from, to));
+    }
+
+    private List<CompanyDTO> mapAll(List<Company> companies) {
+	return companies.stream().map(companyToCompanyDTO::apply).collect(Collectors.toList());
     }
 
 }

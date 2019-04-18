@@ -6,11 +6,9 @@ import java.util.stream.Collectors;
 
 import com.business.ValidatorFactory;
 import com.business.dao.ComputerDAO;
-import com.business.dto.CompanyDTO;
 import com.business.dto.ComputerDTO;
 import com.business.dto.CreateComputerDTO;
 import com.business.dto.UpdateComputerDTO;
-import com.business.entite.Company;
 import com.business.entite.Computer;
 import com.business.exception.ComputerNotFoundException;
 import com.business.exception.ValidatorException;
@@ -68,6 +66,11 @@ public class ComputerServiceImpl implements ComputerService {
 	return mapAll(computerDAO.findAll());
     }
 
+    @Override
+    public List<ComputerDTO> findAll(long from, long to) {
+	return mapAll(computerDAO.findAll(from, to));
+    }
+
     /**
      * @throws {@link ComputerNotFound} si l'ordinateur est introuvable.
      */
@@ -75,6 +78,10 @@ public class ComputerServiceImpl implements ComputerService {
     public ComputerDTO findById(long id) {
 	return computerDAO.findById(id).map(computerToComputerDTO::apply)
 		.orElseThrow(() -> new ComputerNotFoundException(id));
+    }
+
+    private List<ComputerDTO> mapAll(List<Computer> companies) {
+	return companies.stream().map(computerToComputerDTO::apply).collect(Collectors.toList());
     }
 
     /**
@@ -88,14 +95,5 @@ public class ComputerServiceImpl implements ComputerService {
 	} else {
 	    throw new ValidatorException(validator.errors());
 	}
-    }
-
-    @Override
-    public List<ComputerDTO> findAll(long from, long to) {
-	return mapAll(computerDAO.findAll(from,to));
-    }
-
-    private List<ComputerDTO> mapAll(List<Computer> companies) {
-	return companies.stream().map(computerToComputerDTO::apply).collect(Collectors.toList());
     }
 }

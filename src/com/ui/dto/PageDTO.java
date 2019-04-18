@@ -4,8 +4,8 @@ import java.util.List;
 
 public class PageDTO<T> {
     private List<T> content;
-    private boolean hasPrevious;
     private boolean hasNext;
+    private boolean hasPrevious;
 
     public PageDTO(List<T> content, boolean hasPrevious, boolean hasNext) {
 	super();
@@ -18,12 +18,12 @@ public class PageDTO<T> {
 	return content;
     }
 
-    public boolean hasPrevious() {
-	return hasPrevious;
-    }
-
     public boolean hasNext() {
 	return hasNext;
+    }
+
+    public boolean hasPrevious() {
+	return hasPrevious;
     }
 
 }

@@ -77,6 +77,16 @@ public class ComputerDaoJDBC implements ComputerDAO {
     }
 
     @Override
+    public List<Computer> findAll(long from, long to) {
+	try {
+	    return JDBCUtils.find(resultSetToListComputerMapper, connectionFactory, SQL_FIND_ALL_PAGED, to - from,
+		    from);
+	} catch (SQLException e) {
+	    throw new RuntimeException(e);
+	}
+    }
+
+    @Override
     public Optional<Computer> findById(long id) {
 	try {
 	    List<Computer> computers = JDBCUtils.find(resultSetToListComputerMapper, connectionFactory, SQL_FIND_BY_ID,
@@ -118,15 +128,6 @@ public class ComputerDaoJDBC implements ComputerDAO {
 	    throw new RuntimeException(e);
 	}
 
-    }
-
-    @Override
-    public List<Computer> findAll(long from, long to) {
-	try {
-	    return JDBCUtils.find(resultSetToListComputerMapper, connectionFactory, SQL_FIND_ALL_PAGED, to - from, from);
-	} catch (SQLException e) {
-	    throw new RuntimeException(e);
-	}
     }
 
 }

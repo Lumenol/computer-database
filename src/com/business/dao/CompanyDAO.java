@@ -8,7 +8,7 @@ import com.business.entite.Company;
 public interface CompanyDAO {
     List<Company> findAll();
 
-    Optional<Company> findById(long id);
-
     List<Company> findAll(long from, long to);
+
+    Optional<Company> findById(long id);
 }

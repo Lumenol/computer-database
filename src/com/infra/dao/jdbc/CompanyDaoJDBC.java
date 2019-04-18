@@ -35,6 +35,15 @@ public class CompanyDaoJDBC implements CompanyDAO {
     }
 
     @Override
+    public List<Company> findAll(long from, long to) {
+	try {
+	    return JDBCUtils.find(resultSetToListCompanyMapper, connectionFactory, SQL_FIND_ALL_PAGED, to - from, from);
+	} catch (SQLException e) {
+	    throw new RuntimeException(e);
+	}
+    }
+
+    @Override
     public Optional<Company> findById(long id) {
 	try {
 	    List<Company> companies = JDBCUtils.find(resultSetToListCompanyMapper, connectionFactory, SQL_FIND_BY_ID,
@@ -44,15 +53,6 @@ public class CompanyDaoJDBC implements CompanyDAO {
 	    } else {
 		return Optional.of(companies.get(0));
 	    }
-	} catch (SQLException e) {
-	    throw new RuntimeException(e);
-	}
-    }
-
-    @Override
-    public List<Company> findAll(long from, long to) {
-	try {
-	    return JDBCUtils.find(resultSetToListCompanyMapper, connectionFactory, SQL_FIND_ALL_PAGED, to - from, from);
 	} catch (SQLException e) {
 	    throw new RuntimeException(e);
 	}

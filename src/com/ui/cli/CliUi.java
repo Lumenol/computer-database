@@ -82,6 +82,35 @@ public class CliUi implements Ui {
 
     }
 
+    private Action getInputPage(boolean previous, boolean next) {
+	while (true) {
+	    System.out.println("0 - Menu");
+	    if (previous) {
+		System.out.println("1 - Précédent");
+	    }
+	    if (next) {
+		System.out.println("2 - Suivant");
+	    }
+	    while (!scanner.hasNextInt()) {
+		scanner.nextLine();
+	    }
+	    switch (scanner.nextInt()) {
+	    case 0:
+		return Action.RETURN;
+	    case 1:
+		if (previous) {
+		    return Action.PREVIOUS;
+		}
+	    case 2:
+		if (next) {
+		    return Action.NEXT;
+		}
+	    default:
+		break;
+	    }
+	}
+    }
+
     @Override
     public com.ui.dto.UpdateComputerDTO getUpdateComputerDTO() {
 	com.ui.dto.UpdateComputerDTO dto = new com.ui.dto.UpdateComputerDTO();
@@ -129,55 +158,26 @@ public class CliUi implements Ui {
 	companies.forEach(c -> System.out.println("id: " + c.getId() + "\tnom: " + c.getName()));
     }
 
-    private void showListComputer(List<ComputerListDTO> computers) {
-	System.out.println("Les ordinateus");
-	computers.forEach(c -> System.out.println("id: " + c.getId() + "\tnom: " + c.getName()));
-    }
-
-    private Action getInputPage(boolean previous, boolean next) {
-	while (true) {
-	    System.out.println("0 - Menu");
-	    if (previous) {
-		System.out.println("1 - Précédent");
-	    }
-	    if (next) {
-		System.out.println("2 - Suivant");
-	    }
-	    while (!scanner.hasNextInt()) {
-		scanner.nextLine();
-	    }
-	    switch (scanner.nextInt()) {
-	    case 0:
-		return Action.RETURN;
-	    case 1:
-		if (previous) {
-		    return Action.PREVIOUS;
-		}
-	    case 2:
-		if (next) {
-		    return Action.NEXT;
-		}
-	    default:
-		break;
-	    }
-	}
-    }
-
-    @Override
-    public void showMessage(String message) {
-	System.out.println(message);
-    }
-
     @Override
     public Action showListCompany(PageDTO<CompanyListDTO> page) {
 	showListCompany(page.getContent());
 	return getInputPage(page.hasPrevious(), page.hasNext());
     }
 
+    private void showListComputer(List<ComputerListDTO> computers) {
+	System.out.println("Les ordinateus");
+	computers.forEach(c -> System.out.println("id: " + c.getId() + "\tnom: " + c.getName()));
+    }
+
     @Override
     public Action showListComputer(PageDTO<ComputerListDTO> page) {
 	showListComputer(page.getContent());
 	return getInputPage(page.hasPrevious(), page.hasNext());
+    }
+
+    @Override
+    public void showMessage(String message) {
+	System.out.println(message);
     }
 
 }

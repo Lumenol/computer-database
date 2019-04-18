@@ -9,9 +9,11 @@ public class UpdateComputerDTO {
 
     private String mannufacturer;
     private String name;
+
     public String getDiscontinued() {
 	return discontinued;
     }
+
     public long getId() {
 	return id;
     }

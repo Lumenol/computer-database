@@ -8,7 +8,7 @@ public interface CompanyService {
     boolean exist(long id);
 
     List<CompanyDTO> findAll();
-    
-    List<CompanyDTO> findAll(long from,long to);
-    
+
+    List<CompanyDTO> findAll(long from, long to);
+
 }

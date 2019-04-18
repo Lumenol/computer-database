@@ -15,9 +15,9 @@ public interface ComputerService {
 
     List<ComputerDTO> findAll();
 
+    List<ComputerDTO> findAll(long from, long to);
+
     ComputerDTO findById(long id);
 
     void update(UpdateComputerDTO computer);
-
-    List<ComputerDTO> findAll(long from, long to);
 }

@@ -12,6 +12,8 @@ public interface Ui {
 
     CreateComputerDTO getCreateComputerDTO();
 
+    Action getInputMenu();
+
     UpdateComputerDTO getUpdateComputerDTO();
 
     void showComputerNotFound();
@@ -23,8 +25,6 @@ public interface Ui {
     Action showListCompany(PageDTO<CompanyListDTO> page);
 
     Action showListComputer(PageDTO<ComputerListDTO> page);
-
-    Action getInputMenu();
 
     void showMessage(String message);
 }

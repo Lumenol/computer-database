@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.util.function.Function;
 
 import com.business.dto.UpdateComputerDTO;
-import com.business.exception.ComputerNotFoundException;
 
 public class UpdateComputerDTOUiToBusiness implements Function<com.ui.dto.UpdateComputerDTO, UpdateComputerDTO> {
 

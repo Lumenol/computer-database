@@ -1,9 +1,7 @@
 package com.controller;
 
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -24,12 +22,12 @@ import com.ui.dto.PageDTO;
 
 public class Controller {
 
-    private static final int PAGE_SIZE = 10;
-
     private static enum State {
 	CREATE_COMPUTER, DELETE_COMPUTER, QUIT, SHOW_DETAIL_COMPUTER, SHOW_LIST_COMPANY, SHOW_LIST_COMPUTER, SHOW_MENU,
 	UPDATE_COMPUTER
     }
+
+    private static final int PAGE_SIZE = 10;
 
     private final Function<CompanyDTO, CompanyListDTO> companyDTOToCompanyListDTO;
     private final CompanyService companyService;
@@ -38,12 +36,12 @@ public class Controller {
     private final Function<ComputerDTO, ComputerListDTO> computerDTOToComputerListDTO;
     private final ComputerService computerService;
     private final Function<CreateComputerDTO, com.business.dto.CreateComputerDTO> createComputerDTOUiToBusiness;
-    private State state = State.SHOW_MENU;
-    private final Ui ui;
-
-    private final Function<com.ui.dto.UpdateComputerDTO, com.business.dto.UpdateComputerDTO> updateComputerDTOUiToBusiness;
     private final BiFunction<Long, Long, List<CompanyListDTO>> getPageCompanyDTO;
     private final BiFunction<Long, Long, List<ComputerListDTO>> getPageComputerDTO;
+
+    private State state = State.SHOW_MENU;
+    private final Ui ui;
+    private final Function<com.ui.dto.UpdateComputerDTO, com.business.dto.UpdateComputerDTO> updateComputerDTOUiToBusiness;
 
     public Controller(Ui ui, ComputerService computerService, CompanyService companyService,
 	    Function<CompanyDTO, CompanyListDTO> companyDTOToCompanyListDTO,
@@ -95,28 +93,6 @@ public class Controller {
 	state = State.SHOW_MENU;
     }
 
-    private <T> void showPagginer(BiFunction<Long, Long, List<T>> getPage, Function<PageDTO<T>,Action> showPage) {
-	long from = 0;
-	while (true) {
-	    List<T> listDTO = getPage.apply(from, from + PAGE_SIZE);
-	    PageDTO<T> page = new PageDTO<T>(listDTO, from > 0, listDTO.size() == PAGE_SIZE);
-	    Action input = showPage.apply(page);
-	    switch (input) {
-	    case PREVIOUS:
-		from = Math.max(0, from - PAGE_SIZE);
-		break;
-	    case NEXT:
-		from += PAGE_SIZE;
-		break;
-	    case RETURN:
-		state = State.SHOW_MENU;
-		return;
-	    default:
-		break;
-	    }
-	}
-    }
-
     private void showListCampany() {
 	showPagginer(getPageCompanyDTO, ui::showListCompany);
     }
@@ -150,6 +126,28 @@ public class Controller {
 	    break;
 	default:
 	    break;
+	}
+    }
+
+    private <T> void showPagginer(BiFunction<Long, Long, List<T>> getPage, Function<PageDTO<T>, Action> showPage) {
+	long from = 0;
+	while (true) {
+	    List<T> listDTO = getPage.apply(from, from + PAGE_SIZE);
+	    PageDTO<T> page = new PageDTO<T>(listDTO, from > 0, listDTO.size() == PAGE_SIZE);
+	    Action input = showPage.apply(page);
+	    switch (input) {
+	    case PREVIOUS:
+		from = Math.max(0, from - PAGE_SIZE);
+		break;
+	    case NEXT:
+		from += PAGE_SIZE;
+		break;
+	    case RETURN:
+		state = State.SHOW_MENU;
+		return;
+	    default:
+		break;
+	    }
 	}
     }
 
