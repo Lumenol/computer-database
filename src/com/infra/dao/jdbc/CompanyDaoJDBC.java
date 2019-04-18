@@ -52,8 +52,7 @@ public class CompanyDaoJDBC implements CompanyDAO {
     @Override
     public List<Company> findAll(long from, long to) {
 	try {
-	    return JDBCUtils.find(resultSetToListCompanyMapper, connectionFactory, SQL_FIND_ALL_PAGED, to - from,
-		    from);
+	    return JDBCUtils.find(resultSetToListCompanyMapper, connectionFactory, SQL_FIND_ALL_PAGED, to - from, from);
 	} catch (SQLException e) {
 	    throw new RuntimeException(e);
 	}

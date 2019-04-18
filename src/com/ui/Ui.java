@@ -1,19 +1,16 @@
 package com.ui;
 
-import java.util.List;
-
 import com.ui.dto.CompanyListDTO;
 import com.ui.dto.ComputerDetailDTO;
 import com.ui.dto.ComputerListDTO;
 import com.ui.dto.CreateComputerDTO;
+import com.ui.dto.PageDTO;
 import com.ui.dto.UpdateComputerDTO;
 
 public interface Ui {
     long getComputerId();
 
     CreateComputerDTO getCreateComputerDTO();
-
-    Action getInputPage(boolean previous, boolean next);
 
     UpdateComputerDTO getUpdateComputerDTO();
 
@@ -23,9 +20,9 @@ public interface Ui {
 
     void showGoodBye();
 
-    void showListCompany(List<CompanyListDTO> companies);
+    Action showListCompany(PageDTO<CompanyListDTO> page);
 
-    void showListComputer(List<ComputerListDTO> computers);
+    Action showListComputer(PageDTO<ComputerListDTO> page);
 
     Action getInputMenu();
 

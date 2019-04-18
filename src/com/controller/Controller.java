@@ -20,6 +20,7 @@ import com.ui.dto.CompanyListDTO;
 import com.ui.dto.ComputerDetailDTO;
 import com.ui.dto.ComputerListDTO;
 import com.ui.dto.CreateComputerDTO;
+import com.ui.dto.PageDTO;
 
 public class Controller {
 
@@ -94,12 +95,12 @@ public class Controller {
 	state = State.SHOW_MENU;
     }
 
-    private <T> void showPagginer(BiFunction<Long, Long, List<T>> getPage, Consumer<List<T>> show) {
+    private <T> void showPagginer(BiFunction<Long, Long, List<T>> getPage, Function<PageDTO<T>,Action> showPage) {
 	long from = 0;
 	while (true) {
 	    List<T> listDTO = getPage.apply(from, from + PAGE_SIZE);
-	    show.accept(listDTO);
-	    Action input = ui.getInputPage(from > 0, listDTO.size() == PAGE_SIZE);
+	    PageDTO<T> page = new PageDTO<T>(listDTO, from > 0, listDTO.size() == PAGE_SIZE);
+	    Action input = showPage.apply(page);
 	    switch (input) {
 	    case PREVIOUS:
 		from = Math.max(0, from - PAGE_SIZE);

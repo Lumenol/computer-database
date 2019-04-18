@@ -9,6 +9,7 @@ import com.ui.dto.CompanyListDTO;
 import com.ui.dto.ComputerDetailDTO;
 import com.ui.dto.ComputerListDTO;
 import com.ui.dto.CreateComputerDTO;
+import com.ui.dto.PageDTO;
 
 public class CliUi implements Ui {
     private Scanner scanner;
@@ -123,20 +124,17 @@ public class CliUi implements Ui {
 	System.out.println("Au revoir");
     }
 
-    @Override
-    public void showListCompany(List<CompanyListDTO> companies) {
+    private void showListCompany(List<CompanyListDTO> companies) {
 	System.out.println("Les companies");
 	companies.forEach(c -> System.out.println("id: " + c.getId() + "\tnom: " + c.getName()));
     }
 
-    @Override
-    public void showListComputer(List<ComputerListDTO> computers) {
+    private void showListComputer(List<ComputerListDTO> computers) {
 	System.out.println("Les ordinateus");
 	computers.forEach(c -> System.out.println("id: " + c.getId() + "\tnom: " + c.getName()));
     }
 
-    @Override
-    public Action getInputPage(boolean previous, boolean next) {
+    private Action getInputPage(boolean previous, boolean next) {
 	while (true) {
 	    System.out.println("0 - Menu");
 	    if (previous) {
@@ -168,6 +166,18 @@ public class CliUi implements Ui {
     @Override
     public void showMessage(String message) {
 	System.out.println(message);
+    }
+
+    @Override
+    public Action showListCompany(PageDTO<CompanyListDTO> page) {
+	showListCompany(page.getContent());
+	return getInputPage(page.hasPrevious(), page.hasNext());
+    }
+
+    @Override
+    public Action showListComputer(PageDTO<ComputerListDTO> page) {
+	showListComputer(page.getContent());
+	return getInputPage(page.hasPrevious(), page.hasNext());
     }
 
 }
