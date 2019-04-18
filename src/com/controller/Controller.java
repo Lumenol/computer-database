@@ -29,11 +29,8 @@ public class Controller {
 
     private static final int PAGE_SIZE = 10;
 
-    private final Function<CompanyDTO, CompanyListDTO> companyDTOToCompanyListDTO;
-    private final CompanyService companyService;
     private final Function<ComputerDTO, ComputerDetailDTO> computerDTOToComputerDetailDTO;
 
-    private final Function<ComputerDTO, ComputerListDTO> computerDTOToComputerListDTO;
     private final ComputerService computerService;
     private final Function<CreateComputerDTO, com.business.dto.CreateComputerDTO> createComputerDTOUiToBusiness;
     private final BiFunction<Long, Long, List<CompanyListDTO>> getPageCompanyDTO;
@@ -52,10 +49,9 @@ public class Controller {
 	super();
 	this.ui = ui;
 	this.computerService = computerService;
-	this.companyService = companyService;
-	this.companyDTOToCompanyListDTO = companyDTOToCompanyListDTO;
+
 	this.computerDTOToComputerDetailDTO = computerDTOToComputerDetailDTO;
-	this.computerDTOToComputerListDTO = computerDTOToComputerListDTO;
+
 	this.createComputerDTOUiToBusiness = createComputerDTOUiToBusiness;
 	this.updateComputerDTOUiToBusiness = updateComputerDTOUiToBusiness;
 
