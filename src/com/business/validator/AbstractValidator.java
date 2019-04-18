@@ -19,7 +19,7 @@ public abstract class AbstractValidator<T> implements Validator<T> {
 
     /**
      * 
-     * @param t      object à controler
+     * @param t      object à contrôler
      * @param errors map pour enregister les erreurs
      */
     protected abstract void check(T t, Map<String, String> errors);

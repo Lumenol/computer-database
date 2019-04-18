@@ -1,11 +1,11 @@
 package com.ui.dto;
 
 public class ComputerDetailDTO {
-    private String id;
-    private String name;
-    private String introduced;
     private String discontinued;
+    private String id;
+    private String introduced;
     private String mannufacturer;
+    private String name;
 
     public String getDiscontinued() {
 	return discontinued;

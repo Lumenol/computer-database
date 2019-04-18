@@ -13,9 +13,13 @@ public class CreateComputerValidator extends AbstractValidator<CreateComputerDTO
 
     @Override
     protected void check(CreateComputerDTO t, Map<String, String> errors) {
+	if (Objects.isNull(t.getName()) || t.getName().trim().isEmpty()) {
+	    errors.put("name", "Le nom ne peux pas être nul ou vide.");
+	}
+
 	if (Objects.nonNull(t.getIntroduced()) && Objects.nonNull(t.getDiscontinued())
 		&& t.getIntroduced().isAfter(t.getDiscontinued())) {
-	    errors.put("discontinued", "Discontinued ne peux pas être avant Introduced");
+	    errors.put("discontinued", "Discontinued ne peux pas être avant Introduced.");
 	}
     }
 

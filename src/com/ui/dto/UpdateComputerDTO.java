@@ -1,23 +1,19 @@
 package com.ui.dto;
 
 public class UpdateComputerDTO {
-    private String id;
-
-    public String getId() {
-	return id;
-    }
-
-    public void setId(String id) {
-	this.id = id;
-    }
-
-    private String name;
-    private String introduced;
     private String discontinued;
-    private String mannufacturer;
 
+    private long id;
+
+    private String introduced;
+
+    private String mannufacturer;
+    private String name;
     public String getDiscontinued() {
 	return discontinued;
+    }
+    public long getId() {
+	return id;
     }
 
     public String getIntroduced() {
@@ -34,6 +30,10 @@ public class UpdateComputerDTO {
 
     public void setDiscontinued(String discontinued) {
 	this.discontinued = discontinued;
+    }
+
+    public void setId(long id) {
+	this.id = id;
     }
 
     public void setIntroduced(String introduced) {

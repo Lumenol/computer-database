@@ -27,6 +27,11 @@ import com.business.service.ComputerServiceImpl;
 import com.business.validator.CreateComputerValidator;
 import com.business.validator.UpdateComputerValidator;
 import com.controller.Controller;
+import com.controller.mapper.CompanyDTOToCompanyListDTO;
+import com.controller.mapper.ComputerDTOToComputerDetailDTO;
+import com.controller.mapper.ComputerDTOToComputerListDTO;
+import com.controller.mapper.CreateComputerDTOUiToBusiness;
+import com.controller.mapper.UpdateComputerDTOUiToBusiness;
 import com.infra.dao.ConnectionFactory;
 import com.infra.dao.jdbc.CompanyDaoJDBC;
 import com.infra.dao.jdbc.ComputerDaoJDBC;
@@ -37,6 +42,9 @@ import com.infra.dao.mapper.ResultSetToListCompanyMapper;
 import com.infra.dao.mapper.ResultSetToListComputerMapper;
 import com.ui.Ui;
 import com.ui.cli.CliUi;
+import com.ui.dto.CompanyListDTO;
+import com.ui.dto.ComputerDetailDTO;
+import com.ui.dto.ComputerListDTO;
 
 public class Main {
 
@@ -89,7 +97,15 @@ public class Main {
     }
 
     private static Controller controller(Ui ui, ComputerService computerService, CompanyService companyService) {
-	return new Controller(ui, computerService, companyService);
+	Function<CompanyDTO, CompanyListDTO> companyDTOToCompanyListDTO = new CompanyDTOToCompanyListDTO();
+	Function<ComputerDTO, ComputerDetailDTO> computerDTOToComputerDetailDTO = new ComputerDTOToComputerDetailDTO();
+	Function<ComputerDTO, ComputerListDTO> computerDTOToComputerListDTO = new ComputerDTOToComputerListDTO();
+	Function<com.ui.dto.CreateComputerDTO, CreateComputerDTO> createComputerDTOUiToBusiness = new CreateComputerDTOUiToBusiness();
+	Function<com.ui.dto.UpdateComputerDTO, UpdateComputerDTO> updateComputerDTOUiToBusiness = new UpdateComputerDTOUiToBusiness();
+
+	return new Controller(ui, computerService, companyService, companyDTOToCompanyListDTO,
+		computerDTOToComputerDetailDTO, computerDTOToComputerListDTO, createComputerDTOUiToBusiness,
+		updateComputerDTOUiToBusiness);
     }
 
     public static void main(String[] args) {

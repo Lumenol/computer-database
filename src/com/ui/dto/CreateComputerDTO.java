@@ -1,10 +1,10 @@
 package com.ui.dto;
 
 public class CreateComputerDTO {
-    private String name;
-    private String introduced;
     private String discontinued;
+    private String introduced;
     private String mannufacturer;
+    private String name;
 
     public String getDiscontinued() {
 	return discontinued;

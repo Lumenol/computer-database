@@ -11,6 +11,8 @@ public interface ComputerService {
 
     void delete(long id);
 
+    boolean exist(long id);
+
     List<ComputerDTO> findAll();
 
     ComputerDTO findById(long id);

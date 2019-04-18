@@ -8,7 +8,6 @@ import com.business.dao.CompanyDAO;
 import com.business.entite.Company;
 import com.infra.dao.ConnectionFactory;
 import com.infra.dao.mapper.ResultSetMapper;
-import com.infra.dao.mapper.ResultSetToListCompanyMapper;
 
 public class CompanyDaoJDBC implements CompanyDAO {
 
@@ -18,6 +17,13 @@ public class CompanyDaoJDBC implements CompanyDAO {
     private final ConnectionFactory connectionFactory;
     private final ResultSetMapper<List<Company>> resultSetToListCompanyMapper;
 
+    public CompanyDaoJDBC(ConnectionFactory connectionFactory,
+	    ResultSetMapper<List<Company>> resultSetToListCompanyMapper) {
+	super();
+	this.connectionFactory = connectionFactory;
+	this.resultSetToListCompanyMapper = resultSetToListCompanyMapper;
+    }
+
     @Override
     public List<Company> findAll() {
 	try {
@@ -25,13 +31,6 @@ public class CompanyDaoJDBC implements CompanyDAO {
 	} catch (SQLException e) {
 	    throw new RuntimeException(e);
 	}
-    }
-
-    public CompanyDaoJDBC(ConnectionFactory connectionFactory,
-	    ResultSetMapper<List<Company>> resultSetToListCompanyMapper) {
-	super();
-	this.connectionFactory = connectionFactory;
-	this.resultSetToListCompanyMapper = resultSetToListCompanyMapper;
     }
 
     @Override

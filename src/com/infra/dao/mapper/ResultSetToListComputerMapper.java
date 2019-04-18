@@ -5,12 +5,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.business.entite.Company;
 import com.business.entite.Computer;
 
 public class ResultSetToListComputerMapper implements ResultSetMapper<List<Computer>> {
 
     private final ResultSetMapper<Computer> resultSetToComputer;
+
+    public ResultSetToListComputerMapper(ResultSetMapper<Computer> resultSetToComputer) {
+	super();
+	this.resultSetToComputer = resultSetToComputer;
+    }
 
     @Override
     public List<Computer> map(ResultSet rs) throws SQLException {
@@ -19,11 +23,6 @@ public class ResultSetToListComputerMapper implements ResultSetMapper<List<Compu
 	    companies.add(resultSetToComputer.map(rs));
 	}
 	return companies;
-    }
-
-    public ResultSetToListComputerMapper(ResultSetMapper<Computer> resultSetToComputer) {
-	super();
-	this.resultSetToComputer = resultSetToComputer;
     }
 
 }

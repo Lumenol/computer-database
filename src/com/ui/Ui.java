@@ -21,11 +21,11 @@ public interface Ui {
 
     void showDetail(ComputerDetailDTO computer);
 
+    void showGoodBye();
+
     void showListCompany(List<CompanyListDTO> companies);
 
     void showListComputer(List<ComputerListDTO> computers);
 
     void showMenu();
-    
-    void showGoodBye();
 }

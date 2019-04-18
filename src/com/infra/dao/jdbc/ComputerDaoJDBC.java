@@ -13,15 +13,22 @@ import com.infra.dao.mapper.ResultSetMapper;
 
 public class ComputerDaoJDBC implements ComputerDAO {
 
-    private static final String SQL_FIND_BY_ID = "SELECT A.id AS id,A.name AS name ,A.introduced AS introduced ,A.discontinued AS discontinued ,B.id AS company_id,B.name AS company_name FROM computer AS A LEFT JOIN company AS B ON A.company_id = B.id WHERE A.id = ? LIMIT 1";
-    private static final String SQL_FIND_ALL = "SELECT A.id AS id,A.name AS name ,A.introduced AS introduced ,A.discontinued AS discontinued ,B.id AS company_id,B.name AS company_name FROM computer AS A LEFT JOIN company AS B ON A.company_id = B.id ORDER BY A.id";
     private static final String SQL_CREATE = "INSERT INTO computer (name, introduced,discontinued,company_id) VALUES (?,?,?,?)";
-    private static final String SQL_UPDATE = "UPDATE computer SET name = ?, introduced = ?,discontinued = ?,company_id = ? WHERE id = ?";
     private static final String SQL_DELETE = "DELETE FROM computer WHERE id=?";
+    private static final String SQL_FIND_ALL = "SELECT A.id AS id,A.name AS name ,A.introduced AS introduced ,A.discontinued AS discontinued ,B.id AS company_id,B.name AS company_name FROM computer AS A LEFT JOIN company AS B ON A.company_id = B.id ORDER BY A.id";
+    private static final String SQL_FIND_BY_ID = "SELECT A.id AS id,A.name AS name ,A.introduced AS introduced ,A.discontinued AS discontinued ,B.id AS company_id,B.name AS company_name FROM computer AS A LEFT JOIN company AS B ON A.company_id = B.id WHERE A.id = ? LIMIT 1";
+    private static final String SQL_UPDATE = "UPDATE computer SET name = ?, introduced = ?,discontinued = ?,company_id = ? WHERE id = ?";
 
     private final ConnectionFactory connectionFactory;
 
     private final ResultSetMapper<List<Computer>> resultSetToListComputerMapper;
+
+    public ComputerDaoJDBC(ConnectionFactory connectionFactory,
+	    ResultSetMapper<List<Computer>> resultSetToListComputerMapper) {
+	super();
+	this.connectionFactory = connectionFactory;
+	this.resultSetToListComputerMapper = resultSetToListComputerMapper;
+    }
 
     @Override
     public long create(Computer computer) {
@@ -66,13 +73,6 @@ public class ComputerDaoJDBC implements ComputerDAO {
 	} catch (SQLException e) {
 	    throw new RuntimeException(e);
 	}
-    }
-
-    public ComputerDaoJDBC(ConnectionFactory connectionFactory,
-	    ResultSetMapper<List<Computer>> resultSetToListComputerMapper) {
-	super();
-	this.connectionFactory = connectionFactory;
-	this.resultSetToListComputerMapper = resultSetToListComputerMapper;
     }
 
     @Override

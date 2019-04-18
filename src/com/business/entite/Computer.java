@@ -6,11 +6,11 @@ import java.util.Optional;
 public class Computer {
 
     public static class ComputerBuilder {
-	private Long id;
-	private String name;
-	private Company manufacturer;
-	private LocalDate introduced;
 	private LocalDate discontinued;
+	private Long id;
+	private LocalDate introduced;
+	private Company manufacturer;
+	private String name;
 
 	public Computer build() {
 	    return new Computer(id, name, manufacturer, introduced, Optional.ofNullable(discontinued));
@@ -46,12 +46,13 @@ public class Computer {
     public static ComputerBuilder builder() {
 	return new ComputerBuilder();
     }
-    private final Long id;
-    private final String name;
-    private final Company manufacturer;
-    private final LocalDate introduced;
 
     private final Optional<LocalDate> discontinued;
+    private final Long id;
+    private final LocalDate introduced;
+    private final Company manufacturer;
+
+    private final String name;
 
     private Computer(Long id, String name, Company manufacturer, LocalDate introduced,
 	    Optional<LocalDate> discontinued) {

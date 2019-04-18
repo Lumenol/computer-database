@@ -13,19 +13,20 @@ import com.business.entite.Computer.ComputerBuilder;
 
 public class ResultSetToComputerMapper implements ResultSetMapper<Computer> {
 
-    private static final String COLUMN_COMPANY_NAME = "company_name";
     private static final String COLUMN_COMPANY_ID = "company_id";
+    private static final String COLUMN_COMPANY_NAME = "company_name";
     private static final String COLUMN_DISCONTINUED = "discontinued";
+    private static final String COLUMN_ID = "id";
     private static final String COLUMN_INTRODUCED = "introduced";
     private static final String COLUMN_NAME = "name";
-    private static final String COLUMN_ID = "id";
 
     @Override
     public Computer map(ResultSet rs) throws SQLException {
 	long id = rs.getLong(COLUMN_ID);
 	String name = rs.getString(COLUMN_NAME);
 	LocalDate introduced = Optional.ofNullable(rs.getDate(COLUMN_INTRODUCED)).map(Date::toLocalDate).orElse(null);
-	LocalDate discontinued = Optional.ofNullable(rs.getDate(COLUMN_DISCONTINUED)).map(Date::toLocalDate).orElse(null);
+	LocalDate discontinued = Optional.ofNullable(rs.getDate(COLUMN_DISCONTINUED)).map(Date::toLocalDate)
+		.orElse(null);
 	ComputerBuilder computerBuilder = Computer.builder().id(id).name(name).introduced(introduced)
 		.discontinued(discontinued);
 	Long companyId = rs.getLong(COLUMN_COMPANY_ID);

@@ -3,7 +3,6 @@ package com.ui.cli;
 import java.util.List;
 import java.util.Scanner;
 
-import com.business.dto.UpdateComputerDTO;
 import com.ui.Action;
 import com.ui.Ui;
 import com.ui.dto.CompanyListDTO;
@@ -77,7 +76,7 @@ public class CliUi implements Ui {
 	com.ui.dto.UpdateComputerDTO dto = new com.ui.dto.UpdateComputerDTO();
 
 	System.out.print("Id: ");
-	dto.setId(scanner.next());
+	dto.setId(scanner.nextLong());
 
 	System.out.print("Nom: ");
 	dto.setName(scanner.next());
@@ -107,6 +106,11 @@ public class CliUi implements Ui {
     }
 
     @Override
+    public void showGoodBye() {
+	System.out.println("Au revoir");
+    }
+
+    @Override
     public void showListCompany(List<CompanyListDTO> companies) {
 	System.out.println("Les companies");
 	companies.forEach(c -> System.out.println("id: " + c.getId() + "\tnom: " + c.getName()));
@@ -128,11 +132,6 @@ public class CliUi implements Ui {
 	System.out.println("4 - Supprimer un ordinateur");
 	System.out.println("5 - Crée un ordinateur");
 	System.out.println("6 - Mettre à jour un ordinateur");
-    }
-
-    @Override
-    public void showGoodBye() {
-	System.out.println("Au revoir");
     }
 
 }

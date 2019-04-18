@@ -1,9 +1,7 @@
 package com.controller;
 
-import java.time.DateTimeException;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.business.dto.CompanyDTO;
@@ -22,85 +20,42 @@ import com.ui.dto.CreateComputerDTO;
 public class Controller {
 
     private static enum State {
-	SHOW_MENU, SHOW_LIST_COMPUTER, SHOW_DETAIL_COMPUTER, DELETE_COMPUTER, CREATE_COMPUTER, SHOW_LIST_COMPANY,
-	UPDATE_COMPUTER, QUIT
+	CREATE_COMPUTER, DELETE_COMPUTER, QUIT, SHOW_DETAIL_COMPUTER, SHOW_LIST_COMPANY, SHOW_LIST_COMPUTER, SHOW_MENU,
+	UPDATE_COMPUTER
     }
 
-    private static CompanyListDTO toCompanyListDTO(CompanyDTO company) {
-	CompanyListDTO companyListDTO = new CompanyListDTO();
-	companyListDTO.setId(Long.toString(company.getId()));
-	companyListDTO.setName(company.getName());
-	return companyListDTO;
-    }
+    private final Function<CompanyDTO, CompanyListDTO> companyDTOToCompanyListDTO;
+    private final CompanyService companyService;
+    private final Function<ComputerDTO, ComputerDetailDTO> computerDTOToComputerDetailDTO;
 
-    private static ComputerDetailDTO toComputerDetailDTO(ComputerDTO computer) {
-	ComputerDetailDTO computerDetailDTO = new ComputerDetailDTO();
-	computerDetailDTO.setId(Long.toString(computer.getId()));
-	computerDetailDTO.setName(computer.getName());
-
-	if (Objects.nonNull(computer.getIntroduced())) {
-	    computerDetailDTO.setIntroduced(computer.getIntroduced().toString());
-	}
-
-	if (Objects.nonNull(computer.getDiscontinued())) {
-	    computerDetailDTO.setIntroduced(computer.getDiscontinued().toString());
-	}
-
-	if (Objects.nonNull(computer.getMannufacturer())) {
-	    computerDetailDTO.setMannufacturer(computer.getMannufacturer().getName());
-	}
-
-	return computerDetailDTO;
-    }
-
-    private static ComputerListDTO toComputerListDTO(ComputerDTO computer) {
-	ComputerListDTO computerListDTO = new ComputerListDTO();
-	computerListDTO.setId(Long.toString(computer.getId()));
-	computerListDTO.setName(computer.getName());
-	return computerListDTO;
-    }
-
+    private final Function<ComputerDTO, ComputerListDTO> computerDTOToComputerListDTO;
+    private final ComputerService computerService;
+    private final Function<CreateComputerDTO, com.business.dto.CreateComputerDTO> createComputerDTOUiToBusiness;
+    private State state = State.SHOW_MENU;
     private final Ui ui;
 
-    private final ComputerService computerService;
+    private final Function<com.ui.dto.UpdateComputerDTO, com.business.dto.UpdateComputerDTO> updateComputerDTOUiToBusiness;
 
-    private final CompanyService companyService;
-
-    private State state;
-
-    public Controller(Ui ui, ComputerService computerService, CompanyService companyService) {
+    public Controller(Ui ui, ComputerService computerService, CompanyService companyService,
+	    Function<CompanyDTO, CompanyListDTO> companyDTOToCompanyListDTO,
+	    Function<ComputerDTO, ComputerDetailDTO> computerDTOToComputerDetailDTO,
+	    Function<ComputerDTO, ComputerListDTO> computerDTOToComputerListDTO,
+	    Function<CreateComputerDTO, com.business.dto.CreateComputerDTO> createComputerDTOUiToBusiness,
+	    Function<com.ui.dto.UpdateComputerDTO, UpdateComputerDTO> updateComputerDTOUiToBusiness) {
 	super();
 	this.ui = ui;
 	this.computerService = computerService;
 	this.companyService = companyService;
-	state = State.SHOW_MENU;
+	this.companyDTOToCompanyListDTO = companyDTOToCompanyListDTO;
+	this.computerDTOToComputerDetailDTO = computerDTOToComputerDetailDTO;
+	this.computerDTOToComputerListDTO = computerDTOToComputerListDTO;
+	this.createComputerDTOUiToBusiness = createComputerDTOUiToBusiness;
+	this.updateComputerDTOUiToBusiness = updateComputerDTOUiToBusiness;
     }
 
     private void createComputer() {
 	CreateComputerDTO dtoUi = ui.getCreateComputerDTO();
-	com.business.dto.CreateComputerDTO dtoMetier = new com.business.dto.CreateComputerDTO();
-
-	dtoMetier.setName(dtoUi.getName());
-	try {
-	    dtoMetier.setMannufacturerId(Long.valueOf(dtoUi.getMannufacturer()));
-	} catch (NumberFormatException e) {
-	    e.printStackTrace();
-	}
-
-	try {
-	    dtoMetier.setIntroduced(LocalDate.parse(dtoUi.getIntroduced()));
-	} catch (DateTimeException e) {
-	    e.printStackTrace();
-	}
-
-	try {
-	    dtoMetier.setIntroduced(LocalDate.parse(dtoUi.getDiscontinued()));
-	} catch (DateTimeException e) {
-	    e.printStackTrace();
-	}
-
-	computerService.create(dtoMetier);
-
+	computerService.create(createComputerDTOUiToBusiness.apply(dtoUi));
 	state = State.SHOW_MENU;
     }
 
@@ -112,26 +67,26 @@ public class Controller {
 
     private void showDetailComputer() {
 	long id = ui.getComputerId();
-	try {
+	if (computerService.exist(id)) {
 	    ComputerDTO computer = computerService.findById(id);
-	    ui.showDetail(toComputerDetailDTO(computer));
-	} catch (ComputerNotFoundException e) {
+	    ui.showDetail(computerDTOToComputerDetailDTO.apply(computer));
+	} else {
 	    ui.showComputerNotFound();
 	}
 	state = State.SHOW_MENU;
-
     }
 
     private void showListCampany() {
 	List<CompanyDTO> findAll = companyService.findAll();
-	List<CompanyListDTO> listDTO = findAll.stream().map(Controller::toCompanyListDTO).collect(Collectors.toList());
+	List<CompanyListDTO> listDTO = findAll.stream().map(companyDTOToCompanyListDTO::apply)
+		.collect(Collectors.toList());
 	ui.showListCompany(listDTO);
 	state = State.SHOW_MENU;
     }
 
     private void showListComputer() {
 	List<ComputerDTO> computers = computerService.findAll();
-	List<ComputerListDTO> convertedComputers = computers.stream().map(Controller::toComputerListDTO)
+	List<ComputerListDTO> convertedComputers = computers.stream().map(computerDTOToComputerListDTO::apply)
 		.collect(Collectors.toList());
 	ui.showListComputer(convertedComputers);
 	state = State.SHOW_MENU;
@@ -202,30 +157,11 @@ public class Controller {
 
     private void updateComputer() {
 	com.ui.dto.UpdateComputerDTO dtoUi = ui.getUpdateComputerDTO();
-	UpdateComputerDTO dtoMetier = new UpdateComputerDTO();
-
-	dtoMetier.setId(Long.valueOf(dtoUi.getId()));
-	dtoMetier.setName(dtoUi.getName());
 	try {
-	    dtoMetier.setMannufacturerId(Long.valueOf(dtoUi.getMannufacturer()));
-	} catch (NumberFormatException e) {
-	    e.printStackTrace();
+	    computerService.update(updateComputerDTOUiToBusiness.apply(dtoUi));
+	} catch (ComputerNotFoundException e) {
+	    ui.showComputerNotFound();
 	}
-
-	try {
-	    dtoMetier.setIntroduced(LocalDate.parse(dtoUi.getIntroduced()));
-	} catch (DateTimeException e) {
-	    e.printStackTrace();
-	}
-
-	try {
-	    dtoMetier.setIntroduced(LocalDate.parse(dtoUi.getDiscontinued()));
-	} catch (DateTimeException e) {
-	    e.printStackTrace();
-	}
-	
-	computerService.update(dtoMetier);
-
 	state = State.SHOW_MENU;
     }
 

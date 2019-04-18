@@ -19,6 +19,11 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    public boolean exist(long id) {
+	return companyDao.findById(id).isPresent();
+    }
+
+    @Override
     public List<CompanyDTO> findAll() {
 	return companyDao.findAll().stream().map(companyToCompanyDTO::apply).collect(Collectors.toList());
     }

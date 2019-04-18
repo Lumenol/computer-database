@@ -11,16 +11,17 @@ import com.business.dto.CreateComputerDTO;
 import com.business.dto.UpdateComputerDTO;
 import com.business.entite.Computer;
 import com.business.exception.ComputerNotFoundException;
+import com.business.exception.ValidatorException;
 import com.business.validator.Validator;
 
 public class ComputerServiceImpl implements ComputerService {
 
     private final ComputerDAO computerDAO;
-    private final ValidatorFactory<CreateComputerDTO> createComputerValidatorFactory;
-    private final ValidatorFactory<UpdateComputerDTO> updateComputerValidatorFactory;
     private final Function<Computer, ComputerDTO> computerToComputerDTO;
-    private final Function<UpdateComputerDTO, Computer> updateComputerDTOToComputer;
     private final Function<CreateComputerDTO, Computer> createComputerDTOToComputer;
+    private final ValidatorFactory<CreateComputerDTO> createComputerValidatorFactory;
+    private final Function<UpdateComputerDTO, Computer> updateComputerDTOToComputer;
+    private final ValidatorFactory<UpdateComputerDTO> updateComputerValidatorFactory;
 
     public ComputerServiceImpl(ComputerDAO computerDAO,
 	    ValidatorFactory<CreateComputerDTO> createComputerValidatorFactory,
@@ -37,17 +38,27 @@ public class ComputerServiceImpl implements ComputerService {
 	this.createComputerDTOToComputer = createComputerDTOToComputer;
     }
 
+    /**
+     * @throws {@link ValidatorException}
+     */
     @Override
     public void create(CreateComputerDTO computer) {
 	Validator<CreateComputerDTO> validator = createComputerValidatorFactory.get(computer);
 	if (validator.isValid()) {
 	    computerDAO.create(createComputerDTOToComputer.apply(computer));
+	} else {
+	    throw new ValidatorException(validator.errors());
 	}
     }
 
     @Override
     public void delete(long id) {
 	computerDAO.deleteById(id);
+    }
+
+    @Override
+    public boolean exist(long id) {
+	return computerDAO.findById(id).isPresent();
     }
 
     @Override
@@ -64,11 +75,16 @@ public class ComputerServiceImpl implements ComputerService {
 		.orElseThrow(() -> new ComputerNotFoundException(id));
     }
 
+    /**
+     * @throws {@link ValidatorException}
+     */
     @Override
     public void update(UpdateComputerDTO computer) {
 	Validator<UpdateComputerDTO> validator = updateComputerValidatorFactory.get(computer);
 	if (validator.isValid()) {
 	    computerDAO.update(updateComputerDTOToComputer.apply(computer));
+	} else {
+	    throw new ValidatorException(validator.errors());
 	}
     }
 

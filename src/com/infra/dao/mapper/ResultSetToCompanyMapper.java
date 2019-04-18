@@ -2,15 +2,13 @@ package com.infra.dao.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.function.Function;
 
 import com.business.entite.Company;
-import com.business.exception.MappingException;
 
 public class ResultSetToCompanyMapper implements ResultSetMapper<Company> {
 
-    private static final String COLUMN_NAME = "name";
     private static final String COLUMN_ID = "id";
+    private static final String COLUMN_NAME = "name";
 
     @Override
     public Company map(ResultSet rs) throws SQLException {
