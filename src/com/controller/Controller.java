@@ -1,6 +1,9 @@
 package com.controller;
 
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -38,6 +41,8 @@ public class Controller {
     private final Ui ui;
 
     private final Function<com.ui.dto.UpdateComputerDTO, com.business.dto.UpdateComputerDTO> updateComputerDTOUiToBusiness;
+    private final BiFunction<Long, Long, List<CompanyListDTO>> getPageCompanyDTO;
+    private final BiFunction<Long, Long, List<ComputerListDTO>> getPageComputerDTO;
 
     public Controller(Ui ui, ComputerService computerService, CompanyService companyService,
 	    Function<CompanyDTO, CompanyListDTO> companyDTOToCompanyListDTO,
@@ -54,6 +59,12 @@ public class Controller {
 	this.computerDTOToComputerListDTO = computerDTOToComputerListDTO;
 	this.createComputerDTOUiToBusiness = createComputerDTOUiToBusiness;
 	this.updateComputerDTOUiToBusiness = updateComputerDTOUiToBusiness;
+
+	getPageCompanyDTO = (Long from, Long to) -> companyService.findAll(from, to).stream()
+		.map(companyDTOToCompanyListDTO::apply).collect(Collectors.toList());
+
+	getPageComputerDTO = (Long from, Long to) -> computerService.findAll(from, to).stream()
+		.map(computerDTOToComputerListDTO::apply).collect(Collectors.toList());
     }
 
     private void createComputer() {
@@ -83,13 +94,11 @@ public class Controller {
 	state = State.SHOW_MENU;
     }
 
-    private void showListCampany() {
+    private <T> void showPagginer(BiFunction<Long, Long, List<T>> getPage, Consumer<List<T>> show) {
 	long from = 0;
 	while (true) {
-	    List<CompanyDTO> findAll = companyService.findAll(from, from + PAGE_SIZE);
-	    List<CompanyListDTO> listDTO = findAll.stream().map(companyDTOToCompanyListDTO::apply)
-		    .collect(Collectors.toList());
-	    ui.showListCompany(listDTO);
+	    List<T> listDTO = getPage.apply(from, from + PAGE_SIZE);
+	    show.accept(listDTO);
 	    Action input = ui.getInputPage(from > 0, listDTO.size() == PAGE_SIZE);
 	    switch (input) {
 	    case PREVIOUS:
@@ -107,12 +116,12 @@ public class Controller {
 	}
     }
 
+    private void showListCampany() {
+	showPagginer(getPageCompanyDTO, ui::showListCompany);
+    }
+
     private void showListComputer() {
-	List<ComputerDTO> computers = computerService.findAll();
-	List<ComputerListDTO> convertedComputers = computers.stream().map(computerDTOToComputerListDTO::apply)
-		.collect(Collectors.toList());
-	ui.showListComputer(convertedComputers);
-	state = State.SHOW_MENU;
+	showPagginer(getPageComputerDTO, ui::showListComputer);
     }
 
     private void showMenu() {

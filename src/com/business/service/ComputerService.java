@@ -18,4 +18,6 @@ public interface ComputerService {
     ComputerDTO findById(long id);
 
     void update(UpdateComputerDTO computer);
+
+    List<ComputerDTO> findAll(long from, long to);
 }

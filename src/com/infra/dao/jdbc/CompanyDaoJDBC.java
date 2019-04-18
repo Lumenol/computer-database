@@ -12,7 +12,7 @@ import com.infra.dao.mapper.ResultSetMapper;
 public class CompanyDaoJDBC implements CompanyDAO {
 
     private static final String SQL_FIND_ALL = "SELECT id,name FROM company ORDER BY id";
-    private static final String SQL_FIND_ALL_PAGINED = "SELECT id,name FROM company ORDER BY id LIMIT ? OFFSET ?";
+    private static final String SQL_FIND_ALL_PAGED = "SELECT id,name FROM company ORDER BY id LIMIT ? OFFSET ?";
     private static final String SQL_FIND_BY_ID = "SELECT id,name FROM company WHERE id = ? LIMIT 1";
 
     private final ConnectionFactory connectionFactory;
@@ -52,7 +52,7 @@ public class CompanyDaoJDBC implements CompanyDAO {
     @Override
     public List<Company> findAll(long from, long to) {
 	try {
-	    return JDBCUtils.find(resultSetToListCompanyMapper, connectionFactory, SQL_FIND_ALL_PAGINED, to - from,
+	    return JDBCUtils.find(resultSetToListCompanyMapper, connectionFactory, SQL_FIND_ALL_PAGED, to - from,
 		    from);
 	} catch (SQLException e) {
 	    throw new RuntimeException(e);

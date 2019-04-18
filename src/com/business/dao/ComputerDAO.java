@@ -15,4 +15,6 @@ public interface ComputerDAO {
     Optional<Computer> findById(long id);
 
     void update(Computer computer);
+
+    List<Computer> findAll(long from, long to);
 }
