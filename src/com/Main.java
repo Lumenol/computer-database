@@ -1,8 +1,12 @@
 package com;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
 import java.util.function.Function;
 import java.util.function.LongFunction;
 
@@ -83,12 +87,10 @@ public class Main {
 		computerToComputerDTO, updateComputerDTOToComputer, createComputerDTOToComputer);
     }
 
-    private static ConnectionFactory connectionFactory() {
+    private static ConnectionFactory connectionFactory(String url, String user, String password) {
 	return () -> {
 	    try {
-		return DriverManager.getConnection(
-			"jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=UTC",
-			"admincdb", "qwerty1234");
+		return DriverManager.getConnection(url, user, password);
 	    } catch (SQLException e) {
 		e.printStackTrace();
 	    }
@@ -110,7 +112,10 @@ public class Main {
 
     public static void main(String[] args) {
 	Ui ui = ui();
-	ConnectionFactory connectionFactory = connectionFactory();
+
+	ConnectionFactory connectionFactory = connectionFactory(
+		"jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=UTC",
+		"admincdb", "qwerty1234");
 	CompanyDAO companyDAO = companyDAO(connectionFactory);
 	ComputerService computerService = computerService(connectionFactory, companyDAO);
 	CompanyService companyService = companyService(connectionFactory, companyDAO);
