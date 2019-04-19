@@ -87,6 +87,13 @@ public class Main {
 		computerToComputerDTO, updateComputerDTOToComputer, createComputerDTOToComputer);
     }
 
+    private static Properties properties(String propertiesFileName) throws FileNotFoundException, IOException {
+	Properties properties = new Properties();
+	properties.load(new FileReader(propertiesFileName));
+	return properties;
+
+    }
+
     private static ConnectionFactory connectionFactory(String url, String user, String password) {
 	return () -> {
 	    try {
@@ -110,12 +117,15 @@ public class Main {
 		updateComputerDTOUiToBusiness);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException, IOException {
 	Ui ui = ui();
 
-	ConnectionFactory connectionFactory = connectionFactory(
-		"jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=UTC",
-		"admincdb", "qwerty1234");
+	Properties database = properties("database.properties");
+	String url = database.getProperty("url");
+	String username = database.getProperty("username");
+	String password = database.getProperty("password");
+
+	ConnectionFactory connectionFactory = connectionFactory(url,username,password);
 	CompanyDAO companyDAO = companyDAO(connectionFactory);
 	ComputerService computerService = computerService(connectionFactory, companyDAO);
 	CompanyService companyService = companyService(connectionFactory, companyDAO);
