@@ -58,12 +58,17 @@ public class Main {
 	return new CompanyDaoJDBC(connectionFactory, resultSetToListCompany);
     }
 
-    private static CompanyService companyService(ConnectionFactory connectionFactory, CompanyDAO companyDAO) {
-	Function<Company, CompanyDTO> companyToCompanyDTO = new CompanyToCompanyDTOMapper();
+    private static Function<Company, CompanyDTO> companyToCompanyDTO() {
+	return new CompanyToCompanyDTOMapper();
+    }
+
+    private static CompanyService companyService(ConnectionFactory connectionFactory, CompanyDAO companyDAO,
+	    Function<Company, CompanyDTO> companyToCompanyDTO) {
 	return new CompanyServiceImpl(companyDAO, companyToCompanyDTO);
     }
 
-    private static ComputerService computerService(ConnectionFactory connectionFactory, CompanyDAO companyDAO) {
+    private static ComputerService computerService(ConnectionFactory connectionFactory, CompanyDAO companyDAO,
+	    Function<Company, CompanyDTO> companyToCompanyDTO) {
 	ResultSetMapper<Computer> resultSetToComputerMapper = new ResultSetToComputerMapper();
 	ResultSetMapper<List<Computer>> resultSetToListComputerMapper = new ResultSetToListComputerMapper(
 		resultSetToComputerMapper);
@@ -75,7 +80,7 @@ public class Main {
 	LongFunction<Company> findCompanyById = id -> companyDAO.findById(id)
 		.orElseThrow(() -> new CompanyNotFoundException(id));
 
-	Function<Computer, ComputerDTO> computerToComputerDTO = new ComputerToComputerDTOMapper();
+	Function<Computer, ComputerDTO> computerToComputerDTO = new ComputerToComputerDTOMapper(companyToCompanyDTO);
 
 	Function<UpdateComputerDTO, Computer> updateComputerDTOToComputer = new UpdateComputerDTOToComputerMapper(
 		findCompanyById);
@@ -125,10 +130,11 @@ public class Main {
 	String username = database.getProperty("username");
 	String password = database.getProperty("password");
 
-	ConnectionFactory connectionFactory = connectionFactory(url,username,password);
+	ConnectionFactory connectionFactory = connectionFactory(url, username, password);
 	CompanyDAO companyDAO = companyDAO(connectionFactory);
-	ComputerService computerService = computerService(connectionFactory, companyDAO);
-	CompanyService companyService = companyService(connectionFactory, companyDAO);
+	Function<Company, CompanyDTO> companyToCompanyDTO = companyToCompanyDTO();
+	ComputerService computerService = computerService(connectionFactory, companyDAO, companyToCompanyDTO);
+	CompanyService companyService = companyService(connectionFactory, companyDAO, companyToCompanyDTO);
 
 	Controller controller = controller(ui, computerService, companyService);
 	controller.start();

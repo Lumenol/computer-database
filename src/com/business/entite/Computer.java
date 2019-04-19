@@ -13,7 +13,8 @@ public class Computer {
 	private String name;
 
 	public Computer build() {
-	    return new Computer(id, name, manufacturer, introduced, Optional.ofNullable(discontinued));
+	    return new Computer(id, name, Optional.ofNullable(manufacturer), Optional.ofNullable(introduced),
+		    Optional.ofNullable(discontinued));
 	}
 
 	public ComputerBuilder discontinued(LocalDate discontinued) {
@@ -49,19 +50,27 @@ public class Computer {
 
     private final Optional<LocalDate> discontinued;
     private final Long id;
-    private final LocalDate introduced;
-    private final Company manufacturer;
+    private final Optional<LocalDate> introduced;
+    private final Optional<Company> manufacturer;
 
     private final String name;
 
-    private Computer(Long id, String name, Company manufacturer, LocalDate introduced,
-	    Optional<LocalDate> discontinued) {
+    public Optional<LocalDate> getIntroduced() {
+	return introduced;
+    }
 
-	this.id = id;
-	this.name = name;
-	this.manufacturer = manufacturer;
-	this.introduced = introduced;
+    public Optional<Company> getManufacturer() {
+	return manufacturer;
+    }
+
+    private Computer(Long id, String name, Optional<Company> manufacturer, Optional<LocalDate> introduced,
+	    Optional<LocalDate> discontinued) {
+	super();
 	this.discontinued = discontinued;
+	this.id = id;
+	this.introduced = introduced;
+	this.manufacturer = manufacturer;
+	this.name = name;
     }
 
     @Override
@@ -87,14 +96,6 @@ public class Computer {
 
     public Long getId() {
 	return id;
-    }
-
-    public LocalDate getIntroduced() {
-	return introduced;
-    }
-
-    public Company getManufacturer() {
-	return manufacturer;
     }
 
     public String getName() {

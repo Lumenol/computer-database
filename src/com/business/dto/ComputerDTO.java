@@ -1,50 +1,51 @@
 package com.business.dto;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 public class ComputerDTO {
-    private LocalDate discontinued;
+    private Optional<LocalDate> discontinued;
     private long id;
-    private LocalDate introduced;
+    private Optional<LocalDate> introduced;
 
-    private CompagnyDTO mannufacturer;
+    private Optional<CompanyDTO> mannufacturer;
 
     private String name;
 
-    public LocalDate getDiscontinued() {
+    public Optional<LocalDate> getDiscontinued() {
 	return discontinued;
+    }
+
+    public void setDiscontinued(Optional<LocalDate> discontinued) {
+	this.discontinued = discontinued;
     }
 
     public long getId() {
 	return id;
     }
 
-    public LocalDate getIntroduced() {
-	return introduced;
-    }
-
-    public CompagnyDTO getMannufacturer() {
-	return mannufacturer;
-    }
-
-    public String getName() {
-	return name;
-    }
-
-    public void setDiscontinued(LocalDate discontinued) {
-	this.discontinued = discontinued;
-    }
-
     public void setId(long id) {
 	this.id = id;
     }
 
-    public void setIntroduced(LocalDate introduced) {
+    public Optional<LocalDate> getIntroduced() {
+	return introduced;
+    }
+
+    public void setIntroduced(Optional<LocalDate> introduced) {
 	this.introduced = introduced;
     }
 
-    public void setMannufacturer(CompagnyDTO mannufacturer) {
+    public Optional<CompanyDTO> getMannufacturer() {
+	return mannufacturer;
+    }
+
+    public void setMannufacturer(Optional<CompanyDTO> mannufacturer) {
 	this.mannufacturer = mannufacturer;
+    }
+
+    public String getName() {
+	return name;
     }
 
     public void setName(String name) {

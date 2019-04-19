@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import com.business.dao.ComputerDAO;
+import com.business.entite.Company;
 import com.business.entite.Computer;
 import com.infra.dao.ConnectionFactory;
 import com.infra.dao.mapper.ResultSetMapper;
@@ -35,20 +36,9 @@ public class ComputerDaoJDBC implements ComputerDAO {
     public long create(Computer computer) {
 	String name = computer.getName();
 
-	Date introduced = null;
-	if (Objects.nonNull(computer.getIntroduced())) {
-	    introduced = Date.valueOf(computer.getIntroduced());
-	}
-
-	Date discontinued = null;
-	if (computer.getDiscontinued().isPresent()) {
-	    discontinued = Date.valueOf(computer.getDiscontinued().get());
-	}
-
-	Long manufacturerId = null;
-	if (Objects.nonNull(computer.getManufacturer())) {
-	    manufacturerId = computer.getManufacturer().getId();
-	}
+	Date introduced = computer.getIntroduced().map(Date::valueOf).orElse(null);
+	Date discontinued = computer.getDiscontinued().map(Date::valueOf).orElse(null);
+	Long manufacturerId = computer.getManufacturer().map(Company::getId).orElse(null);
 
 	try {
 	    return JDBCUtils.insert(connectionFactory, SQL_CREATE, name, introduced, discontinued, manufacturerId);
@@ -103,24 +93,12 @@ public class ComputerDaoJDBC implements ComputerDAO {
 
     @Override
     public void update(Computer computer) {
-
-	String name = computer.getName();
-
-	Date introduced = null;
-	if (Objects.nonNull(computer.getIntroduced())) {
-	    introduced = Date.valueOf(computer.getIntroduced());
-	}
-
-	Date discontinued = null;
-	if (computer.getDiscontinued().isPresent()) {
-	    discontinued = Date.valueOf(computer.getDiscontinued().get());
-	}
-
-	Long manufacturerId = null;
-	if (Objects.nonNull(computer.getManufacturer())) {
-	    manufacturerId = computer.getManufacturer().getId();
-	}
+	
 	Long id = computer.getId();
+	String name = computer.getName();
+	Date introduced = computer.getIntroduced().map(Date::valueOf).orElse(null);
+	Date discontinued = computer.getDiscontinued().map(Date::valueOf).orElse(null);
+	Long manufacturerId = computer.getManufacturer().map(Company::getId).orElse(null);
 
 	try {
 	    JDBCUtils.update(connectionFactory, SQL_UPDATE, name, introduced, discontinued, manufacturerId, id);

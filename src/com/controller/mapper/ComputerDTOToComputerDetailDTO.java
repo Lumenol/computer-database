@@ -3,6 +3,7 @@ package com.controller.mapper;
 import java.util.Objects;
 import java.util.function.Function;
 
+import com.business.dto.CompanyDTO;
 import com.business.dto.ComputerDTO;
 import com.ui.dto.ComputerDetailDTO;
 
@@ -23,7 +24,7 @@ public class ComputerDTOToComputerDetailDTO implements Function<ComputerDTO, Com
 	}
 
 	if (Objects.nonNull(computer.getMannufacturer())) {
-	    computerDetailDTO.setMannufacturer(computer.getMannufacturer().getName());
+	    computerDetailDTO.setMannufacturer(computer.getMannufacturer().map(CompanyDTO::getName).orElse(null));
 	}
 
 	return computerDetailDTO;
