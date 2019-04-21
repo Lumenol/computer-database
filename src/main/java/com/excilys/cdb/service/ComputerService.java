@@ -1,23 +1,83 @@
 package com.excilys.cdb.service;
 
+import com.excilys.cdb.dao.ComputerDao;
+import com.excilys.cdb.exception.ComputerDAOException;
+import com.excilys.cdb.exception.ComputerServiceException;
+import com.excilys.cdb.model.Computer;
+
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
-import com.excilys.cdb.dto.ComputerDTO;
-import com.excilys.cdb.dto.CreateComputerDTO;
-import com.excilys.cdb.dto.UpdateComputerDTO;
+public class ComputerService {
 
-public interface ComputerService {
-    void create(CreateComputerDTO computer);
 
-    void delete(long id);
+    private static ComputerService instance;
+    private final ComputerDao computerDAO = ComputerDao.getInstance();
 
-    boolean exist(long id);
+    private ComputerService() {
+    }
 
-    List<ComputerDTO> findAll();
+    public static ComputerService getInstance() {
+        if (Objects.isNull(instance)) {
+            instance = new ComputerService();
+        }
+        return instance;
+    }
 
-    List<ComputerDTO> findAll(long from, long to);
+    public void create(Computer computer) {
+        try {
+            computerDAO.create(computer);
+        } catch (ComputerDAOException e) {
+            throw new ComputerServiceException(e);
+        }
+    }
 
-    ComputerDTO findById(long id);
+    public void delete(long id) {
+        try {
+            computerDAO.deleteById(id);
+        } catch (ComputerDAOException e) {
+            throw new ComputerServiceException(e);
+        }
+    }
 
-    void update(UpdateComputerDTO computer);
+    public List<Computer> findAll(long offset, long limit) {
+        try {
+            return computerDAO.findAll(offset, limit);
+        } catch (ComputerDAOException e) {
+            throw new ComputerServiceException(e);
+        }
+    }
+
+    public Optional<Computer> findById(long id) {
+        try {
+            return computerDAO.findById(id);
+        } catch (ComputerDAOException e) {
+            throw new ComputerServiceException(e);
+        }
+    }
+
+    public void update(Computer computer) {
+        try {
+            computerDAO.update(computer);
+        } catch (ComputerDAOException e) {
+            throw new ComputerServiceException(e);
+        }
+    }
+
+    public long count() {
+        try {
+            return computerDAO.count();
+        } catch (ComputerDAOException e) {
+            throw new ComputerServiceException(e);
+        }
+    }
+
+    public boolean exist(long id) {
+        try {
+            return findById(id).isPresent();
+        } catch (ComputerDAOException e) {
+            throw new ComputerServiceException(e);
+        }
+    }
 }

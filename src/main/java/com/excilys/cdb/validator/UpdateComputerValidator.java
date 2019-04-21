@@ -1,25 +1,31 @@
 package com.excilys.cdb.validator;
 
-import java.util.HashMap;
+import com.excilys.cdb.dto.UpdateComputerDTO;
+import com.excilys.cdb.service.ComputerService;
+
 import java.util.Map;
 import java.util.Objects;
 
-import com.excilys.cdb.dto.UpdateComputerDTO;
+public class UpdateComputerValidator extends Validator<UpdateComputerDTO> {
 
-public class UpdateComputerValidator extends AbstractValidator<UpdateComputerDTO> {
+    private static UpdateComputerValidator instance;
+
+    private UpdateComputerValidator() {
+    }
+
+    public static UpdateComputerValidator getInstance() {
+        if (Objects.isNull(instance)) {
+            instance = new UpdateComputerValidator();
+        }
+        return instance;
+    }
 
     @Override
     protected Map<String, String> validation(UpdateComputerDTO toValidate) {
-	HashMap<String, String> errors = new HashMap<>();
-	if (Objects.isNull(toValidate.getName()) || toValidate.getName().trim().isEmpty()) {
-	    errors.put("name", "Le nom ne peux pas être nul ou vide.");
-	}
-
-	if (Objects.nonNull(toValidate.getIntroduced()) && Objects.nonNull(toValidate.getDiscontinued())
-		&& toValidate.getIntroduced().isAfter(toValidate.getDiscontinued())) {
-	    errors.put("discontinued", "Discontinued ne peux pas être avant Introduced.");
-	}
-	return errors;
+        final Map<String, String> errors = CreateComputerValidator.getInstance().validation(toValidate);
+        if (!ComputerService.getInstance().exist(toValidate.getId())) {
+            errors.put("id", "l'id ne correspond à aucun ordinateur");
+        }
+        return errors;
     }
-
 }

@@ -1,6 +1,7 @@
 package com.excilys.cdb.dto;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Optional;
 
 public class ComputerDTO {
@@ -13,42 +14,70 @@ public class ComputerDTO {
     private String name;
 
     public Optional<LocalDate> getDiscontinued() {
-	return discontinued;
+        return discontinued;
     }
 
     public void setDiscontinued(Optional<LocalDate> discontinued) {
-	this.discontinued = discontinued;
+        this.discontinued = discontinued;
     }
 
     public long getId() {
-	return id;
+        return id;
     }
 
     public void setId(long id) {
-	this.id = id;
+        this.id = id;
     }
 
     public Optional<LocalDate> getIntroduced() {
-	return introduced;
+        return introduced;
     }
 
     public void setIntroduced(Optional<LocalDate> introduced) {
-	this.introduced = introduced;
+        this.introduced = introduced;
     }
 
     public Optional<CompanyDTO> getMannufacturer() {
-	return mannufacturer;
+        return mannufacturer;
     }
 
     public void setMannufacturer(Optional<CompanyDTO> mannufacturer) {
-	this.mannufacturer = mannufacturer;
+        this.mannufacturer = mannufacturer;
     }
 
     public String getName() {
-	return name;
+        return name;
     }
 
     public void setName(String name) {
-	this.name = name;
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "ComputerDTO{" +
+                "discontinued=" + discontinued.orElse(null) +
+                ", id=" + id +
+                ", introduced=" + introduced.orElse(null) +
+                ", mannufacturer=" + mannufacturer.orElse(null) +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ComputerDTO that = (ComputerDTO) o;
+        return id == that.id &&
+                Objects.equals(discontinued, that.discontinued) &&
+                Objects.equals(introduced, that.introduced) &&
+                Objects.equals(mannufacturer, that.mannufacturer) &&
+                Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(discontinued, id, introduced, mannufacturer, name);
     }
 }
