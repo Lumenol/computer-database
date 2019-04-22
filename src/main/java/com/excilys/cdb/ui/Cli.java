@@ -26,6 +26,10 @@ public class Cli {
     private final Controller controller = Controller.getInstance();
     private final Scanner in;
     private final PrintStream out;
+    private final UpdateComputerUIValidator updateComputerUIValidator = UpdateComputerUIValidator.getInstance();
+    private final UpdateComputerDTOUiToUpdateComputerDTOMapper updateComputerDTOUiToUpdateComputerDTOMapper = UpdateComputerDTOUiToUpdateComputerDTOMapper.getInstance();
+    private final CreateComputerUIValidator createComputerUIValidator = CreateComputerUIValidator.getInstance();
+    private final CreateComputerDTOUiToCreateComputerDTOMapper createComputerDTOUiToCreateComputerDTOMapper = CreateComputerDTOUiToCreateComputerDTOMapper.getInstance();
     private boolean quit = false;
 
     public Cli(InputStream in, PrintStream out) {
@@ -125,9 +129,9 @@ public class Cli {
             dtoUi.setIntroduced(tokens.get(2));
             dtoUi.setDiscontinued(tokens.get(3));
             dtoUi.setMannufacturerId(tokens.get(4));
-            final Validator.Result result = UpdateComputerUIValidator.getInstance().check(dtoUi);
+            final Validator.Result result = updateComputerUIValidator.check(dtoUi);
             if (result.isValid()) {
-                controller.updateComputer(UpdateComputerDTOUiToUpdateComputerDTOMapper.getInstance().map(dtoUi));
+                controller.updateComputer(updateComputerDTOUiToUpdateComputerDTOMapper.map(dtoUi));
             } else {
                 result.values().forEach(out::println);
             }
@@ -159,9 +163,9 @@ public class Cli {
             dtoUi.setIntroduced(tokens.get(1));
             dtoUi.setDiscontinued(tokens.get(2));
             dtoUi.setMannufacturerId(tokens.get(3));
-            final Validator.Result result = CreateComputerUIValidator.getInstance().check(dtoUi);
+            final Validator.Result result = createComputerUIValidator.check(dtoUi);
             if (result.isValid()) {
-                controller.createComputer(CreateComputerDTOUiToCreateComputerDTOMapper.getInstance().map(dtoUi));
+                controller.createComputer(createComputerDTOUiToCreateComputerDTOMapper.map(dtoUi));
             } else {
                 result.values().forEach(out::println);
             }

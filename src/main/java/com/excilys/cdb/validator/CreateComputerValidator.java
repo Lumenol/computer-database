@@ -7,9 +7,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.excilys.cdb.validator.ValidatorUtils.isBlank;
+
 public class CreateComputerValidator extends Validator<CreateComputerDTO> {
 
     private static CreateComputerValidator instance;
+    private final CompanyService companyService = CompanyService.getInstance();
 
     private CreateComputerValidator() {
     }
@@ -24,7 +27,7 @@ public class CreateComputerValidator extends Validator<CreateComputerDTO> {
     @Override
     protected Map<String, String> validation(CreateComputerDTO toValidate) {
         HashMap<String, String> errors = new HashMap<>();
-        if (Objects.isNull(toValidate.getName()) || toValidate.getName().trim().isEmpty()) {
+        if (isBlank(toValidate.getName())) {
             errors.put("name", "Le nom ne peux pas être nul ou vide.");
         }
 
@@ -34,7 +37,7 @@ public class CreateComputerValidator extends Validator<CreateComputerDTO> {
         }
 
         final Long mannufacturerId = toValidate.getMannufacturerId();
-        if (Objects.nonNull(mannufacturerId) && !CompanyService.getInstance().exist(mannufacturerId)) {
+        if (Objects.nonNull(mannufacturerId) && !companyService.exist(mannufacturerId)) {
             errors.put("mannufacturerId", "Le fabriaquant avec l'id " + mannufacturerId + " n'existe pas");
         }
         return errors;

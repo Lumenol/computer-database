@@ -30,9 +30,9 @@ public class ComputerToComputerDTOMapper implements Mapper<Computer, ComputerDTO
         computerDTO.setName(computer.getName());
         computerDTO.setIntroduced(computer.getIntroduced());
         computerDTO.setDiscontinued(computer.getDiscontinued());
-
-        computerDTO.setMannufacturer(computer.getManufacturer().map(companyToCompanyDTO::map));
-
+        if (Objects.nonNull(computer.getManufacturer())) {
+            computerDTO.setMannufacturer(companyToCompanyDTO.map(computer.getManufacturer()));
+        }
         return computerDTO;
     }
 

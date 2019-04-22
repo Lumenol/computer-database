@@ -2,22 +2,30 @@ package com.excilys.cdb.dto;
 
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.Optional;
 
 public class ComputerDTO {
-    private Optional<LocalDate> discontinued;
+    private LocalDate discontinued;
     private long id;
-    private Optional<LocalDate> introduced;
-
-    private Optional<CompanyDTO> mannufacturer;
-
+    private LocalDate introduced;
+    private CompanyDTO mannufacturer;
     private String name;
 
-    public Optional<LocalDate> getDiscontinued() {
+    @Override
+    public String toString() {
+        return "ComputerDTO{" +
+                "discontinued=" + discontinued +
+                ", id=" + id +
+                ", introduced=" + introduced +
+                ", mannufacturer=" + mannufacturer +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
+    public LocalDate getDiscontinued() {
         return discontinued;
     }
 
-    public void setDiscontinued(Optional<LocalDate> discontinued) {
+    public void setDiscontinued(LocalDate discontinued) {
         this.discontinued = discontinued;
     }
 
@@ -29,19 +37,19 @@ public class ComputerDTO {
         this.id = id;
     }
 
-    public Optional<LocalDate> getIntroduced() {
+    public LocalDate getIntroduced() {
         return introduced;
     }
 
-    public void setIntroduced(Optional<LocalDate> introduced) {
+    public void setIntroduced(LocalDate introduced) {
         this.introduced = introduced;
     }
 
-    public Optional<CompanyDTO> getMannufacturer() {
+    public CompanyDTO getMannufacturer() {
         return mannufacturer;
     }
 
-    public void setMannufacturer(Optional<CompanyDTO> mannufacturer) {
+    public void setMannufacturer(CompanyDTO mannufacturer) {
         this.mannufacturer = mannufacturer;
     }
 
@@ -51,17 +59,6 @@ public class ComputerDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "ComputerDTO{" +
-                "discontinued=" + discontinued.orElse(null) +
-                ", id=" + id +
-                ", introduced=" + introduced.orElse(null) +
-                ", mannufacturer=" + mannufacturer.orElse(null) +
-                ", name='" + name + '\'' +
-                '}';
     }
 
     @Override

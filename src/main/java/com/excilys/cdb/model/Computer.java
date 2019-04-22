@@ -2,18 +2,17 @@ package com.excilys.cdb.model;
 
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.Optional;
 
 public class Computer {
 
-    private final Optional<LocalDate> discontinued;
+    private final LocalDate discontinued;
     private final Long id;
-    private final Optional<LocalDate> introduced;
-    private final Optional<Company> manufacturer;
+    private final LocalDate introduced;
+    private final Company manufacturer;
     private final String name;
 
-    private Computer(Long id, String name, Optional<Company> manufacturer, Optional<LocalDate> introduced,
-                     Optional<LocalDate> discontinued) {
+    private Computer(Long id, String name, Company manufacturer, LocalDate introduced,
+                     LocalDate discontinued) {
         super();
         this.discontinued = discontinued;
         this.id = id;
@@ -39,15 +38,15 @@ public class Computer {
         return Objects.hash(id);
     }
 
-    public Optional<LocalDate> getIntroduced() {
+    public LocalDate getIntroduced() {
         return introduced;
     }
 
-    public Optional<Company> getManufacturer() {
+    public Company getManufacturer() {
         return manufacturer;
     }
 
-    public Optional<LocalDate> getDiscontinued() {
+    public LocalDate getDiscontinued() {
         return discontinued;
     }
 
@@ -73,8 +72,8 @@ public class Computer {
         private String name;
 
         public Computer build() {
-            return new Computer(id, name, Optional.ofNullable(manufacturer), Optional.ofNullable(introduced),
-                    Optional.ofNullable(discontinued));
+            return new Computer(id, name, manufacturer, introduced,
+                    discontinued);
         }
 
         public ComputerBuilder discontinued(LocalDate discontinued) {

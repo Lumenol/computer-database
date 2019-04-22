@@ -5,6 +5,7 @@ import com.excilys.cdb.mapper.result.ResultSetMapper;
 import java.sql.*;
 
 class JDBCUtils {
+
     private static final ResultSetMapper<Long> keyMapper = ps -> {
         ps.first();
         return ps.getLong(1);
@@ -17,6 +18,9 @@ class JDBCUtils {
     private static final ResultProvider noResult = ps -> null;
     private static final ResultProvider resultSet = PreparedStatement::getResultSet;
     private static final StatementFactory simpleStatementFactory = Connection::prepareStatement;
+
+    private JDBCUtils() {
+    }
 
     public static void delete(ConnectionProvider connectionProvider, String sql, Object... args) throws SQLException {
         execute(ResultSetMapper.identity(), connectionProvider, simpleStatementFactory, executeUpdate, noResult, sql,

@@ -5,14 +5,14 @@ import com.excilys.cdb.mapper.result.ResultSetMapper;
 import com.excilys.cdb.mapper.result.ResultSetToComputerMapper;
 import com.excilys.cdb.mapper.result.ResultSetToCountMapper;
 import com.excilys.cdb.mapper.result.ResultSetToListMapper;
-import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import static com.excilys.cdb.dao.DAOUtils.haveOneOrEmpty;
 
 public class ComputerDao {
 
@@ -26,6 +26,7 @@ public class ComputerDao {
     private static ComputerDao instance;
     private final ConnectionProvider connectionProvider = ConnectionProvider.getInstance();
     private final ResultSetMapper<List<Computer>> resultSetMapper = new ResultSetToListMapper<>(ResultSetToComputerMapper.getInstance());
+    private final ResultSetToCountMapper resultSetToCountMapper = ResultSetToCountMapper.getInstance();
 
     private ComputerDao() {
     }
@@ -38,14 +39,9 @@ public class ComputerDao {
     }
 
     public long create(Computer computer) {
-        String name = computer.getName();
-
-        Date introduced = computer.getIntroduced().map(Date::valueOf).orElse(null);
-        Date discontinued = computer.getDiscontinued().map(Date::valueOf).orElse(null);
-        Long manufacturerId = computer.getManufacturer().map(Company::getId).orElse(null);
-
+        final SQLComputer sqlComputer = SQLComputer.from(computer);
         try {
-            return JDBCUtils.insert(connectionProvider, SQL_CREATE, name, introduced, discontinued, manufacturerId);
+            return JDBCUtils.insert(connectionProvider, SQL_CREATE, sqlComputer.getName(), sqlComputer.getIntroduced(), sqlComputer.getDiscontinued(), sqlComputer.getManufacturerId());
         } catch (SQLException e) {
             throw new ComputerDAOException(e);
         }
@@ -73,26 +69,16 @@ public class ComputerDao {
         try {
             List<Computer> computers = JDBCUtils.find(resultSetMapper, connectionProvider, SQL_FIND_BY_ID,
                     id);
-            if (computers.isEmpty()) {
-                return Optional.empty();
-            } else {
-                return Optional.of(computers.get(0));
-            }
+            return haveOneOrEmpty(computers);
         } catch (SQLException e) {
             throw new ComputerDAOException(e);
         }
     }
 
     public void update(Computer computer) {
-
-        Long id = computer.getId();
-        String name = computer.getName();
-        Date introduced = computer.getIntroduced().map(Date::valueOf).orElse(null);
-        Date discontinued = computer.getDiscontinued().map(Date::valueOf).orElse(null);
-        Long manufacturerId = computer.getManufacturer().map(Company::getId).orElse(null);
-
+        final SQLComputer sqlComputer = SQLComputer.from(computer);
         try {
-            JDBCUtils.update(connectionProvider, SQL_UPDATE, name, introduced, discontinued, manufacturerId, id);
+            JDBCUtils.update(connectionProvider, SQL_UPDATE, sqlComputer.getName(), sqlComputer.getIntroduced(), sqlComputer.getDiscontinued(), sqlComputer.getManufacturerId(), sqlComputer.getId());
         } catch (SQLException e) {
             throw new ComputerDAOException(e);
         }
@@ -101,7 +87,7 @@ public class ComputerDao {
 
     public long count() {
         try {
-            return JDBCUtils.find(ResultSetToCountMapper.getInstance(), connectionProvider, SQL_COUNT);
+            return JDBCUtils.find(resultSetToCountMapper, connectionProvider, SQL_COUNT);
         } catch (SQLException e) {
             throw new ComputerDAOException(e);
         }

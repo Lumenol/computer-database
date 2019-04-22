@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.excilys.cdb.dao.DAOUtils.haveOneOrEmpty;
+
 public class CompanyDao {
 
     private static final String SQL_FIND_ALL_PAGED = "SELECT id,name FROM company ORDER BY id LIMIT ? OFFSET ?";
@@ -21,6 +23,7 @@ public class CompanyDao {
     private static CompanyDao instance;
     private final ConnectionProvider connectionProvider = ConnectionProvider.getInstance();
     private final ResultSetMapper<List<Company>> resultSetMapper = new ResultSetToListMapper<>(ResultSetToCompanyMapper.getInstance());
+    private final ResultSetToCountMapper resultSetToCountMapper = ResultSetToCountMapper.getInstance();
 
     private CompanyDao() {
     }
@@ -43,11 +46,7 @@ public class CompanyDao {
     public Optional<Company> findById(long id) {
         try {
             List<Company> companies = JDBCUtils.find(resultSetMapper, connectionProvider, SQL_FIND_BY_ID, id);
-            if (companies.isEmpty()) {
-                return Optional.empty();
-            } else {
-                return Optional.of(companies.get(0));
-            }
+            return haveOneOrEmpty(companies);
         } catch (SQLException e) {
             throw new CompanyDAOException(e);
         }
@@ -55,7 +54,7 @@ public class CompanyDao {
 
     public long count() {
         try {
-            return JDBCUtils.find(ResultSetToCountMapper.getInstance(), connectionProvider, SQL_COUNT);
+            return JDBCUtils.find(resultSetToCountMapper, connectionProvider, SQL_COUNT);
         } catch (SQLException e) {
             throw new CompanyDAOException(e);
         }

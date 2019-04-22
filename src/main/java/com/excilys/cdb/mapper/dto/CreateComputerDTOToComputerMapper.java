@@ -14,6 +14,7 @@ import java.util.Optional;
 public class CreateComputerDTOToComputerMapper implements Mapper<CreateComputerDTO, Computer> {
 
     private static CreateComputerDTOToComputerMapper instance;
+    private final CompanyService companyService = CompanyService.getInstance();
 
     private CreateComputerDTOToComputerMapper() {
     }
@@ -31,7 +32,7 @@ public class CreateComputerDTOToComputerMapper implements Mapper<CreateComputerD
                 .discontinued(dto.getDiscontinued());
         if (Objects.nonNull(dto.getMannufacturerId())) {
             try {
-                final Optional<Company> company = CompanyService.getInstance().findById(dto.getMannufacturerId());
+                final Optional<Company> company = companyService.findById(dto.getMannufacturerId());
                 builder.manufacturer(company.orElse(null));
             } catch (CompanyServiceException e) {
                 throw new MapperException(e);

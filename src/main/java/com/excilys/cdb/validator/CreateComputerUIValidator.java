@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.excilys.cdb.validator.ValidatorUtils.isBlank;
+
 public class CreateComputerUIValidator extends Validator<CreateComputerDTOUi> {
 
     private static final String NULL = "null";
@@ -50,13 +52,12 @@ public class CreateComputerUIValidator extends Validator<CreateComputerDTOUi> {
     @Override
     protected Map<String, String> validation(CreateComputerDTOUi toValidate) {
         final HashMap<String, String> errors = new HashMap<>();
-        if (toValidate.getName().isEmpty()) {
+        if (isBlank(toValidate.getName())) {
             errors.put("name", "Le nom ne peut pas être vide");
         }
         if (checkDateFail(toValidate.getIntroduced())) {
             errors.put("introduced", "introduced est mal formée");
         }
-
         if (checkDateFail(toValidate.getDiscontinued())) {
             errors.put("discontinued", "discontinued est mal formée");
         }

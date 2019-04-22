@@ -26,6 +26,10 @@ public class Controller {
     private final Mapper<Company, CompanyDTO> companyToCompanyDTO = CompanyToCompanyDTOMapper.getInstance();
     private final Mapper<Computer, ComputerDTO> computerToComputerDTO = ComputerToComputerDTOMapper.getInstance();
     private final ComputerService computerService = ComputerService.getInstance();
+    private final CreateComputerValidator createComputerValidator = CreateComputerValidator.getInstance();
+    private final UpdateComputerValidator updateComputerValidator = UpdateComputerValidator.getInstance();
+    private final CreateComputerDTOToComputerMapper createComputerDTOToComputerMapper = CreateComputerDTOToComputerMapper.getInstance();
+    private final UpdateComputerDTOToComputerMapper updateComputerDTOToComputerMapper = UpdateComputerDTOToComputerMapper.getInstance();
 
     private Controller() {
     }
@@ -87,9 +91,9 @@ public class Controller {
 
     public void createComputer(CreateComputerDTO dto) {
         try {
-            final Validator.Result result = CreateComputerValidator.getInstance().check(dto);
+            final Validator.Result result = createComputerValidator.check(dto);
             if (result.isValid()) {
-                computerService.create(CreateComputerDTOToComputerMapper.getInstance().map(dto));
+                computerService.create(createComputerDTOToComputerMapper.map(dto));
             } else {
                 throw new ValidatorException(result);
             }
@@ -102,9 +106,9 @@ public class Controller {
 
     public void updateComputer(UpdateComputerDTO dto) {
         try {
-            final Validator.Result result = UpdateComputerValidator.getInstance().check(dto);
+            final Validator.Result result = updateComputerValidator.check(dto);
             if (result.isValid()) {
-                computerService.update(UpdateComputerDTOToComputerMapper.getInstance().map(dto));
+                computerService.update(updateComputerDTOToComputerMapper.map(dto));
             } else {
                 throw new ValidatorException(result);
             }

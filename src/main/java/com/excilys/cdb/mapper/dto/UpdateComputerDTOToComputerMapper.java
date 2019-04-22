@@ -12,6 +12,7 @@ import java.util.Objects;
 public class UpdateComputerDTOToComputerMapper implements Mapper<UpdateComputerDTO, Computer> {
 
     private static UpdateComputerDTOToComputerMapper instance;
+    private final CompanyService companyService = CompanyService.getInstance();
 
     private UpdateComputerDTOToComputerMapper() {
     }
@@ -29,7 +30,7 @@ public class UpdateComputerDTOToComputerMapper implements Mapper<UpdateComputerD
                 .discontinued(dto.getDiscontinued());
         if (Objects.nonNull(dto.getMannufacturerId())) {
             try {
-                Company mannufacturer = CompanyService.getInstance().findById(dto.getMannufacturerId()).orElse(null);
+                Company mannufacturer = companyService.findById(dto.getMannufacturerId()).orElse(null);
                 builder.manufacturer(mannufacturer);
             } catch (CompanyServiceException e) {
                 throw new MapperException(e);
