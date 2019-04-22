@@ -1,6 +1,6 @@
 package com.excilys.cdb.dao;
 
-import com.excilys.cdb.mapper.result.ResultSetMapper;
+import com.excilys.cdb.mapper.resultset.ResultSetMapper;
 
 import java.sql.*;
 

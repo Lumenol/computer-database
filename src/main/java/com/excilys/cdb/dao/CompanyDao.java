@@ -1,10 +1,10 @@
 package com.excilys.cdb.dao;
 
 import com.excilys.cdb.exception.CompanyDAOException;
-import com.excilys.cdb.mapper.result.ResultSetMapper;
-import com.excilys.cdb.mapper.result.ResultSetToCompanyMapper;
-import com.excilys.cdb.mapper.result.ResultSetToCountMapper;
-import com.excilys.cdb.mapper.result.ResultSetToListMapper;
+import com.excilys.cdb.mapper.resultset.ResultSetMapper;
+import com.excilys.cdb.mapper.resultset.ResultSetToCompanyMapper;
+import com.excilys.cdb.mapper.resultset.ResultSetToCountMapper;
+import com.excilys.cdb.mapper.resultset.ResultSetToListMapper;
 import com.excilys.cdb.model.Company;
 
 import java.sql.SQLException;

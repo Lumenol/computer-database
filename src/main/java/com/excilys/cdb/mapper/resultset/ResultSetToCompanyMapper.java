@@ -1,4 +1,4 @@
-package com.excilys.cdb.mapper.result;
+package com.excilys.cdb.mapper.resultset;
 
 import com.excilys.cdb.model.Company;
 
