@@ -44,7 +44,7 @@ class ResultSetToComputerMapperTest {
 
     @ParameterizedTest
     @MethodSource("provideComputer")
-    public void map(long id, String name, LocalDate introduced, LocalDate discontinued, Long companyId,
+    public void testMap(long id, String name, LocalDate introduced, LocalDate discontinued, Long companyId,
 	    String companyName) throws SQLException {
 	Mockito.when(mockResultSet.getLong(COLUMN_ID)).thenReturn(id);
 	Mockito.when(mockResultSet.getString(COLUMN_NAME)).thenReturn(name);
