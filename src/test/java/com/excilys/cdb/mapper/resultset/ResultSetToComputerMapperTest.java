@@ -15,6 +15,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
+import com.excilys.cdb.dao.ConnectionProvider;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Computer.ComputerBuilder;
@@ -46,6 +47,7 @@ class ResultSetToComputerMapperTest {
     @MethodSource("provideComputer")
     public void testMap(long id, String name, LocalDate introduced, LocalDate discontinued, Long companyId,
 	    String companyName) throws SQLException {
+	ConnectionProvider instance = ConnectionProvider.getInstance();
 	Mockito.when(mockResultSet.getLong(COLUMN_ID)).thenReturn(id);
 	Mockito.when(mockResultSet.getString(COLUMN_NAME)).thenReturn(name);
 
