@@ -106,6 +106,10 @@ class TestDatabase {
     public List<Computer> findAllComputers() {
         return computers.values().stream().sorted(Comparator.comparingLong(Computer::getId)).collect(Collectors.toList());
     }
+    
+    public List<Computer> findAllComputers(long offset,long limit){
+	return findAllComputers().stream().skip(offset).limit(limit).collect(Collectors.toList());
+    }
 
     void reload() throws IOException, SQLException {
         executeScript("schema.sql");
