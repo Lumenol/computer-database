@@ -20,6 +20,9 @@ public class UpdateComputerUIValidator extends Validator<UpdateComputerDTOUi> {
     }
 
     private static boolean checkIdFail(String id) {
+        if (Objects.isNull(id)) {
+            return true;
+        }
         try {
             Long.valueOf(id);
             return false;
