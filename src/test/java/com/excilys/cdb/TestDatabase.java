@@ -1,5 +1,6 @@
-package com.excilys.cdb.dao;
+package com.excilys.cdb;
 
+import com.excilys.cdb.dao.ConnectionProvider;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
@@ -12,7 +13,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-class TestDatabase {
+public class TestDatabase {
 
     private static TestDatabase instance = new TestDatabase();
 
@@ -115,7 +116,7 @@ class TestDatabase {
 	return companies.values().stream().sorted(Comparator.comparingLong(Company::getId)).collect(Collectors.toList());
     }
 
-    void reload() throws IOException, SQLException {
+    public void reload() throws IOException, SQLException {
         executeScript("schema.sql");
         executeScript("entries.sql");
     }
