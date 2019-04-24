@@ -26,7 +26,9 @@ public class CreateComputerUIValidator extends Validator<CreateComputerDTOUi> {
     }
 
     private static boolean checkDateFail(String date) {
-        if (date.equals(NULL)) {
+        if (Objects.isNull(date)) {
+            return true;
+        } else if (date.equals(NULL)) {
             return false;
         }
         try {
@@ -38,7 +40,9 @@ public class CreateComputerUIValidator extends Validator<CreateComputerDTOUi> {
     }
 
     private static boolean checkIdFail(String id) {
-        if (id.equals(NULL)) {
+        if (Objects.isNull(id)) {
+            return true;
+        } else if (id.equals(NULL)) {
             return false;
         }
         try {
