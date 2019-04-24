@@ -110,10 +110,19 @@ class TestDatabase {
     public List<Computer> findAllComputers(long offset,long limit){
 	return findAllComputers().stream().skip(offset).limit(limit).collect(Collectors.toList());
     }
+    
+    public List<Company> findAllCompanies(){
+	return companies.values().stream().sorted(Comparator.comparingLong(Company::getId)).collect(Collectors.toList());
+    }
 
     void reload() throws IOException, SQLException {
         executeScript("schema.sql");
         executeScript("entries.sql");
+    }
+
+    public List<Company> findAllCompanies(long offset, long limit) {
+	return findAllCompanies().stream().skip(offset).limit(limit).collect(Collectors.toList());
+	    
     }
 
 }
