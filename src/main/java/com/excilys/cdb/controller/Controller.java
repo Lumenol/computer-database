@@ -20,6 +20,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Controller {
     private static Controller instance;
     private final CompanyService companyService = CompanyService.getInstance();
@@ -28,94 +31,110 @@ public class Controller {
     private final ComputerService computerService = ComputerService.getInstance();
     private final CreateComputerValidator createComputerValidator = CreateComputerValidator.getInstance();
     private final UpdateComputerValidator updateComputerValidator = UpdateComputerValidator.getInstance();
-    private final CreateComputerDTOToComputerMapper createComputerDTOToComputerMapper = CreateComputerDTOToComputerMapper.getInstance();
-    private final UpdateComputerDTOToComputerMapper updateComputerDTOToComputerMapper = UpdateComputerDTOToComputerMapper.getInstance();
+    private final CreateComputerDTOToComputerMapper createComputerDTOToComputerMapper = CreateComputerDTOToComputerMapper
+	    .getInstance();
+    private final UpdateComputerDTOToComputerMapper updateComputerDTOToComputerMapper = UpdateComputerDTOToComputerMapper
+	    .getInstance();
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private Controller() {
     }
 
     public static Controller getInstance() {
-        if (Objects.isNull(instance)) {
-            instance = new Controller();
-        }
-        return instance;
+	if (Objects.isNull(instance)) {
+	    instance = new Controller();
+	}
+	return instance;
     }
 
     public List<CompanyDTO> getCompanies(long offset, long limit) {
-        try {
-            return companyService.findAll(offset, limit).stream().map(companyToCompanyDTO::map).collect(Collectors.toList());
-        } catch (RuntimeException e) {
-            throw new ControllerException();
-        }
+	try {
+	    return companyService.findAll(offset, limit).stream().map(companyToCompanyDTO::map)
+		    .collect(Collectors.toList());
+	} catch (RuntimeException e) {
+	    logger.warn("getCompanies(" + offset + "," + limit + ")", e);
+	    throw new ControllerException();
+	}
     }
 
     public long numberOfCompanies() {
-        try {
-            return companyService.count();
-        } catch (RuntimeException e) {
-            throw new ControllerException();
-        }
+	try {
+	    return companyService.count();
+	} catch (RuntimeException e) {
+	    logger.warn("numberOfCompanies()", e);
+	    throw new ControllerException();
+	}
     }
 
     public List<ComputerDTO> getComputers(long offset, long limit) {
-        try {
-            return computerService.findAll(offset, limit).stream().map(computerToComputerDTO::map).collect(Collectors.toList());
-        } catch (RuntimeException e) {
-            throw new ControllerException();
-        }
+	try {
+	    return computerService.findAll(offset, limit).stream().map(computerToComputerDTO::map)
+		    .collect(Collectors.toList());
+	} catch (RuntimeException e) {
+	    logger.warn("getComputers(" + offset + "," + limit + ")", e);
+	    throw new ControllerException();
+	}
     }
 
     public long numberOfComputers() {
-        try {
-            return computerService.count();
-        } catch (RuntimeException e) {
-            throw new ControllerException();
-        }
+	try {
+	    return computerService.count();
+	} catch (RuntimeException e) {
+	    logger.warn("numberOfComputers()", e);
+	    throw new ControllerException();
+	}
     }
 
     public Optional<ComputerDTO> getComputerById(long id) {
-        try {
-            return computerService.findById(id).map(computerToComputerDTO::map);
-        } catch (RuntimeException e) {
-            throw new ControllerException();
-        }
+	try {
+	    return computerService.findById(id).map(computerToComputerDTO::map);
+	} catch (RuntimeException e) {
+	    logger.warn("getComputerById(" + id + ")", e);
+	    throw new ControllerException();
+	}
     }
 
     public void deleteComputer(long id) {
-        try {
-            computerService.delete(id);
-        } catch (RuntimeException e) {
-            throw new ControllerException();
-        }
+	try {
+	    computerService.delete(id);
+	} catch (RuntimeException e) {
+	    logger.warn("deleteComputer(" + id + ")", e);
+	    throw new ControllerException();
+	}
     }
 
     public void createComputer(CreateComputerDTO dto) {
-        try {
-            final Validator.Result result = createComputerValidator.check(dto);
-            if (result.isValid()) {
-                computerService.create(createComputerDTOToComputerMapper.map(dto));
-            } else {
-                throw new ValidatorException(result);
-            }
-        } catch (ValidatorException e) {
-            throw new ControllerException(e.getMessage());
-        } catch (RuntimeException e) {
-            throw new ControllerException();
-        }
+	try {
+	    final Validator.Result result = createComputerValidator.check(dto);
+	    if (result.isValid()) {
+		computerService.create(createComputerDTOToComputerMapper.map(dto));
+	    } else {
+		throw new ValidatorException(result);
+	    }
+	} catch (ValidatorException e) {
+	    logger.warn("createComputer(" + dto + ")", e);
+	    throw new ControllerException(e.getMessage());
+	} catch (RuntimeException e) {
+	    logger.warn("createComputer(" + dto + ")", e);
+	    throw new ControllerException();
+	}
     }
 
     public void updateComputer(UpdateComputerDTO dto) {
-        try {
-            final Validator.Result result = updateComputerValidator.check(dto);
-            if (result.isValid()) {
-                computerService.update(updateComputerDTOToComputerMapper.map(dto));
-            } else {
-                throw new ValidatorException(result);
-            }
-        } catch (ValidatorException e) {
-            throw new ControllerException(e.getMessage());
-        } catch (RuntimeException e) {
-            throw new ControllerException();
-        }
+	try {
+	    final Validator.Result result = updateComputerValidator.check(dto);
+	    if (result.isValid()) {
+		computerService.update(updateComputerDTOToComputerMapper.map(dto));
+	    } else {
+		throw new ValidatorException(result);
+	    }
+	} catch (ValidatorException e) {
+	    logger.warn("updateComputer(" + dto + ")", e);
+	    throw new ControllerException(e.getMessage());
+	} catch (RuntimeException e) {
+	    logger.warn("updateComputer(" + dto + ")", e);
+	    throw new ControllerException();
+	}
     }
 }
