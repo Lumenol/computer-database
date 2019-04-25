@@ -8,10 +8,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class CreateComputerDTOUiToCreateComputerDTOMapper implements Mapper<CreateComputerDTOUi, CreateComputerDTO> {
     private static final String NULL = "null";
     private static CreateComputerDTOUiToCreateComputerDTOMapper instance;
-
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private CreateComputerDTOUiToCreateComputerDTOMapper() {
     }
 
@@ -47,6 +50,7 @@ public class CreateComputerDTOUiToCreateComputerDTOMapper implements Mapper<Crea
             createComputerDTO.setDiscontinued(parseDate(createComputerDTOUi.getDiscontinued()));
             return createComputerDTO;
         } catch (NumberFormatException | DateTimeParseException e) {
+            logger.warn("map(" + createComputerDTOUi + ")", e);
             throw new MapperException(e);
         }
     }
