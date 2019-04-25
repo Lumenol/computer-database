@@ -4,30 +4,42 @@ import java.util.Objects;
 
 public class Company {
 
+    public static class CompagnyBuilder {
+
+	private Long id;
+
+	private String name;
+
+	private CompagnyBuilder() {
+	}
+
+	public Company build() {
+	    return new Company(id, name);
+	}
+
+	public CompagnyBuilder id(long id) {
+	    this.id = id;
+	    return this;
+	}
+
+	public CompagnyBuilder name(String name) {
+	    this.name = name;
+	    return this;
+	}
+
+    }
+    public static CompagnyBuilder builder() {
+	return new CompagnyBuilder();
+    }
+
     private final Long id;
+
     private final String name;
 
     private Company(Long id, String name) {
 	Objects.requireNonNull(name);
 	this.id = id;
 	this.name = name;
-    }
-
-    public static CompagnyBuilder builder() {
-	return new CompagnyBuilder();
-    }
-
-    public Long getId() {
-	return id;
-    }
-
-    public String getName() {
-	return name;
-    }
-
-    @Override
-    public String toString() {
-	return "Compagny [id=" + id + ", name=" + name + "]";
     }
 
     @Override
@@ -52,6 +64,14 @@ public class Company {
 	return true;
     }
 
+    public Long getId() {
+	return id;
+    }
+
+    public String getName() {
+	return name;
+    }
+
     @Override
     public int hashCode() {
 	final int prime = 31;
@@ -61,29 +81,9 @@ public class Company {
 	return result;
     }
 
-    public static class CompagnyBuilder {
-
-	private Long id;
-
-	private String name;
-
-	private CompagnyBuilder() {
-	}
-
-	public Company build() {
-	    return new Company(id, name);
-	}
-
-	public CompagnyBuilder id(long id) {
-	    this.id = id;
-	    return this;
-	}
-
-	public CompagnyBuilder name(String name) {
-	    this.name = name;
-	    return this;
-	}
-
+    @Override
+    public String toString() {
+	return "Compagny [id=" + id + ", name=" + name + "]";
     }
 
 }

@@ -1,11 +1,5 @@
 package com.excilys.cdb.service;
 
-import com.excilys.cdb.dao.CompanyDAO;
-import com.excilys.cdb.dao.ComputerDAO;
-import com.excilys.cdb.exception.CompanyDAOException;
-import com.excilys.cdb.exception.CompanyServiceException;
-import com.excilys.cdb.model.Company;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -13,55 +7,60 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.cdb.dao.CompanyDAO;
+import com.excilys.cdb.exception.CompanyDAOException;
+import com.excilys.cdb.exception.CompanyServiceException;
+import com.excilys.cdb.model.Company;
+
 public class CompanyService {
     private static CompanyService instance;
+    public static CompanyService getInstance() {
+	if (Objects.isNull(instance)) {
+	    instance = new CompanyService();
+	}
+	return instance;
+    }
+
     private final CompanyDAO companyDAO = CompanyDAO.getInstance();
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    
+
     private CompanyService() {
     }
 
-    public static CompanyService getInstance() {
-        if (Objects.isNull(instance)) {
-            instance = new CompanyService();
-        }
-        return instance;
-    }
-
-    public List<Company> findAll(long offset, long limit) {
-        try {
-            return companyDAO.findAll(offset, limit);
-        } catch (CompanyDAOException e) {
-            logger.warn("findAll(" + offset + "," + limit + ")", e);
-            throw new CompanyServiceException(e);
-        }
-    }
-
-    public Optional<Company> findById(long id) {
-        try {
-            return companyDAO.findById(id);
-        } catch (CompanyServiceException e) {
-            logger.warn("findById(" + id + ")", e);
-            throw new CompanyServiceException(e);
-        }
-    }
-
     public long count() {
-        try {
-            return companyDAO.count();
-        } catch (CompanyDAOException e) {
-            logger.warn("count()", e);
-            throw new CompanyServiceException(e);
-        }
+	try {
+	    return companyDAO.count();
+	} catch (CompanyDAOException e) {
+	    logger.warn("count()", e);
+	    throw new CompanyServiceException(e);
+	}
     }
 
     public boolean exist(long id) {
-        try {
-            return findById(id).isPresent();
-        } catch (CompanyDAOException e) {
-            logger.warn("exist(" + id + ")", e);
-            throw new CompanyServiceException(e);
-        }
+	try {
+	    return findById(id).isPresent();
+	} catch (CompanyDAOException e) {
+	    logger.warn("exist(" + id + ")", e);
+	    throw new CompanyServiceException(e);
+	}
+    }
+
+    public List<Company> findAll(long offset, long limit) {
+	try {
+	    return companyDAO.findAll(offset, limit);
+	} catch (CompanyDAOException e) {
+	    logger.warn("findAll(" + offset + "," + limit + ")", e);
+	    throw new CompanyServiceException(e);
+	}
+    }
+
+    public Optional<Company> findById(long id) {
+	try {
+	    return companyDAO.findById(id);
+	} catch (CompanyServiceException e) {
+	    logger.warn("findById(" + id + ")", e);
+	    throw new CompanyServiceException(e);
+	}
     }
 }

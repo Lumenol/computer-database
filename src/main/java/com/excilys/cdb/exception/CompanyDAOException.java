@@ -5,14 +5,14 @@ public class CompanyDAOException extends RuntimeException {
     }
 
     public CompanyDAOException(String message) {
-        super(message);
+	super(message);
     }
 
     public CompanyDAOException(String message, Throwable cause) {
-        super(message, cause);
+	super(message, cause);
     }
 
     public CompanyDAOException(Throwable cause) {
-        super(cause);
+	super(cause);
     }
 }

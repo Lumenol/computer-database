@@ -9,34 +9,34 @@ public class CreateComputerDTO {
     private String name;
 
     public LocalDate getDiscontinued() {
-        return discontinued;
-    }
-
-    public void setDiscontinued(LocalDate discontinued) {
-        this.discontinued = discontinued;
+	return discontinued;
     }
 
     public LocalDate getIntroduced() {
-        return introduced;
-    }
-
-    public void setIntroduced(LocalDate introduced) {
-        this.introduced = introduced;
+	return introduced;
     }
 
     public Long getMannufacturerId() {
-        return mannufacturerId;
-    }
-
-    public void setMannufacturerId(Long mannufacturerId) {
-        this.mannufacturerId = mannufacturerId;
+	return mannufacturerId;
     }
 
     public String getName() {
-        return name;
+	return name;
+    }
+
+    public void setDiscontinued(LocalDate discontinued) {
+	this.discontinued = discontinued;
+    }
+
+    public void setIntroduced(LocalDate introduced) {
+	this.introduced = introduced;
+    }
+
+    public void setMannufacturerId(Long mannufacturerId) {
+	this.mannufacturerId = mannufacturerId;
     }
 
     public void setName(String name) {
-        this.name = name;
+	this.name = name;
     }
 }

@@ -1,5 +1,11 @@
 package com.excilys.cdb.mapper.dto;
 
+import java.util.Objects;
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.cdb.dto.CreateComputerDTO;
 import com.excilys.cdb.exception.CompanyServiceException;
 import com.excilys.cdb.exception.MapperException;
@@ -7,29 +13,22 @@ import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Computer.ComputerBuilder;
 import com.excilys.cdb.service.CompanyService;
-import com.excilys.cdb.service.ComputerService;
-
-import java.util.Objects;
-import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CreateComputerDTOToComputerMapper implements Mapper<CreateComputerDTO, Computer> {
 
     private static CreateComputerDTOToComputerMapper instance;
-    private final CompanyService companyService = CompanyService.getInstance();
-
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-
-    private CreateComputerDTOToComputerMapper() {
-    }
-
     public static CreateComputerDTOToComputerMapper getInstance() {
 	if (Objects.isNull(instance)) {
 	    instance = new CreateComputerDTOToComputerMapper();
 	}
 	return instance;
+    }
+
+    private final CompanyService companyService = CompanyService.getInstance();
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    private CreateComputerDTOToComputerMapper() {
     }
 
     @Override

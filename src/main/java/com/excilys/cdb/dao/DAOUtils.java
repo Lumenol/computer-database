@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 class DAOUtils {
-    private DAOUtils() {
+    static <T> Optional<T> haveOneOrEmpty(List<T> list) {
+	if (list.isEmpty()) {
+	    return Optional.empty();
+	} else {
+	    return Optional.of(list.get(0));
+	}
     }
 
-    static <T> Optional<T> haveOneOrEmpty(List<T> list) {
-        if (list.isEmpty()) {
-            return Optional.empty();
-        } else {
-            return Optional.of(list.get(0));
-        }
+    private DAOUtils() {
     }
 }
