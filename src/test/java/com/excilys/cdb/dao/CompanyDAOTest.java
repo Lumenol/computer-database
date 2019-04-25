@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class CompanyDaoTest {
+class CompanyDAOTest {
 
     @BeforeEach
     public void loadEnttries() throws IOException, SQLException {
@@ -37,7 +37,7 @@ class CompanyDaoTest {
     @MethodSource("provideCompanyId")
     void findById(long id) {
 	final Optional<Company> expected = Optional.ofNullable(TestDatabase.getInstance().findCompanyById(id));
-	final Optional<Company> actual = CompanyDao.getInstance().findById(id);
+	final Optional<Company> actual = CompanyDAO.getInstance().findById(id);
 	assertEquals(expected, actual);
     }
 
@@ -48,14 +48,14 @@ class CompanyDaoTest {
     @ParameterizedTest
     @MethodSource("provideOffsetLimit")
     void findAll(long offset, long limit) {
-	final List<Company> actual = CompanyDao.getInstance().findAll(offset, limit);
+	final List<Company> actual = CompanyDAO.getInstance().findAll(offset, limit);
 	final List<Company> expected = TestDatabase.getInstance().findAllCompanies(offset, limit);
 	assertEquals(expected, actual);
     }
 
     @Test
     void count() {
-	final long count = CompanyDao.getInstance().count();
+	final long count = CompanyDAO.getInstance().count();
 	assertEquals(TestDatabase.getInstance().findAllCompanies().size(), count);
     }
 }

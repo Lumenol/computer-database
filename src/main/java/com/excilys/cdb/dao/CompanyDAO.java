@@ -14,23 +14,23 @@ import java.util.Optional;
 
 import static com.excilys.cdb.dao.DAOUtils.haveOneOrEmpty;
 
-public class CompanyDao {
+public class CompanyDAO {
 
     private static final String SQL_FIND_ALL_PAGED = "SELECT id,name FROM company ORDER BY id LIMIT ? OFFSET ?";
     private static final String SQL_FIND_BY_ID = "SELECT id,name FROM company WHERE id = ? LIMIT 1";
     private static final String SQL_COUNT = "SELECT COUNT(id) AS count FROM company";
 
-    private static CompanyDao instance;
+    private static CompanyDAO instance;
     private final ConnectionProvider connectionProvider = ConnectionProvider.getInstance();
     private final ResultSetMapper<List<Company>> resultSetMapper = new ResultSetToListMapper<>(ResultSetToCompanyMapper.getInstance());
     private final ResultSetToCountMapper resultSetToCountMapper = ResultSetToCountMapper.getInstance();
 
-    private CompanyDao() {
+    private CompanyDAO() {
     }
 
-    public static CompanyDao getInstance() {
+    public static CompanyDAO getInstance() {
         if (Objects.isNull(instance)) {
-            instance = new CompanyDao();
+            instance = new CompanyDAO();
         }
         return instance;
     }
