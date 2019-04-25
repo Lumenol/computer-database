@@ -14,7 +14,7 @@ import java.util.Optional;
 
 import static com.excilys.cdb.dao.DAOUtils.haveOneOrEmpty;
 
-public class ComputerDao {
+public class ComputerDAO {
 
     private static final String SQL_CREATE = "INSERT INTO computer (name, introduced,discontinued,company_id) VALUES (?,?,?,?)";
     private static final String SQL_DELETE = "DELETE FROM computer WHERE id=?";
@@ -23,17 +23,17 @@ public class ComputerDao {
     private static final String SQL_UPDATE = "UPDATE computer SET name = ?, introduced = ?,discontinued = ?,company_id = ? WHERE id = ?";
     private static final String SQL_COUNT = "SELECT COUNT(id) AS count FROM computer";
 
-    private static ComputerDao instance;
+    private static ComputerDAO instance;
     private final ConnectionProvider connectionProvider = ConnectionProvider.getInstance();
     private final ResultSetMapper<List<Computer>> resultSetMapper = new ResultSetToListMapper<>(ResultSetToComputerMapper.getInstance());
     private final ResultSetToCountMapper resultSetToCountMapper = ResultSetToCountMapper.getInstance();
 
-    private ComputerDao() {
+    private ComputerDAO() {
     }
 
-    public static ComputerDao getInstance() {
+    public static ComputerDAO getInstance() {
         if (Objects.isNull(instance)) {
-            instance = new ComputerDao();
+            instance = new ComputerDAO();
         }
         return instance;
     }

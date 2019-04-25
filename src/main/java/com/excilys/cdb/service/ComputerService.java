@@ -1,6 +1,6 @@
 package com.excilys.cdb.service;
 
-import com.excilys.cdb.dao.ComputerDao;
+import com.excilys.cdb.dao.ComputerDAO;
 import com.excilys.cdb.exception.ComputerDAOException;
 import com.excilys.cdb.exception.ComputerServiceException;
 import com.excilys.cdb.model.Computer;
@@ -13,7 +13,7 @@ public class ComputerService {
 
 
     private static ComputerService instance;
-    private final ComputerDao computerDAO = ComputerDao.getInstance();
+    private final ComputerDAO computerDAO = ComputerDAO.getInstance();
 
     private ComputerService() {
     }

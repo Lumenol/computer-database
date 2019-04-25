@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ComputerDaoTest {
+class ComputerDAOTest {
 
     private static Stream<Long> provideComputerId() {
 	final Stream.Builder<Long> builder = Stream.builder();
@@ -43,10 +43,10 @@ class ComputerDaoTest {
 	final ComputerBuilder builder = Computer.builder().introduced(LocalDate.of(2012, 4, 14))
 		.discontinued(LocalDate.of(2020, 5, 10)).name("Le modifié").manufacturer(company);
 	final Computer cree = builder.build();
-	final long id = ComputerDao.getInstance().create(cree);
+	final long id = ComputerDAO.getInstance().create(cree);
 
 	final Computer expected = builder.id(id).build();
-	final Computer actual = ComputerDao.getInstance().findById(id).get();
+	final Computer actual = ComputerDAO.getInstance().findById(id).get();
 	assertEquals(expected, actual);
     }
 
@@ -56,15 +56,15 @@ class ComputerDaoTest {
 	final ComputerBuilder builder = Computer.builder().introduced(LocalDate.of(2012, 4, 14))
 		.discontinued(LocalDate.of(2020, 5, 10)).name("Le modifié").manufacturer(company);
 	final Computer cree = builder.build();
-	assertThrows(ComputerDAOException.class, () -> ComputerDao.getInstance().create(cree));
+	assertThrows(ComputerDAOException.class, () -> ComputerDAO.getInstance().create(cree));
     }
 
     @Test
     void deleteById() {
 	final int id = 5;
-	final Optional<Computer> le5avant = ComputerDao.getInstance().findById(id);
-	ComputerDao.getInstance().deleteById(id);
-	final Optional<Computer> le5apres = ComputerDao.getInstance().findById(id);
+	final Optional<Computer> le5avant = ComputerDAO.getInstance().findById(id);
+	ComputerDAO.getInstance().deleteById(id);
+	final Optional<Computer> le5apres = ComputerDAO.getInstance().findById(id);
 	assertTrue(le5avant.isPresent());
 	assertFalse(le5apres.isPresent());
     }
@@ -76,7 +76,7 @@ class ComputerDaoTest {
     @ParameterizedTest
     @MethodSource("provideOffsetLimit")
     void findAll(long offset, long limit) {
-	final List<Computer> actual = ComputerDao.getInstance().findAll(offset, limit);
+	final List<Computer> actual = ComputerDAO.getInstance().findAll(offset, limit);
 	final List<Computer> expected = TestDatabase.getInstance().findAllComputers(offset, limit);
 	assertEquals(expected, actual);
     }
@@ -85,7 +85,7 @@ class ComputerDaoTest {
     @MethodSource("provideComputerId")
     void findById(long id) {
 	final Optional<Computer> expected = Optional.ofNullable(TestDatabase.getInstance().findComputerById(id));
-	final Optional<Computer> actual = ComputerDao.getInstance().findById(id);
+	final Optional<Computer> actual = ComputerDAO.getInstance().findById(id);
 	assertEquals(expected, actual);
     }
 
@@ -94,14 +94,14 @@ class ComputerDaoTest {
 	final int id = 5;
 	final Computer expected = Computer.builder().id(id).introduced(LocalDate.of(2012, 4, 14))
 		.discontinued(LocalDate.of(2020, id, 10)).name("Le modifié").build();
-	ComputerDao.getInstance().update(expected);
-	final Computer actual = ComputerDao.getInstance().findById(id).get();
+	ComputerDAO.getInstance().update(expected);
+	final Computer actual = ComputerDAO.getInstance().findById(id).get();
 	assertEquals(expected, actual);
     }
 
     @Test
     void count() {
-	final long count = ComputerDao.getInstance().count();
+	final long count = ComputerDAO.getInstance().count();
 	assertEquals(TestDatabase.getInstance().findAllComputers().size(), count);
     }
 }
