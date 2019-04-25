@@ -20,7 +20,7 @@ public class CreateComputerDTOToComputerMapper implements Mapper<CreateComputerD
     private static CreateComputerDTOToComputerMapper instance;
     private final CompanyService companyService = CompanyService.getInstance();
 
-    private final Logger logger = LoggerFactory.getLogger(CreateComputerDTOToComputerMapper.class);
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private CreateComputerDTOToComputerMapper() {
     }
