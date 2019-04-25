@@ -5,10 +5,12 @@ import com.excilys.cdb.model.Company;
 
 import java.util.Objects;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class CompanyToCompanyDTOMapper implements Mapper<Company, CompanyDTO> {
 
     private static CompanyToCompanyDTOMapper instance;
-
     private CompanyToCompanyDTOMapper() {
     }
 
