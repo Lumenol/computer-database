@@ -9,11 +9,14 @@ import com.excilys.cdb.service.CompanyService;
 
 import java.util.Objects;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class UpdateComputerDTOToComputerMapper implements Mapper<UpdateComputerDTO, Computer> {
 
     private static UpdateComputerDTOToComputerMapper instance;
     private final CompanyService companyService = CompanyService.getInstance();
-
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private UpdateComputerDTOToComputerMapper() {
     }
 
@@ -33,6 +36,7 @@ public class UpdateComputerDTOToComputerMapper implements Mapper<UpdateComputerD
                 Company mannufacturer = companyService.findById(dto.getMannufacturerId()).orElse(null);
                 builder.manufacturer(mannufacturer);
             } catch (CompanyServiceException e) {
+        	logger.warn("map(" + dto + ")", e);
                 throw new MapperException(e);
             }
         }
