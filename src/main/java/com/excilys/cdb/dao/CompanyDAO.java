@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import static com.excilys.cdb.dao.DAOUtils.haveOneOrEmpty;
 
 public class CompanyDAO {
@@ -22,41 +25,47 @@ public class CompanyDAO {
 
     private static CompanyDAO instance;
     private final ConnectionProvider connectionProvider = ConnectionProvider.getInstance();
-    private final ResultSetMapper<List<Company>> resultSetMapper = new ResultSetToListMapper<>(ResultSetToCompanyMapper.getInstance());
+    private final ResultSetMapper<List<Company>> resultSetMapper = new ResultSetToListMapper<>(
+	    ResultSetToCompanyMapper.getInstance());
     private final ResultSetToCountMapper resultSetToCountMapper = ResultSetToCountMapper.getInstance();
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private CompanyDAO() {
     }
 
     public static CompanyDAO getInstance() {
-        if (Objects.isNull(instance)) {
-            instance = new CompanyDAO();
-        }
-        return instance;
+	if (Objects.isNull(instance)) {
+	    instance = new CompanyDAO();
+	}
+	return instance;
     }
 
     public List<Company> findAll(long offset, long limit) {
-        try {
-            return JDBCUtils.find(resultSetMapper, connectionProvider, SQL_FIND_ALL_PAGED, limit, offset);
-        } catch (SQLException e) {
-            throw new CompanyDAOException(e);
-        }
+	try {
+	    return JDBCUtils.find(resultSetMapper, connectionProvider, SQL_FIND_ALL_PAGED, limit, offset);
+	} catch (SQLException e) {
+	    logger.warn("findAll(" + offset + "," + limit + ")", e);
+	    throw new CompanyDAOException(e);
+	}
     }
 
     public Optional<Company> findById(long id) {
-        try {
-            List<Company> companies = JDBCUtils.find(resultSetMapper, connectionProvider, SQL_FIND_BY_ID, id);
-            return haveOneOrEmpty(companies);
-        } catch (SQLException e) {
-            throw new CompanyDAOException(e);
-        }
+	try {
+	    List<Company> companies = JDBCUtils.find(resultSetMapper, connectionProvider, SQL_FIND_BY_ID, id);
+	    return haveOneOrEmpty(companies);
+	} catch (SQLException e) {
+	    logger.warn("findById(" + id + ")", e);
+	    throw new CompanyDAOException(e);
+	}
     }
 
     public long count() {
-        try {
-            return JDBCUtils.find(resultSetToCountMapper, connectionProvider, SQL_COUNT);
-        } catch (SQLException e) {
-            throw new CompanyDAOException(e);
-        }
+	try {
+	    return JDBCUtils.find(resultSetToCountMapper, connectionProvider, SQL_COUNT);
+	} catch (SQLException e) {
+	    logger.warn("count()", e);
+	    throw new CompanyDAOException(e);
+	}
     }
 }
