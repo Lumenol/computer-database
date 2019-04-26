@@ -15,6 +15,12 @@ import java.util.stream.Collectors;
 
 public class TestDatabase {
 
+    private static final String ENTRIES_SQL = "entries.sql";
+
+
+    private static final String SCHEMA_SQL = "schema.sql";
+
+
     private static TestDatabase instance = new TestDatabase();
 
 
@@ -29,7 +35,9 @@ public class TestDatabase {
     public static TestDatabase getInstance() {
         return instance;
     }
-
+/*
+ * Ne retire pas les lignes de commentaires risque de ne pas marcher avec
+ */
     private static void executeScript(String filename) throws SQLException, IOException {
         try (final Connection connection = ConnectionProvider.getInstance().get();
              final Statement statement = connection.createStatement();
@@ -117,8 +125,8 @@ public class TestDatabase {
     }
 
     public void reload() throws IOException, SQLException {
-        executeScript("schema.sql");
-        executeScript("entries.sql");
+        executeScript(SCHEMA_SQL);
+        executeScript(ENTRIES_SQL);
     }
 
     public List<Company> findAllCompanies(long offset, long limit) {
