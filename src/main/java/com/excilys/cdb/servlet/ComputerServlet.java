@@ -7,7 +7,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class Computer extends HttpServlet {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class ComputerServlet extends HttpServlet {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
@@ -16,6 +20,13 @@ public class Computer extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
+	switch (request.getPathInfo()) {
+	case "dashbord":
 
+	    break;
+
+	default:
+	    break;
+	}
     }
 }
