@@ -13,12 +13,15 @@ class JDBCUtils {
     private interface ResultProvider {
 	ResultSet result(PreparedStatement ps) throws SQLException;
     }
+
     private interface StatementExecutor {
 	void execute(PreparedStatement ps) throws SQLException;
     }
+
     private interface StatementFactory {
 	PreparedStatement create(Connection co, String sql) throws SQLException;
     }
+
     private static final StatementExecutor execute = PreparedStatement::execute;
     private static final StatementExecutor executeUpdate = PreparedStatement::executeUpdate;
     private static final ResultProvider generatedKeys = PreparedStatement::getGeneratedKeys;

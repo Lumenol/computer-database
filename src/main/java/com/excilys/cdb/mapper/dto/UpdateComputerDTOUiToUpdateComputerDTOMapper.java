@@ -14,6 +14,7 @@ import com.excilys.cdb.exception.MapperException;
 public class UpdateComputerDTOUiToUpdateComputerDTOMapper implements Mapper<UpdateComputerDTOUi, UpdateComputerDTO> {
     private static UpdateComputerDTOUiToUpdateComputerDTOMapper instance;
     private static final String NULL = "null";
+
     public static UpdateComputerDTOUiToUpdateComputerDTOMapper getInstance() {
 	if (Objects.isNull(instance)) {
 	    instance = new UpdateComputerDTOUiToUpdateComputerDTOMapper();

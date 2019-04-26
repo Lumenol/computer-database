@@ -17,6 +17,7 @@ import com.excilys.cdb.service.CompanyService;
 public class CreateComputerDTOToComputerMapper implements Mapper<CreateComputerDTO, Computer> {
 
     private static CreateComputerDTOToComputerMapper instance;
+
     public static CreateComputerDTOToComputerMapper getInstance() {
 	if (Objects.isNull(instance)) {
 	    instance = new CreateComputerDTOToComputerMapper();

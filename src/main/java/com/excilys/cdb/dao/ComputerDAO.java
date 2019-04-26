@@ -27,12 +27,14 @@ public class ComputerDAO {
     private static final String SQL_FIND_BY_ID = "SELECT A.id AS id,A.name AS name ,A.introduced AS introduced ,A.discontinued AS discontinued ,B.id AS company_id,B.name AS company_name FROM computer AS A LEFT JOIN company AS B ON A.company_id = B.id WHERE A.id = ? LIMIT 1";
 
     private static final String SQL_UPDATE = "UPDATE computer SET name = ?, introduced = ?,discontinued = ?,company_id = ? WHERE id = ?";
+
     public static ComputerDAO getInstance() {
 	if (Objects.isNull(instance)) {
 	    instance = new ComputerDAO();
 	}
 	return instance;
     }
+
     private final ConnectionProvider connectionProvider = ConnectionProvider.getInstance();
     private final Logger logger = LoggerFactory.getLogger(getClass());
 

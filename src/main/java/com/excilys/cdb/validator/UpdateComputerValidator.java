@@ -9,12 +9,14 @@ import com.excilys.cdb.service.ComputerService;
 public class UpdateComputerValidator extends Validator<UpdateComputerDTO> {
 
     private static UpdateComputerValidator instance;
+
     public static UpdateComputerValidator getInstance() {
 	if (Objects.isNull(instance)) {
 	    instance = new UpdateComputerValidator();
 	}
 	return instance;
     }
+
     private final ComputerService computerService = ComputerService.getInstance();
 
     private final CreateComputerValidator createComputerValidator = CreateComputerValidator.getInstance();

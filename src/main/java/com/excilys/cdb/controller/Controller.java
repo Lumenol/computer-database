@@ -29,12 +29,14 @@ import com.excilys.cdb.validator.Validator;
 
 public class Controller {
     private static Controller instance;
+
     public static Controller getInstance() {
 	if (Objects.isNull(instance)) {
 	    instance = new Controller();
 	}
 	return instance;
     }
+
     private final CompanyService companyService = CompanyService.getInstance();
     private final Mapper<Company, CompanyDTO> companyToCompanyDTO = CompanyToCompanyDTOMapper.getInstance();
     private final ComputerService computerService = ComputerService.getInstance();

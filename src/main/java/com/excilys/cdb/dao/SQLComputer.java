@@ -22,6 +22,7 @@ class SQLComputer {
 	}
 	return sqlComputer;
     }
+
     private Date discontinued;
     private Long id;
     private Date introduced;

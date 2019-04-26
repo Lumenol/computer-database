@@ -15,12 +15,14 @@ import com.excilys.cdb.service.CompanyService;
 public class UpdateComputerDTOToComputerMapper implements Mapper<UpdateComputerDTO, Computer> {
 
     private static UpdateComputerDTOToComputerMapper instance;
+
     public static UpdateComputerDTOToComputerMapper getInstance() {
 	if (Objects.isNull(instance)) {
 	    instance = new UpdateComputerDTOToComputerMapper();
 	}
 	return instance;
     }
+
     private final CompanyService companyService = CompanyService.getInstance();
 
     private final Logger logger = LoggerFactory.getLogger(getClass());

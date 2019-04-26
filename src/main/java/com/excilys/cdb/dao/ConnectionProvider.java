@@ -9,9 +9,11 @@ import java.util.ResourceBundle;
 public class ConnectionProvider {
 
     private static ConnectionProvider instance;
+
     private static ResourceBundle bundle() {
 	return ResourceBundle.getBundle("database");
     }
+
     public static ConnectionProvider getInstance() {
 	if (Objects.isNull(instance)) {
 	    ResourceBundle bundle = bundle();
@@ -24,6 +26,7 @@ public class ConnectionProvider {
 	}
 	return instance;
     }
+
     private String password;
 
     private String url;

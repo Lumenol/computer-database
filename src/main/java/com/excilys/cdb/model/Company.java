@@ -28,6 +28,7 @@ public class Company {
 	}
 
     }
+
     public static CompagnyBuilder builder() {
 	return new CompagnyBuilder();
     }

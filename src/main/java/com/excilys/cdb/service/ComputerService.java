@@ -15,12 +15,14 @@ import com.excilys.cdb.model.Computer;
 public class ComputerService {
 
     private static ComputerService instance;
+
     public static ComputerService getInstance() {
 	if (Objects.isNull(instance)) {
 	    instance = new ComputerService();
 	}
 	return instance;
     }
+
     private final ComputerDAO computerDAO = ComputerDAO.getInstance();
 
     private final Logger logger = LoggerFactory.getLogger(getClass());

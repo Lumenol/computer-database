@@ -14,6 +14,7 @@ import com.excilys.cdb.model.Company;
 
 public class CompanyService {
     private static CompanyService instance;
+
     public static CompanyService getInstance() {
 	if (Objects.isNull(instance)) {
 	    instance = new CompanyService();

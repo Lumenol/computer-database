@@ -10,6 +10,7 @@ import com.excilys.cdb.model.Computer;
 public class ComputerToComputerDTOMapper implements Mapper<Computer, ComputerDTO> {
 
     private static ComputerToComputerDTOMapper instance;
+
     public static ComputerToComputerDTOMapper getInstance() {
 	if (Objects.isNull(instance)) {
 	    instance = new ComputerToComputerDTOMapper();

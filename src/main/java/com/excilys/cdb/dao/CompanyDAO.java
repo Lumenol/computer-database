@@ -24,12 +24,14 @@ public class CompanyDAO {
     private static final String SQL_FIND_ALL_PAGED = "SELECT id,name FROM company ORDER BY id LIMIT ? OFFSET ?";
 
     private static final String SQL_FIND_BY_ID = "SELECT id,name FROM company WHERE id = ? LIMIT 1";
+
     public static CompanyDAO getInstance() {
 	if (Objects.isNull(instance)) {
 	    instance = new CompanyDAO();
 	}
 	return instance;
     }
+
     private final ConnectionProvider connectionProvider = ConnectionProvider.getInstance();
     private final Logger logger = LoggerFactory.getLogger(getClass());
 

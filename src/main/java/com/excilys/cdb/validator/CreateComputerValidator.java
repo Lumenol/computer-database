@@ -12,6 +12,7 @@ import com.excilys.cdb.service.CompanyService;
 public class CreateComputerValidator extends Validator<CreateComputerDTO> {
 
     private static CreateComputerValidator instance;
+
     public static CreateComputerValidator getInstance() {
 	if (Objects.isNull(instance)) {
 	    instance = new CreateComputerValidator();

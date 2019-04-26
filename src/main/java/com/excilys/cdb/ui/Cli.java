@@ -28,6 +28,7 @@ public class Cli {
     private enum PageAction {
 	MENU, NEXT, PREVIOUS
     }
+
     public static final String DATE_FORMAT_ALLOWED = "Les dates doivents être null ou aaaa-mm-jj";
     public static final String ID_MANNUFACTURER_FORMAT_ALLOWED = "L'id du fabricant peut être null";
     private static final int PAGE_SIZE = 20;

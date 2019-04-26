@@ -41,9 +41,11 @@ public class Computer {
 	}
 
     }
+
     public static ComputerBuilder builder() {
 	return new ComputerBuilder();
     }
+
     private final LocalDate discontinued;
     private final Long id;
     private final LocalDate introduced;

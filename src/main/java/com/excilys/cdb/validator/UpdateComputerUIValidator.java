@@ -7,6 +7,7 @@ import com.excilys.cdb.dto.UpdateComputerDTOUi;
 
 public class UpdateComputerUIValidator extends Validator<UpdateComputerDTOUi> {
     private static UpdateComputerUIValidator instance;
+
     private static boolean checkIdFail(String id) {
 	if (Objects.isNull(id)) {
 	    return true;
