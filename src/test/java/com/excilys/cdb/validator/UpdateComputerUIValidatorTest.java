@@ -1,14 +1,14 @@
 package com.excilys.cdb.validator;
 
 import com.excilys.cdb.dto.UpdateComputerDTOUi;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-class UpdateComputerUIValidatorTest {
+public class UpdateComputerUIValidatorTest {
 
     @Test
-    void validWithoutDateAndMannufacturerId() {
+    public void validWithoutDateAndMannufacturerId() {
         final UpdateComputerDTOUi updateComputerDTOUi = new UpdateComputerDTOUi();
         updateComputerDTOUi.setId("9");
         updateComputerDTOUi.setName("Un non pas vide");
@@ -20,7 +20,7 @@ class UpdateComputerUIValidatorTest {
     }
 
     @Test
-    void validWithoutDateWithMannufacturerId() {
+    public void validWithoutDateWithMannufacturerId() {
         final UpdateComputerDTOUi updateComputerDTOUi = new UpdateComputerDTOUi();
         updateComputerDTOUi.setId("40");
         updateComputerDTOUi.setName("Un non pas vide");
@@ -32,7 +32,7 @@ class UpdateComputerUIValidatorTest {
     }
 
     @Test
-    void valid() {
+    public void valid() {
         final UpdateComputerDTOUi updateComputerDTOUi = new UpdateComputerDTOUi();
         updateComputerDTOUi.setId("25");
         updateComputerDTOUi.setName("Un non pas vide");
@@ -44,7 +44,7 @@ class UpdateComputerUIValidatorTest {
     }
 
     @Test
-    void unvalidBecauseIntroduced() {
+    public void unvalidBecauseIntroduced() {
         final UpdateComputerDTOUi updateComputerDTOUi = new UpdateComputerDTOUi();
         updateComputerDTOUi.setId("9");
         updateComputerDTOUi.setName("Un non pas vide");
@@ -57,7 +57,7 @@ class UpdateComputerUIValidatorTest {
     }
 
     @Test
-    void unvalidBecauseDiscontinuedAndIntroduced() {
+    public void unvalidBecauseDiscontinuedAndIntroduced() {
         final UpdateComputerDTOUi updateComputerDTOUi = new UpdateComputerDTOUi();
         updateComputerDTOUi.setId("9");
         updateComputerDTOUi.setName("Un non pas vide");
@@ -71,7 +71,7 @@ class UpdateComputerUIValidatorTest {
     }
 
     @Test
-    void unvalidBecauseMannufacturerId() {
+    public void unvalidBecauseMannufacturerId() {
         final UpdateComputerDTOUi updateComputerDTOUi = new UpdateComputerDTOUi();
         updateComputerDTOUi.setId("9");
         updateComputerDTOUi.setName("Un non pas vide");
@@ -84,7 +84,7 @@ class UpdateComputerUIValidatorTest {
     }
 
     @Test
-    void unvalidBecauseDateIsNullValue() {
+    public void unvalidBecauseDateIsNullValue() {
         final UpdateComputerDTOUi updateComputerDTOUi = new UpdateComputerDTOUi();
         updateComputerDTOUi.setId("9");
         updateComputerDTOUi.setName("Un non pas vide");
@@ -97,7 +97,7 @@ class UpdateComputerUIValidatorTest {
     }
 
     @Test
-    void unvalidBecauseName() {
+    public void unvalidBecauseName() {
         final UpdateComputerDTOUi updateComputerDTOUi = new UpdateComputerDTOUi();
         updateComputerDTOUi.setId("9");
         updateComputerDTOUi.setName("");
@@ -110,7 +110,7 @@ class UpdateComputerUIValidatorTest {
     }
 
     @Test
-    void unvalidBecauseMannufacturerIdIsNull() {
+    public void unvalidBecauseMannufacturerIdIsNull() {
         final UpdateComputerDTOUi updateComputerDTOUi = new UpdateComputerDTOUi();
         updateComputerDTOUi.setId("9");
         updateComputerDTOUi.setName("un nom");
@@ -123,7 +123,7 @@ class UpdateComputerUIValidatorTest {
     }
 
     @Test
-    void unvalidBecauseId() {
+    public void unvalidBecauseId() {
         final UpdateComputerDTOUi updateComputerDTOUi = new UpdateComputerDTOUi();
         updateComputerDTOUi.setId("9 ");
         updateComputerDTOUi.setName("Un non pas vide");
@@ -136,7 +136,7 @@ class UpdateComputerUIValidatorTest {
     }
 
     @Test
-    void unvalidBecauseIdIsNull() {
+    public void unvalidBecauseIdIsNull() {
         final UpdateComputerDTOUi updateComputerDTOUi = new UpdateComputerDTOUi();
         updateComputerDTOUi.setId(null);
         updateComputerDTOUi.setName("Un non pas vide");

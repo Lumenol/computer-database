@@ -4,10 +4,11 @@ import com.excilys.cdb.dao.ConnectionProvider;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Computer.ComputerBuilder;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
 import java.sql.Date;
@@ -15,11 +16,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
-class ResultSetToComputerMapperTest {
+@RunWith(JUnitParamsRunner.class)
+public class ResultSetToComputerMapperTest {
 
     private static final String COLUMN_COMPANY_ID = "company_id";
     private static final String COLUMN_COMPANY_NAME = "company_name";
@@ -30,22 +31,22 @@ class ResultSetToComputerMapperTest {
 
     private ResultSet mockResultSet;
 
-    private static Stream<Arguments> provideComputer() {
-        return Stream.of(Arguments.of(1l, "Le premier", null, null, 4l, "4eme corp"),
-                Arguments.of(2l, "Le dexieme", LocalDate.of(2017, 10, 10), null, null, null),
-                Arguments.of(3l, "Le 3eme", LocalDate.of(2016, 9, 9), LocalDate.of(2017, 10, 10), 5l, "Une autre corp"),
-                Arguments.of(4l, "Le 4eme", null, LocalDate.of(2017, 10, 10), 6l, "La 6eme"));
+    public Object[] provideComputer() {
+        return new Object[][]{{1l, "Le premier", null, null, 4l, "4eme corp"},
+                {2l, "Le dexieme", LocalDate.of(2017, 10, 10), null, null, null},
+                {3l, "Le 3eme", LocalDate.of(2016, 9, 9), LocalDate.of(2017, 10, 10), 5l, "Une autre corp"},
+                {4l, "Le 4eme", null, LocalDate.of(2017, 10, 10), 6l, "La 6eme"}};
     }
 
     ;
 
-    @BeforeEach
+    @Before
     public void mockResultSet() {
         mockResultSet = Mockito.mock(ResultSet.class);
     }
 
-    @ParameterizedTest
-    @MethodSource("provideComputer")
+    @Test
+    @Parameters(method = "provideComputer")
     public void testMap(long id, String name, LocalDate introduced, LocalDate discontinued, Long companyId,
                         String companyName) throws SQLException {
         ConnectionProvider instance = ConnectionProvider.getInstance();

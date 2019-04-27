@@ -1,14 +1,14 @@
 package com.excilys.cdb.validator;
 
 import com.excilys.cdb.dto.CreateComputerDTOUi;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-class CreateComputerUIValidatorTest {
+public class CreateComputerUIValidatorTest {
 
     @Test
-    void validWithoutDateAndMannufacturerId() {
+    public void validWithoutDateAndMannufacturerId() {
         final CreateComputerDTOUi createComputerDTOUi = new CreateComputerDTOUi();
         createComputerDTOUi.setName("Un non pas vide");
         createComputerDTOUi.setIntroduced("null");
@@ -19,7 +19,7 @@ class CreateComputerUIValidatorTest {
     }
 
     @Test
-    void validWithoutDateWithMannufacturerId() {
+    public void validWithoutDateWithMannufacturerId() {
         final CreateComputerDTOUi createComputerDTOUi = new CreateComputerDTOUi();
         createComputerDTOUi.setName("Un non pas vide");
         createComputerDTOUi.setIntroduced("null");
@@ -30,7 +30,7 @@ class CreateComputerUIValidatorTest {
     }
 
     @Test
-    void valid() {
+    public void valid() {
         final CreateComputerDTOUi createComputerDTOUi = new CreateComputerDTOUi();
         createComputerDTOUi.setName("Un non pas vide");
         createComputerDTOUi.setIntroduced("2017-02-12");
@@ -41,7 +41,7 @@ class CreateComputerUIValidatorTest {
     }
 
     @Test
-    void unvalidBecauseIntroduced() {
+    public void unvalidBecauseIntroduced() {
         final CreateComputerDTOUi createComputerDTOUi = new CreateComputerDTOUi();
         createComputerDTOUi.setName("Un non pas vide");
         createComputerDTOUi.setIntroduced("12-02-2020");
@@ -53,7 +53,7 @@ class CreateComputerUIValidatorTest {
     }
 
     @Test
-    void unvalidBecauseDiscontinuedAndIntroduced() {
+    public void unvalidBecauseDiscontinuedAndIntroduced() {
         final CreateComputerDTOUi createComputerDTOUi = new CreateComputerDTOUi();
         createComputerDTOUi.setName("Un non pas vide");
         createComputerDTOUi.setIntroduced("nul");
@@ -66,7 +66,7 @@ class CreateComputerUIValidatorTest {
     }
 
     @Test
-    void unvalidBecauseMannufacturerId() {
+    public void unvalidBecauseMannufacturerId() {
         final CreateComputerDTOUi createComputerDTOUi = new CreateComputerDTOUi();
         createComputerDTOUi.setName("Un non pas vide");
         createComputerDTOUi.setIntroduced("null");

@@ -3,23 +3,24 @@ package com.excilys.cdb.validator;
 import com.excilys.cdb.TestDatabase;
 import com.excilys.cdb.dto.UpdateComputerDTO;
 import com.excilys.cdb.validator.Validator.Result;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-class UpdateComputerValidatorTest {
-    @BeforeEach
+
+public class UpdateComputerValidatorTest {
+    @Before
     public void loadEnttries() throws IOException, SQLException {
         TestDatabase.getInstance().reload();
     }
 
     @Test
-    void validWithoutDateAndMannufacturerId() {
+    public void validWithoutDateAndMannufacturerId() {
         final UpdateComputerDTO updateComputerDTO = new UpdateComputerDTO();
         updateComputerDTO.setId(5L);
         updateComputerDTO.setName("Un nom correct");
@@ -28,7 +29,7 @@ class UpdateComputerValidatorTest {
     }
 
     @Test
-    void validWithoutDateWithMannufacturerId() {
+    public void validWithoutDateWithMannufacturerId() {
         final UpdateComputerDTO updateComputerDTO = new UpdateComputerDTO();
         updateComputerDTO.setId(3L);
         updateComputerDTO.setName("Un nom correct");
@@ -38,7 +39,7 @@ class UpdateComputerValidatorTest {
     }
 
     @Test
-    void valid() {
+    public void valid() {
         final UpdateComputerDTO updateComputerDTO = new UpdateComputerDTO();
         updateComputerDTO.setId(9L);
         updateComputerDTO.setName("Un nom correct");
@@ -50,7 +51,7 @@ class UpdateComputerValidatorTest {
     }
 
     @Test
-    void unvalidBecauseNameIsEmpty() {
+    public void unvalidBecauseNameIsEmpty() {
         final UpdateComputerDTO updateComputerDTO = new UpdateComputerDTO();
         updateComputerDTO.setId(3L);
         updateComputerDTO.setName("");
@@ -63,7 +64,7 @@ class UpdateComputerValidatorTest {
     }
 
     @Test
-    void unvalidBecauseMannufacturerDoesNotExist() {
+    public void unvalidBecauseMannufacturerDoesNotExist() {
         final UpdateComputerDTO updateComputerDTO = new UpdateComputerDTO();
         updateComputerDTO.setId(3L);
         updateComputerDTO.setName("Un nom correct");
@@ -76,7 +77,7 @@ class UpdateComputerValidatorTest {
     }
 
     @Test
-    void unvalidBecauseDiscontinuedIsBeforeIntroduced() {
+    public void unvalidBecauseDiscontinuedIsBeforeIntroduced() {
         final UpdateComputerDTO updateComputerDTO = new UpdateComputerDTO();
         updateComputerDTO.setId(3L);
         updateComputerDTO.setName("Un nom correct");
@@ -89,7 +90,7 @@ class UpdateComputerValidatorTest {
     }
 
     @Test
-    void unvalidBecauseComputerDoesNotExist() {
+    public void unvalidBecauseComputerDoesNotExist() {
         final UpdateComputerDTO updateComputerDTO = new UpdateComputerDTO();
         updateComputerDTO.setId(984L);
         updateComputerDTO.setName("Un nom correct");
