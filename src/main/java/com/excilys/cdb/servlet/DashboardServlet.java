@@ -1,24 +1,20 @@
 package com.excilys.cdb.servlet;
 
-import com.excilys.cdb.controller.Controller;
 import com.excilys.cdb.dto.ComputerDTO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.excilys.cdb.mapper.dto.ComputerToComputerDTOMapper;
+import com.excilys.cdb.service.ComputerService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DashboardServlet extends HttpServlet {
-    public static final int PAGE_SIZE = 10;
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-    private final Controller controller = Controller.getInstance();
+    public static final int PAGE_SIZE = 50;
+    private final ComputerService computerService = ComputerService.getInstance();
 
     private List<Long> indexOfPages(long pageCurrent, long pageSize, long numberOfEntities) {
         final Set<Long> pages = new TreeSet<>();
@@ -51,13 +47,33 @@ public class DashboardServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         final long pageNumber = getPageNumber(request);
 
-        final List<ComputerDTO> computers = controller.getComputers((pageNumber - 1) * PAGE_SIZE, PAGE_SIZE);
-        final long numberOfComputers = controller.numberOfComputers();
+        final long numberOfComputers = computerService.count();
+        if (redirectIfPageOutOfRange(response, pageNumber, numberOfComputers)) return;
 
+        final List<ComputerDTO> computers = computerService.findAll((pageNumber - 1) * PAGE_SIZE, PAGE_SIZE).stream().map(ComputerToComputerDTOMapper.getInstance()::map).collect(Collectors.toList());
+
+        setNumberOfComputers(request, numberOfComputers);
         setComputers(request, computers);
         setPaggingParameters(request, pageNumber, numberOfComputers);
 
         getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+    }
+
+    private boolean redirectIfPageOutOfRange(HttpServletResponse response, long pageNumber, double numberOfComputers) throws IOException {
+        long lastPage = (long) Math.ceil(numberOfComputers / PAGE_SIZE);
+        if (pageNumber < 1) {
+            redirectToPageNumber(response, 1);
+            return true;
+        }
+        if (pageNumber > lastPage) {
+            redirectToPageNumber(response, lastPage);
+            return true;
+        }
+        return false;
+    }
+
+    private void redirectToPageNumber(HttpServletResponse response, long pageNumber) throws IOException {
+        response.sendRedirect("dashboard?page=" + pageNumber);
     }
 
     private void setPaggingParameters(HttpServletRequest request, long pageCurrent, long numberOfEntities) {
@@ -87,8 +103,15 @@ public class DashboardServlet extends HttpServlet {
         }
     }
 
+    private void setNumberOfComputers(HttpServletRequest request, long numberOfComputers) {
+        request.setAttribute("numberOfComputers", numberOfComputers);
+    }
+
     private long getPageNumber(HttpServletRequest request) {
         final String numeroPageParam = request.getParameter("page");
+        if (Objects.isNull(numeroPageParam)) {
+            return 1;
+        }
         try {
             long pageNumber = Long.parseLong(numeroPageParam);
             if (pageNumber >= 1) {
@@ -96,7 +119,7 @@ public class DashboardServlet extends HttpServlet {
             }
         } catch (NumberFormatException e) {
         }
-        return 1;
+        return -1;
     }
 
 }
