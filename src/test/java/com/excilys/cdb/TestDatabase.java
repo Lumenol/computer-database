@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class TestDatabase {
 
-    private static final String ENTRIES_SQL = "entries.sql";
+    private static final String ENTRIES_SQL = "entriesUT.sql";
 
     private static final String SCHEMA_SQL = "schema.sql";
 
