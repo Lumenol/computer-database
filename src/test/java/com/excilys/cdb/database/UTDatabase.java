@@ -1,4 +1,4 @@
-package com.excilys.cdb;
+package com.excilys.cdb.database;
 
 import com.excilys.cdb.dao.ConnectionProvider;
 import com.excilys.cdb.model.Company;
@@ -13,23 +13,23 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TestDatabase {
+public class UTDatabase {
 
     private static final String ENTRIES_SQL = "entriesUT.sql";
 
     private static final String SCHEMA_SQL = "schema.sql";
 
-    private static TestDatabase instance = new TestDatabase();
+    private static UTDatabase instance = new UTDatabase();
 
     private Map<Long, Company> companies = new TreeMap<>();
     private Map<Long, Computer> computers = new TreeMap<>();
 
-    private TestDatabase() {
+    private UTDatabase() {
         addCompanies();
         addComputers();
     }
 
-    public static TestDatabase getInstance() {
+    public static UTDatabase getInstance() {
         return instance;
     }
 
@@ -39,7 +39,7 @@ public class TestDatabase {
     private static void executeScript(String filename) throws SQLException, IOException {
         try (final Connection connection = ConnectionProvider.getInstance().get();
              final Statement statement = connection.createStatement();
-             final InputStream resourceAsStream = TestDatabase.class.getClassLoader().getResourceAsStream(filename);
+             final InputStream resourceAsStream = UTDatabase.class.getClassLoader().getResourceAsStream(filename);
              final Scanner scanner = new Scanner(resourceAsStream)) {
 
             StringBuilder sb = new StringBuilder();

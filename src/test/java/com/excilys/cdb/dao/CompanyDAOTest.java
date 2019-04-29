@@ -1,6 +1,6 @@
 package com.excilys.cdb.dao;
 
-import com.excilys.cdb.TestDatabase;
+import com.excilys.cdb.database.UTDatabase;
 import com.excilys.cdb.model.Company;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
@@ -21,7 +21,7 @@ public class CompanyDAOTest {
 
     public Object[] provideCompanyId() {
         final Stream.Builder<Long> builder = Stream.builder();
-        final List<Company> companies = TestDatabase.getInstance().findAllCompanies();
+        final List<Company> companies = UTDatabase.getInstance().findAllCompanies();
         final Company lastCcompanies = companies.get(companies.size() - 1);
         for (long i = -5; i < lastCcompanies.getId() + 5; i++) {
             builder.add(i);
@@ -35,13 +35,13 @@ public class CompanyDAOTest {
 
     @Before
     public void loadEnttries() throws IOException, SQLException {
-        TestDatabase.getInstance().reload();
+        UTDatabase.getInstance().reload();
     }
 
     @Test
     @Parameters(method = "provideCompanyId")
     public void findById(long id) {
-        final Optional<Company> expected = Optional.ofNullable(TestDatabase.getInstance().findCompanyById(id));
+        final Optional<Company> expected = Optional.ofNullable(UTDatabase.getInstance().findCompanyById(id));
         final Optional<Company> actual = CompanyDAO.getInstance().findById(id);
         assertEquals(expected, actual);
     }
@@ -50,13 +50,13 @@ public class CompanyDAOTest {
     @Parameters(method = "provideOffsetLimit")
     public void findAll(long offset, long limit) {
         final List<Company> actual = CompanyDAO.getInstance().findAll(offset, limit);
-        final List<Company> expected = TestDatabase.getInstance().findAllCompanies(offset, limit);
+        final List<Company> expected = UTDatabase.getInstance().findAllCompanies(offset, limit);
         assertEquals(expected, actual);
     }
 
     @Test
     public void count() {
         final long count = CompanyDAO.getInstance().count();
-        assertEquals(TestDatabase.getInstance().findAllCompanies().size(), count);
+        assertEquals(UTDatabase.getInstance().findAllCompanies().size(), count);
     }
 }

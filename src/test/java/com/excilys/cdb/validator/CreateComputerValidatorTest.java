@@ -1,6 +1,6 @@
 package com.excilys.cdb.validator;
 
-import com.excilys.cdb.TestDatabase;
+import com.excilys.cdb.database.UTDatabase;
 import com.excilys.cdb.dto.CreateComputerDTO;
 import com.excilys.cdb.validator.Validator.Result;
 import org.junit.Before;
@@ -17,7 +17,7 @@ public class CreateComputerValidatorTest {
 
     @Before
     public void loadEnttries() throws IOException, SQLException {
-        TestDatabase.getInstance().reload();
+        UTDatabase.getInstance().reload();
     }
 
     @Test
