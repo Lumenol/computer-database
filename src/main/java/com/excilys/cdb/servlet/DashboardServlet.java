@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class DashboardServlet extends HttpServlet {
-    public static final int PAGE_SIZE = 50;
+    public static final int DEFAULT_PAGE_SIZE = 50;
     private final ComputerService computerService = ComputerService.getInstance();
 
     private List<Long> indexOfPages(long pageCurrent, long pageSize, long numberOfEntities) {
@@ -40,59 +40,82 @@ public class DashboardServlet extends HttpServlet {
         return new ArrayList<>(pages);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         doGet(request, response);
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        final long pageNumber = getPageNumber(request);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        final long pageIndex = getPageIndex(request);
+        final long pageSize = getPageSize(request);
 
         final long numberOfComputers = computerService.count();
-        if (redirectIfPageOutOfRange(response, pageNumber, numberOfComputers)) return;
+        if (redirectIfPageOutOfRange(response, pageIndex, numberOfComputers, pageSize)) {
+            return;
+        }
 
-        final List<ComputerDTO> computers = computerService.findAll((pageNumber - 1) * PAGE_SIZE, PAGE_SIZE).stream().map(ComputerToComputerDTOMapper.getInstance()::map).collect(Collectors.toList());
+        final long offset = (pageIndex - 1) * pageSize;
+        final List<ComputerDTO> computers = computerService.findAll(offset, pageSize).stream()
+                .map(ComputerToComputerDTOMapper.getInstance()::map).collect(Collectors.toList());
 
         setNumberOfComputers(request, numberOfComputers);
         setComputers(request, computers);
-        setPaggingParameters(request, pageNumber, numberOfComputers);
+        setPaggingParameters(request, pageIndex, numberOfComputers, pageSize);
+
+        setPageSize(request, pageSize);
+        setCurrentPageIndex(request, pageIndex);
 
         getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
     }
 
-    private boolean redirectIfPageOutOfRange(HttpServletResponse response, long pageNumber, double numberOfComputers) throws IOException {
-        long lastPage = (long) Math.ceil(numberOfComputers / PAGE_SIZE);
-        if (pageNumber < 1) {
-            redirectToPageNumber(response, 1);
+    private boolean redirectIfPageOutOfRange(HttpServletResponse response, long pageIndex, double numberOfComputers,
+                                             long pageSize) throws IOException {
+        long indexLastPage = indexLastPage(numberOfComputers, pageSize);
+        if (pageIndex < 1) {
+            redirectToPageNumber(response, 1, pageSize);
             return true;
         }
-        if (pageNumber > lastPage) {
-            redirectToPageNumber(response, lastPage);
+        if (pageIndex > indexLastPage) {
+            redirectToPageNumber(response, indexLastPage, pageSize);
             return true;
         }
         return false;
     }
 
-    private void redirectToPageNumber(HttpServletResponse response, long pageNumber) throws IOException {
-        response.sendRedirect("dashboard?page=" + pageNumber);
+    private long indexLastPage(double numberOfEntities, long pageSize) {
+        return (long) Math.ceil(numberOfEntities / pageSize);
     }
 
-    private void setPaggingParameters(HttpServletRequest request, long pageCurrent, long numberOfEntities) {
+    private void redirectToPageNumber(HttpServletResponse response, long pageNumber, long pageSize) throws IOException {
+        response.sendRedirect("dashboard?page=" + pageNumber + "&size=" + pageSize);
+    }
+
+    private void setPaggingParameters(HttpServletRequest request, long pageCurrent, long numberOfEntities, long pageSize) {
         setPreviousPage(request, pageCurrent);
-        setNextPage(request, pageCurrent, numberOfEntities);
-        setPagesNumbers(request, pageCurrent, numberOfEntities);
+        setNextPage(request, pageCurrent, numberOfEntities, pageSize);
+        setPagesNumbers(request, pageCurrent, numberOfEntities, pageSize);
     }
 
-    private void setPagesNumbers(HttpServletRequest request, long pageCurrent, long numberOfEntries) {
-        final List<Long> pages = indexOfPages(pageCurrent, PAGE_SIZE, numberOfEntries);
+    private void setPagesNumbers(HttpServletRequest request, long pageCurrent, long numberOfEntries, long pageSize) {
+        final List<Long> pages = indexOfPages(pageCurrent, pageSize, numberOfEntries);
         request.setAttribute("pages", pages);
+    }
+
+    private void setCurrentPageIndex(HttpServletRequest request, long pageCurrent) {
+        request.setAttribute("current", pageCurrent);
+    }
+
+    private void setPageSize(HttpServletRequest request, long pageSize) {
+        request.setAttribute("size", pageSize);
     }
 
     private void setComputers(HttpServletRequest request, List<ComputerDTO> computers) {
         request.setAttribute("computers", computers);
     }
 
-    private void setNextPage(HttpServletRequest request, long pageCurrent, long numberOfEntities) {
-        if (pageCurrent * PAGE_SIZE < numberOfEntities) {
+    private void setNextPage(HttpServletRequest request, long pageCurrent, long numberOfEntities, long pageSize) {
+        if (pageCurrent * pageSize < numberOfEntities) {
             request.setAttribute("next", pageCurrent + 1);
         }
     }
@@ -107,19 +130,23 @@ public class DashboardServlet extends HttpServlet {
         request.setAttribute("numberOfComputers", numberOfComputers);
     }
 
-    private long getPageNumber(HttpServletRequest request) {
-        final String numeroPageParam = request.getParameter("page");
-        if (Objects.isNull(numeroPageParam)) {
-            return 1;
-        }
+    private long getPageIndex(HttpServletRequest request) {
+        final Long pageIndex = getParameterAsLong(request, "page");
+        return Objects.nonNull(pageIndex) ? pageIndex : 1;
+    }
+
+    private Long getParameterAsLong(HttpServletRequest request, String nameParameter) {
+        final String parameter = request.getParameter(nameParameter);
         try {
-            long pageNumber = Long.parseLong(numeroPageParam);
-            if (pageNumber >= 1) {
-                return pageNumber;
-            }
+            return Long.parseLong(parameter);
         } catch (NumberFormatException e) {
+            return null;
         }
-        return -1;
+    }
+
+    private long getPageSize(HttpServletRequest request) {
+        final Long pageSize = getParameterAsLong(request, "size");
+        return Objects.nonNull(pageSize) ? pageSize : DEFAULT_PAGE_SIZE;
     }
 
 }

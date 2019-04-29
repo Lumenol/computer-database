@@ -89,3 +89,7 @@ $(document).keydown(function (e) {
     }
 });
 
+
+function goToPage(index,size){
+	window.location.href="?page="+index+"&size="+size;
+}
