@@ -12,64 +12,64 @@ public class ComputerDTO {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        ComputerDTO that = (ComputerDTO) o;
-        return id == that.id && Objects.equals(discontinued, that.discontinued)
-                && Objects.equals(introduced, that.introduced) && Objects.equals(mannufacturer, that.mannufacturer)
-                && Objects.equals(name, that.name);
+	if (this == o)
+	    return true;
+	if (o == null || getClass() != o.getClass())
+	    return false;
+	ComputerDTO that = (ComputerDTO) o;
+	return id == that.id && Objects.equals(discontinued, that.discontinued)
+		&& Objects.equals(introduced, that.introduced) && Objects.equals(mannufacturer, that.mannufacturer)
+		&& Objects.equals(name, that.name);
     }
 
     public LocalDate getDiscontinued() {
-        return discontinued;
+	return discontinued;
     }
 
     public void setDiscontinued(LocalDate discontinued) {
-        this.discontinued = discontinued;
+	this.discontinued = discontinued;
     }
 
     public long getId() {
-        return id;
+	return id;
     }
 
     public void setId(long id) {
-        this.id = id;
+	this.id = id;
     }
 
     public LocalDate getIntroduced() {
-        return introduced;
+	return introduced;
     }
 
     public void setIntroduced(LocalDate introduced) {
-        this.introduced = introduced;
+	this.introduced = introduced;
     }
 
     public CompanyDTO getMannufacturer() {
-        return mannufacturer;
+	return mannufacturer;
     }
 
     public void setMannufacturer(CompanyDTO mannufacturer) {
-        this.mannufacturer = mannufacturer;
+	this.mannufacturer = mannufacturer;
     }
 
     public String getName() {
-        return name;
+	return name;
     }
 
     public void setName(String name) {
-        this.name = name;
+	this.name = name;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(discontinued, id, introduced, mannufacturer, name);
+	return Objects.hash(discontinued, id, introduced, mannufacturer, name);
     }
 
     @Override
     public String toString() {
-        return "ComputerDTO{" + "discontinued=" + discontinued + ", id=" + id + ", introduced=" + introduced
-                + ", mannufacturer=" + mannufacturer + ", name='" + name + '\'' + '}';
+	return "ComputerDTO{" + "discontinued=" + discontinued + ", id=" + id + ", introduced=" + introduced
+		+ ", mannufacturer=" + mannufacturer + ", name='" + name + '\'' + '}';
     }
 }

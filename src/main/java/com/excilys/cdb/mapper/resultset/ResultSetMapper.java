@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 public interface ResultSetMapper<T> {
     static ResultSetMapper<ResultSet> identity() {
-        return rs -> rs;
+	return rs -> rs;
     }
 
     T map(ResultSet rs) throws SQLException;

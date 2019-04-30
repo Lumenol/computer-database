@@ -12,16 +12,16 @@ public class ResultSetToCountMapper implements ResultSetMapper<Long> {
     }
 
     public static ResultSetToCountMapper getInstance() {
-        if (Objects.isNull(instance)) {
-            instance = new ResultSetToCountMapper();
-        }
-        return instance;
+	if (Objects.isNull(instance)) {
+	    instance = new ResultSetToCountMapper();
+	}
+	return instance;
     }
 
     @Override
     public Long map(ResultSet rs) throws SQLException {
-        rs.first();
-        return rs.getLong(1);
+	rs.first();
+	return rs.getLong(1);
     }
 
 }
