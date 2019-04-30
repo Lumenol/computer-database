@@ -9,6 +9,7 @@
 	<packaging>war</packaging>
 	<properties>
 		<java.version>1.8</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- Version des dépendances -->
 		<mysql-connector.version>8.0.15</mysql-connector.version>
@@ -109,7 +110,7 @@
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
-					<encoding>UTF-8</encoding>
+					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
 
@@ -141,6 +142,9 @@
 					<includes>
 						<include>**/selenium/**/*.java</include>
 					</includes>
+					<systemPropertyVariables>
+						<integration-test.url>http://localhost:${tomcat.http.port}/${project.artifactId}</integration-test.url>
+					</systemPropertyVariables>
 				</configuration>
 				<executions>
 					<execution>
@@ -174,11 +178,36 @@
 				<version>3.7.1</version>
 			</plugin>
 
+			<!-- Reservation d'un port pour tomcat -->
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<id>reserve-network-port</id>
+						<goals>
+							<goal>reserve-network-port</goal>
+						</goals>
+						<phase>pre-integration-test</phase>
+						<configuration>
+							<portNames>
+								<portName>tomcat.http.port</portName>
+							</portNames>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 			<!-- Lancement et arrêt de tomcat pour les tests d'intégration -->
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.2</version>
+				<configuration>
+					<port>${tomcat.http.port}</port>
+				</configuration>
 				<executions>
 					<execution>
 						<id>start-tomcat</id>
@@ -225,7 +254,7 @@
 				<executions>
 					<execution>
 						<id>create-schema</id>
-						<phase>process-test-resources</phase>
+						<phase>pre-integration-test</phase>
 						<goals>
 							<goal>execute</goal>
 						</goals>
@@ -239,7 +268,7 @@
 
 					<execution>
 						<id>create-data</id>
-						<phase>process-test-resources</phase>
+						<phase>pre-integration-test</phase>
 						<goals>
 							<goal>execute</goal>
 						</goals>
@@ -250,10 +279,8 @@
 							</srcFiles>
 						</configuration>
 					</execution>
-
 				</executions>
 			</plugin>
-
 		</plugins>
 	</build>
 </project>
