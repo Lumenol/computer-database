@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,7 +24,6 @@
                     id: 0
                 </div>
                 <h1>Edit Computer</h1>
-
                 <form action="editComputer" method="POST">
                     <input type="hidden" value="0" id="id"/> <!-- TODO: Change this value with the computer id -->
                     <fieldset>
