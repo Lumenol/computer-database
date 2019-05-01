@@ -25,10 +25,10 @@ public class AddComputerServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final String PARAMETER_COMPANIES = "companies";
     private static final String ADD_COMPUTER_JSP = "/WEB-INF/views/addComputer.jsp";
-    private static final String PARAMETER_COMPUTER_NAME = "computerName";
+    private static final String PARAMETER_COMPUTER_NAME = "name";
     private static final String PARAMETER_INTRODUCED = "introduced";
     private static final String PARAMETER_DISCONTINUED = "discontinued";
-    private static final String PARAMETER_MANNUFACTURER_ID = "mannufacturerID";
+    private static final String PARAMETER_MANNUFACTURER_ID = "mannufacturerId";
     private final CompanyService companyService = CompanyService.getInstance();
     private final CreateComputerWebUiValidator createComputerWebUiValidator = CreateComputerWebUiValidator.getInstance();
 
@@ -42,13 +42,13 @@ public class AddComputerServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        final String computerName = request.getParameter(PARAMETER_COMPUTER_NAME);
+        final String name = request.getParameter(PARAMETER_COMPUTER_NAME);
         final String introduced = request.getParameter(PARAMETER_INTRODUCED);
         final String discontinued = request.getParameter(PARAMETER_DISCONTINUED);
         final String mannufacturerId = request.getParameter(PARAMETER_MANNUFACTURER_ID);
 
         final CreateComputerDTOUi createComputerDTOUi = new CreateComputerDTOUi();
-        createComputerDTOUi.setName(computerName);
+        createComputerDTOUi.setName(name);
         createComputerDTOUi.setIntroduced(introduced);
         createComputerDTOUi.setDiscontinued(discontinued);
         createComputerDTOUi.setMannufacturerId(mannufacturerId);
@@ -60,12 +60,14 @@ public class AddComputerServlet extends HttpServlet {
             if (result.isValid()) {
                 final Computer computer = CreateComputerDTOToComputerMapper.getInstance().map(createComputerDTO);
                 ComputerService.getInstance().create(computer);
+                request.setAttribute("success", true);
             }
         }
         if (!result.isValid()) {
+            request.setAttribute("success", false);
+            request.setAttribute("computer", createComputerDTOUi);
             request.setAttribute("errors", result.getErrors());
         }
-        getServletContext().getRequestDispatcher(ADD_COMPUTER_JSP).forward(request, response);
-
+        doGet(request, response);
     }
 }
