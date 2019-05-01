@@ -11,7 +11,6 @@ import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
 public class CreateComputerDTOUiToCreateComputerDTOMapper implements Mapper<CreateComputerDTOUi, CreateComputerDTO> {
-    private static final String NULL = "null";
     private static CreateComputerDTOUiToCreateComputerDTOMapper instance;
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -26,17 +25,18 @@ public class CreateComputerDTOUiToCreateComputerDTOMapper implements Mapper<Crea
     }
 
     private static LocalDate parseDate(String date) {
-        if (date.equals(NULL)) {
+        try {
+            return LocalDate.parse(date);
+        } catch (DateTimeParseException e) {
             return null;
         }
-        return LocalDate.parse(date);
     }
 
     private static Long parseId(String id) {
-        if (id.equals(NULL)) {
-            return null;
-        } else {
+        try {
             return Long.valueOf(id);
+        } catch (NumberFormatException e) {
+            return null;
         }
     }
 
