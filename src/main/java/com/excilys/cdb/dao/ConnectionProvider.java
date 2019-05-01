@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 public class ConnectionProvider {
 
@@ -38,6 +39,7 @@ public class ConnectionProvider {
 
     public static ConnectionProvider getInstance() {
         if (Objects.isNull(instance)) {
+            TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
             ResourceBundle bundle = bundle();
             final String url = bundle.getString("url");
             final String username = bundle.getString("username");
