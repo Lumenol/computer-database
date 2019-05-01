@@ -38,7 +38,7 @@
                         <div class="form-group ${not empty errors['name']?"has-error":""}">
                             <label for="computerName">Computer name</label>
                             <input type="text" class="form-control" name="name" id="computerName"
-                                   placeholder="Computer name" value="${computer.name}">
+                                   placeholder="Computer name" value="${computer.name}" required>
                             <c:if test="${not empty errors['name']}">
                                 <div class="help-block">${errors['name']}</div>
                             </c:if>
