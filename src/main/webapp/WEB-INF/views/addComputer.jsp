@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +21,8 @@
         <div class="row">
             <div class="col-xs-8 col-xs-offset-2 box">
                 <h1>Add Computer</h1>
-                <form action="addComputer" method="POST">
+                ${errors}
+                <form action="add" method="POST">
                     <fieldset>
                         <div class="form-group">
                             <label for="computerName">Computer name</label>
@@ -35,16 +37,20 @@
                             <input type="date" class="form-control" id="discontinued" placeholder="Discontinued date">
                         </div>
                         <div class="form-group">
-                            <label for="companyId">Company</label>
-                            <select class="form-control" id="companyId">
-                                <option value="0">--</option>
+                            <label for="mannufacturerID">Company</label>
+                            <select class="form-control" id="mannufacturerID">
+                                <option>--</option>
+                                <c:forEach var="company" items="${companies}">
+                                    <option value="${company.id}">${company.name}</option>
+                                </c:forEach>
                             </select>
                         </div>
                     </fieldset>
                     <div class="actions pull-right">
                         <input type="submit" value="Add" class="btn btn-primary">
                         or
-                        <a href="dashboard" class="btn btn-default">Cancel</a>
+                        <c:url var="dashboard" value="/dashboard"/>
+                        <a href="${dashboard}" class="btn btn-default">Cancel</a>
                     </div>
                 </form>
             </div>

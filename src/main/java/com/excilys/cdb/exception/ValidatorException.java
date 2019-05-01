@@ -1,17 +1,17 @@
 package com.excilys.cdb.exception;
 
-import com.excilys.cdb.validator.Validator;
+import com.excilys.cdb.validator.Result;
 
 public class ValidatorException extends RuntimeException {
     private static final long serialVersionUID = 1L;
-    private final Validator.Result result;
+    private final Result result;
 
-    public ValidatorException(Validator.Result result) {
-	super(result.values().toString());
-	this.result = result;
+    public ValidatorException(Result result) {
+        super(result.getErrors().values().toString());
+        this.result = result;
     }
 
-    public Validator.Result getResult() {
-	return result;
+    public Result getResult() {
+        return result;
     }
 }

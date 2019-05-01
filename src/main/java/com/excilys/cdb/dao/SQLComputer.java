@@ -1,9 +1,9 @@
 package com.excilys.cdb.dao;
 
+import com.excilys.cdb.model.Computer;
+
 import java.sql.Date;
 import java.util.Objects;
-
-import com.excilys.cdb.model.Computer;
 
 class SQLComputer {
 
@@ -14,58 +14,58 @@ class SQLComputer {
     private String name;
 
     static SQLComputer from(Computer computer) {
-	final SQLComputer sqlComputer = new SQLComputer();
-	sqlComputer.setId(computer.getId());
-	sqlComputer.setName(computer.getName());
-	if (Objects.nonNull(computer.getManufacturer())) {
-	    sqlComputer.setManufacturerId(computer.getManufacturer().getId());
-	}
-	if (Objects.nonNull(computer.getIntroduced())) {
-	    sqlComputer.setIntroduced(Date.valueOf(computer.getIntroduced()));
-	}
-	if (Objects.nonNull(computer.getDiscontinued())) {
-	    sqlComputer.setDiscontinued(Date.valueOf(computer.getDiscontinued()));
-	}
-	return sqlComputer;
+        final SQLComputer sqlComputer = new SQLComputer();
+        sqlComputer.setId(computer.getId());
+        sqlComputer.setName(computer.getName());
+        if (Objects.nonNull(computer.getManufacturer())) {
+            sqlComputer.setManufacturerId(computer.getManufacturer().getId());
+        }
+        if (Objects.nonNull(computer.getIntroduced())) {
+            sqlComputer.setIntroduced(Date.valueOf(computer.getIntroduced()));
+        }
+        if (Objects.nonNull(computer.getDiscontinued())) {
+            sqlComputer.setDiscontinued(Date.valueOf(computer.getDiscontinued()));
+        }
+        return sqlComputer;
     }
 
     public Date getDiscontinued() {
-	return discontinued;
+        return discontinued;
     }
 
     public void setDiscontinued(Date discontinued) {
-	this.discontinued = discontinued;
+        this.discontinued = discontinued;
     }
 
     public Long getId() {
-	return id;
+        return id;
     }
 
     public void setId(Long id) {
-	this.id = id;
+        this.id = id;
     }
 
     public Date getIntroduced() {
-	return introduced;
+        return introduced;
     }
 
     public void setIntroduced(Date introduced) {
-	this.introduced = introduced;
+        this.introduced = introduced;
     }
 
     public Long getManufacturerId() {
-	return manufacturerId;
+        return manufacturerId;
     }
 
     public void setManufacturerId(Long manufacturerId) {
-	this.manufacturerId = manufacturerId;
+        this.manufacturerId = manufacturerId;
     }
 
     public String getName() {
-	return name;
+        return name;
     }
 
     public void setName(String name) {
-	this.name = name;
+        this.name = name;
     }
 }

@@ -90,6 +90,6 @@ $(document).keydown(function (e) {
 });
 
 
-function goToPage(index,size){
+function goToPage(index, size) {
     window.location.href = encodeURI("?page=" + index + "&size=" + size);
 }

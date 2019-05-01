@@ -7,34 +7,34 @@ public class CreateComputerDTOUi {
     private String name;
 
     public String getDiscontinued() {
-	return discontinued;
+        return discontinued;
     }
 
     public void setDiscontinued(String discontinued) {
-	this.discontinued = discontinued;
+        this.discontinued = discontinued;
     }
 
     public String getIntroduced() {
-	return introduced;
+        return introduced;
     }
 
     public void setIntroduced(String introduced) {
-	this.introduced = introduced;
+        this.introduced = introduced;
     }
 
     public String getMannufacturerId() {
-	return mannufacturerId;
+        return mannufacturerId;
     }
 
     public void setMannufacturerId(String mannufacturerId) {
-	this.mannufacturerId = mannufacturerId;
+        this.mannufacturerId = mannufacturerId;
     }
 
     public String getName() {
-	return name;
+        return name;
     }
 
     public void setName(String name) {
-	this.name = name;
+        this.name = name;
     }
 }

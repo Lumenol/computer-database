@@ -7,6 +7,6 @@ class ValidatorUtils {
     }
 
     static boolean isBlank(String s) {
-	return Objects.isNull(s) || s.trim().isEmpty();
+        return Objects.isNull(s) || s.trim().isEmpty();
     }
 }
