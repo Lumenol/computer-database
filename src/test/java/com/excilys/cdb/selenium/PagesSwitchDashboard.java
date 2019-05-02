@@ -83,11 +83,7 @@ public class PagesSwitchDashboard {
 
         final String mannufacturerName = actualElement.findElement(By.xpath("td[5]")).getText();
 
-        String expectedMannufacturerName = "";
-        if (Objects.nonNull(expectedComputerDTO.getMannufacturer())) {
-            expectedMannufacturerName = expectedComputerDTO.getMannufacturer().getName();
-        }
-        Assert.assertEquals("nom fabriquant", expectedMannufacturerName, mannufacturerName);
+        Assert.assertEquals("nom fabriquant", Objects.toString(expectedComputerDTO.getMannufacturer(), ""), mannufacturerName);
     }
 
     private void clickPaginationButton(String text) {

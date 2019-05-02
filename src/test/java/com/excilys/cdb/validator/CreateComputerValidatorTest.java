@@ -2,6 +2,7 @@ package com.excilys.cdb.validator;
 
 import com.excilys.cdb.database.UTDatabase;
 import com.excilys.cdb.dto.CreateComputerDTO;
+import com.excilys.cdb.exception.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,7 +10,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class CreateComputerValidatorTest {
 
@@ -22,64 +24,70 @@ public class CreateComputerValidatorTest {
     public void validWithoutDateAndMannufacturerId() {
         final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
         createComputerDTO.setName("Un nom correct");
-        final Result result = CreateComputerValidator.getInstance().check(createComputerDTO);
-        assertTrue(result.isValid());
+        CreateComputerValidator.getInstance().check(createComputerDTO);
     }
 
     @Test
     public void validWithoutDateWithMannufacturerId() {
         final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
         createComputerDTO.setName("Un nom correct");
-        createComputerDTO.setMannufacturerId(5L);
-        final Result result = CreateComputerValidator.getInstance().check(createComputerDTO);
-        assertTrue(result.isValid());
+        createComputerDTO.setMannufacturerId("5");
+        CreateComputerValidator.getInstance().check(createComputerDTO);
     }
 
     @Test
     public void valid() {
         final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
         createComputerDTO.setName("Un nom correct");
-        createComputerDTO.setMannufacturerId(5L);
-        createComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4));
-        createComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20));
-        final Result result = CreateComputerValidator.getInstance().check(createComputerDTO);
-        assertTrue(result.isValid());
+        createComputerDTO.setMannufacturerId("5");
+        createComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4).toString());
+        createComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20).toString());
+        CreateComputerValidator.getInstance().check(createComputerDTO);
     }
 
     @Test
     public void unvalidBecauseNameIsEmpty() {
         final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
         createComputerDTO.setName("");
-        createComputerDTO.setMannufacturerId(5L);
-        createComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4));
-        createComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20));
-        final Result result = CreateComputerValidator.getInstance().check(createComputerDTO);
-        assertFalse(result.isValid());
-        assertNotNull(result.getErrors().get("name"));
+        createComputerDTO.setMannufacturerId("5");
+        createComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4).toString());
+        createComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20).toString());
+        try {
+            CreateComputerValidator.getInstance().check(createComputerDTO);
+            fail("La validation a échoué");
+        } catch (ValidationException e) {
+            assertEquals("name", e.getField());
+        }
     }
 
     @Test
     public void unvalidBecauseMannufacturerDoesNotExist() {
         final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
         createComputerDTO.setName("Un nom correct");
-        createComputerDTO.setMannufacturerId(5300L);
-        createComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4));
-        createComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20));
-        final Result result = CreateComputerValidator.getInstance().check(createComputerDTO);
-        assertFalse(result.isValid());
-        assertNotNull(result.getErrors().get("mannufacturerId"));
+        createComputerDTO.setMannufacturerId("5300");
+        createComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4).toString());
+        createComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20).toString());
+        try {
+            CreateComputerValidator.getInstance().check(createComputerDTO);
+            fail("La validation a échoué");
+        } catch (ValidationException e) {
+            assertEquals("mannufacturerId", e.getField());
+        }
     }
 
     @Test
     public void unvalidBecauseDiscontinuedIsBeforeIntroduced() {
         final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
         createComputerDTO.setName("Un nom correct");
-        createComputerDTO.setMannufacturerId(5L);
-        createComputerDTO.setIntroduced(LocalDate.of(2016, 2, 4));
-        createComputerDTO.setDiscontinued(LocalDate.of(2012, 10, 20));
-        final Result result = CreateComputerValidator.getInstance().check(createComputerDTO);
-        assertFalse(result.isValid());
-        assertNotNull(result.getErrors().get("discontinued"));
+        createComputerDTO.setMannufacturerId("5");
+        createComputerDTO.setIntroduced(LocalDate.of(2016, 2, 4).toString());
+        createComputerDTO.setDiscontinued(LocalDate.of(2012, 10, 20).toString());
+        try {
+            CreateComputerValidator.getInstance().check(createComputerDTO);
+            fail("La validation a échoué");
+        } catch (ValidationException e) {
+            assertEquals("discontinued", e.getField());
+        }
     }
 
 }

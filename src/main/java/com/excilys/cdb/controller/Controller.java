@@ -5,14 +5,13 @@ import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.dto.CreateComputerDTO;
 import com.excilys.cdb.dto.UpdateComputerDTO;
 import com.excilys.cdb.exception.ControllerException;
-import com.excilys.cdb.exception.ValidatorException;
+import com.excilys.cdb.exception.ValidationException;
 import com.excilys.cdb.mapper.dto.*;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.validator.CreateComputerValidator;
-import com.excilys.cdb.validator.Result;
 import com.excilys.cdb.validator.UpdateComputerValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,15 +47,11 @@ public class Controller {
 
     public void createComputer(CreateComputerDTO dto) {
         try {
-            final Result result = createComputerValidator.check(dto);
-            if (result.isValid()) {
-                computerService.create(createComputerDTOToComputerMapper.map(dto));
-            } else {
-                throw new ValidatorException(result);
-            }
-        } catch (ValidatorException e) {
+            createComputerValidator.check(dto);
+            computerService.create(createComputerDTOToComputerMapper.map(dto));
+        } catch (ValidationException e) {
             logger.warn("createComputer(" + dto + ")", e);
-            throw new ControllerException(e.getMessage());
+            throw e;
         } catch (RuntimeException e) {
             logger.warn("createComputer(" + dto + ")", e);
             throw new ControllerException();
@@ -121,15 +116,11 @@ public class Controller {
 
     public void updateComputer(UpdateComputerDTO dto) {
         try {
-            final Result result = updateComputerValidator.check(dto);
-            if (result.isValid()) {
-                computerService.update(updateComputerDTOToComputerMapper.map(dto));
-            } else {
-                throw new ValidatorException(result);
-            }
-        } catch (ValidatorException e) {
+            updateComputerValidator.check(dto);
+            computerService.update(updateComputerDTOToComputerMapper.map(dto));
+        } catch (ValidationException e) {
             logger.warn("updateComputer(" + dto + ")", e);
-            throw new ControllerException(e.getMessage());
+            throw e;
         } catch (RuntimeException e) {
             logger.warn("updateComputer(" + dto + ")", e);
             throw new ControllerException();

@@ -1,17 +1,17 @@
 package com.excilys.cdb.validator;
 
 import com.excilys.cdb.dto.UpdateComputerDTO;
+import com.excilys.cdb.exception.ValidationException;
 import com.excilys.cdb.service.ComputerService;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDate;
 import java.util.Objects;
+
+import static com.excilys.cdb.validator.ComputerValidatorUtils.*;
 
 public class UpdateComputerValidator implements Validator<UpdateComputerDTO> {
 
     private static UpdateComputerValidator instance;
-    private final ComputerService computerService = ComputerService.getInstance();
-    private final CreateComputerValidator createComputerValidator = CreateComputerValidator.getInstance();
 
     private UpdateComputerValidator() {
     }
@@ -23,12 +23,24 @@ public class UpdateComputerValidator implements Validator<UpdateComputerDTO> {
         return instance;
     }
 
-    @Override
-    public Result check(UpdateComputerDTO toValidate) {
-        final Map<String, String> errors = new HashMap<>(createComputerValidator.check(toValidate).getErrors());
-        if (!computerService.exist(toValidate.getId())) {
-            errors.put("id", "l'id ne correspond à aucun ordinateur");
+    private void checkId(String id) {
+        try {
+            final long i = Long.parseLong(id);
+            if (!ComputerService.getInstance().exist(i)) {
+                throw new ValidationException("id", "L'id n'exist pas.");
+            }
+        } catch (NumberFormatException e) {
+            throw new ValidationException("id", "L'id est mal écrit.");
         }
-        return new Result(errors);
+    }
+
+    @Override
+    public void check(UpdateComputerDTO toValidate) {
+        checkName(toValidate.getName());
+        final LocalDate introduced = checkIntroduced(toValidate.getIntroduced());
+        final LocalDate discontinued = checkDiscontinued(toValidate.getDiscontinued());
+        checkIntroducedIsBeforeDiscontinued(introduced, discontinued);
+        checkMannufacturerId(toValidate.getMannufacturerId());
+        checkId(toValidate.getId());
     }
 }

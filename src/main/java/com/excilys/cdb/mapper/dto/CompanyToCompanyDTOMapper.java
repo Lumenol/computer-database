@@ -21,10 +21,7 @@ public class CompanyToCompanyDTOMapper implements Mapper<Company, CompanyDTO> {
 
     @Override
     public CompanyDTO map(Company company) {
-        CompanyDTO companyDTO = new CompanyDTO();
-        companyDTO.setId(company.getId());
-        companyDTO.setName(company.getName());
-        return companyDTO;
+        return CompanyDTO.builder().id(company.getId()).name(company.getName()).build();
     }
 
 }

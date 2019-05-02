@@ -2,14 +2,10 @@ package com.excilys.cdb.ui;
 
 import com.excilys.cdb.controller.Controller;
 import com.excilys.cdb.dto.ComputerDTO;
-import com.excilys.cdb.dto.CreateComputerDTOUi;
-import com.excilys.cdb.dto.UpdateComputerDTOUi;
+import com.excilys.cdb.dto.CreateComputerDTO;
+import com.excilys.cdb.dto.UpdateComputerDTO;
 import com.excilys.cdb.exception.ControllerException;
-import com.excilys.cdb.mapper.dto.CreateComputerDTOUiToCreateComputerDTOMapper;
-import com.excilys.cdb.mapper.dto.UpdateComputerDTOUiToUpdateComputerDTOMapper;
-import com.excilys.cdb.validator.CreateComputerCliUiValidator;
-import com.excilys.cdb.validator.Result;
-import com.excilys.cdb.validator.UpdateComputerCliUiValidator;
+import com.excilys.cdb.exception.ValidationException;
 
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -20,18 +16,12 @@ import java.util.stream.Collectors;
 
 public class Cli {
 
-    public static final String DATE_FORMAT_ALLOWED = "Les dates doivents être null ou aaaa-mm-jj";
-    public static final String ID_MANNUFACTURER_FORMAT_ALLOWED = "L'id du fabricant peut être null";
+    private static final String DATE_FORMAT_ALLOWED = "Les dates doivents être vide ou aaaa-mm-jj";
+    private static final String ID_MANNUFACTURER_FORMAT_ALLOWED = "L'id du fabricant peut être vide";
     private static final int PAGE_SIZE = 20;
     private final Controller controller = Controller.getInstance();
-    private final CreateComputerDTOUiToCreateComputerDTOMapper createComputerDTOUiToCreateComputerDTOMapper = CreateComputerDTOUiToCreateComputerDTOMapper
-            .getInstance();
-    private final CreateComputerCliUiValidator createComputerCliUiValidator = CreateComputerCliUiValidator.getInstance();
     private final Scanner in;
     private final PrintStream out;
-    private final UpdateComputerDTOUiToUpdateComputerDTOMapper updateComputerDTOUiToUpdateComputerDTOMapper = UpdateComputerDTOUiToUpdateComputerDTOMapper
-            .getInstance();
-    private final UpdateComputerCliUiValidator updateComputerCliUiValidator = UpdateComputerCliUiValidator.getInstance();
     private boolean quit = false;
 
     public Cli(InputStream in, PrintStream out) {
@@ -48,16 +38,11 @@ public class Cli {
         final List<String> tokens = readLine(delim);
         final int numberOfToken = 4;
         if (tokens.size() == numberOfToken) {
-            final CreateComputerDTOUi dtoUi = new CreateComputerDTOUi();
-            dtoUi.setName(tokens.get(0));
-            dtoUi.setIntroduced(tokens.get(1));
-            dtoUi.setDiscontinued(tokens.get(2));
-            dtoUi.setMannufacturerId(tokens.get(3));
-            final Result result = createComputerCliUiValidator.check(dtoUi);
-            if (result.isValid()) {
-                controller.createComputer(createComputerDTOUiToCreateComputerDTOMapper.map(dtoUi));
-            } else {
-                result.getErrors().values().forEach(out::println);
+            final CreateComputerDTO createComputerDTO = CreateComputerDTO.builder().name(tokens.get(0)).introduced(tokens.get(1)).discontinued(tokens.get(2)).mannufacturerId(tokens.get(3)).build();
+            try {
+                controller.createComputer(createComputerDTO);
+            } catch (ValidationException e) {
+                out.println(e.getMessage());
             }
         } else {
             out.println("Il manque des informations");
@@ -257,17 +242,11 @@ public class Cli {
         final List<String> tokens = readLine(delim);
         final int numberOfToken = 5;
         if (tokens.size() == numberOfToken) {
-            final UpdateComputerDTOUi dtoUi = new UpdateComputerDTOUi();
-            dtoUi.setId(tokens.get(0));
-            dtoUi.setName(tokens.get(1));
-            dtoUi.setIntroduced(tokens.get(2));
-            dtoUi.setDiscontinued(tokens.get(3));
-            dtoUi.setMannufacturerId(tokens.get(4));
-            final Result result = updateComputerCliUiValidator.check(dtoUi);
-            if (result.isValid()) {
-                controller.updateComputer(updateComputerDTOUiToUpdateComputerDTOMapper.map(dtoUi));
-            } else {
-                result.getErrors().values().forEach(out::println);
+            final UpdateComputerDTO updateComputerDTO = UpdateComputerDTO.builder().id(tokens.get(0)).name(tokens.get(1)).introduced(tokens.get(2)).discontinued(tokens.get(3)).mannufacturerId(tokens.get(4)).build();
+            try {
+                controller.updateComputer(updateComputerDTO);
+            } catch (ValidationException e) {
+                out.println(e.getMessage());
             }
         } else {
             out.println("Il manque des informations");

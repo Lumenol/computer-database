@@ -11,8 +11,7 @@ public class Computer {
     private final Company manufacturer;
     private final String name;
 
-    private Computer(Long id, String name, Company manufacturer, LocalDate introduced, LocalDate discontinued) {
-        super();
+    Computer(LocalDate discontinued, Long id, LocalDate introduced, Company manufacturer, String name) {
         this.discontinued = discontinued;
         this.id = id;
         this.introduced = introduced;
@@ -76,8 +75,7 @@ public class Computer {
         private Company manufacturer;
         private String name;
 
-        public Computer build() {
-            return new Computer(id, name, manufacturer, introduced, discontinued);
+        ComputerBuilder() {
         }
 
         public ComputerBuilder discontinued(LocalDate discontinued) {
@@ -85,7 +83,7 @@ public class Computer {
             return this;
         }
 
-        public ComputerBuilder id(long id) {
+        public ComputerBuilder id(Long id) {
             this.id = id;
             return this;
         }
@@ -105,6 +103,12 @@ public class Computer {
             return this;
         }
 
-    }
+        public Computer build() {
+            return new Computer(discontinued, id, introduced, manufacturer, name);
+        }
 
+        public String toString() {
+            return "Computer.ComputerBuilder(discontinued=" + this.discontinued + ", id=" + this.id + ", introduced=" + this.introduced + ", manufacturer=" + this.manufacturer + ", name=" + this.name + ")";
+        }
+    }
 }

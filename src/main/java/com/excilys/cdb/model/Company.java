@@ -13,8 +13,8 @@ public class Company {
         this.name = name;
     }
 
-    public static CompagnyBuilder builder() {
-        return new CompagnyBuilder();
+    public static CompanyBuilder builder() {
+        return new CompanyBuilder();
     }
 
     @Override
@@ -47,29 +47,29 @@ public class Company {
         return "Compagny [id=" + id + ", name=" + name + "]";
     }
 
-    public static class CompagnyBuilder {
-
+    public static class CompanyBuilder {
         private Long id;
-
         private String name;
 
-        private CompagnyBuilder() {
+        CompanyBuilder() {
+        }
+
+        public CompanyBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public CompanyBuilder name(String name) {
+            this.name = name;
+            return this;
         }
 
         public Company build() {
             return new Company(id, name);
         }
 
-        public CompagnyBuilder id(long id) {
-            this.id = id;
-            return this;
+        public String toString() {
+            return "Company.CompanyBuilder(id=" + this.id + ", name=" + this.name + ")";
         }
-
-        public CompagnyBuilder name(String name) {
-            this.name = name;
-            return this;
-        }
-
     }
-
 }

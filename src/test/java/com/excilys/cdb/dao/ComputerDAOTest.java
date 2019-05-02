@@ -57,7 +57,7 @@ public class ComputerDAOTest {
 
     @Test(expected = ComputerDAOException.class)
     public void createWithForeinKeyConflict() {
-        final Company company = Company.builder().id(404).name("La company").build();
+        final Company company = Company.builder().id(404L).name("La company").build();
         final ComputerBuilder builder = Computer.builder().introduced(LocalDate.of(2012, 4, 14))
                 .discontinued(LocalDate.of(2020, 5, 10)).name("Le modifié").manufacturer(company);
         final Computer cree = builder.build();
@@ -92,9 +92,9 @@ public class ComputerDAOTest {
 
     @Test
     public void update() {
-        final int id = 5;
+        final long id = 5;
         final Computer expected = Computer.builder().id(id).introduced(LocalDate.of(2012, 4, 14))
-                .discontinued(LocalDate.of(2020, id, 10)).name("Le modifié").build();
+                .discontinued(LocalDate.of(2020, 5, 10)).name("Le modifié").build();
         ComputerDAO.getInstance().update(expected);
         final Computer actual = ComputerDAO.getInstance().findById(id).get();
         assertEquals(expected, actual);

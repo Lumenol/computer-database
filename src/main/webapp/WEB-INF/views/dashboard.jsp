@@ -77,7 +77,7 @@
                     <td><a href="editComputer.html" onclick="">${computer.name}</a></td>
                     <td>${computer.introduced}</td>
                     <td>${computer.discontinued}</td>
-                    <td>${computer.mannufacturer.name}</td>
+                    <td>${computer.mannufacturer}</td>
 
                 </tr>
             </c:forEach>
