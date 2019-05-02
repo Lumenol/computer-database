@@ -35,7 +35,7 @@
                 </c:if>
                 <form action="add" method="POST">
                     <fieldset>
-                        <div class="form-group ${not empty errors['name']?"has-error":""}">
+                        <div class='form-group ${not empty errors["name"]?"has-error":""}'>
                             <label for="computerName">Computer name</label>
                             <input type="text" class="form-control" name="name" id="computerName"
                                    placeholder="Computer name" value="${computer.name}" required>
@@ -43,29 +43,29 @@
                                 <div class="help-block">${errors['name']}</div>
                             </c:if>
                         </div>
-                        <div class="form-group ${not empty errors['introduced']?"has-error":""}">
+                        <div class='form-group ${not empty errors["introduced"]?"has-error":""}'>
                             <label for="introduced">Introduced date</label>
                             <input type="date" class="form-control" name="introduced" id="introduced"
-                                   placeholder="Introduced date" value="${computer.introduced}">
+                                   placeholder="Introduced date" value="${computer.introduced}" min="1970-01-01">
                             <c:if test="${not empty errors['introduced']}">
                                 <div class="help-block">${errors['introduced']}</div>
                             </c:if>
                         </div>
-                        <div class="form-group ${not empty errors['discontinued']?"has-error":""}">
+                        <div class='form-group ${not empty errors["discontinued"]?"has-error":""}'>
                             <label for="discontinued">Discontinued date</label>
                             <input type="date" class="form-control" name="discontinued" id="discontinued"
-                                   placeholder="Discontinued date" value="${computer.discontinued}">
+                                   placeholder="Discontinued date" value="${computer.discontinued}" min="1970-01-01">
                             <c:if test="${not empty errors['discontinued']}">
                                 <div class="help-block">${errors['discontinued']}</div>
                             </c:if>
                         </div>
-                        <div class="form-group ${not empty errors['mannufacturerId']?"has-error":""}">
+                        <div class='form-group ${not empty errors["mannufacturerId"]?"has-error":""}'>
                             <label for="mannufacturerID">Company</label>
                             <select class="form-control" name="mannufacturerId" id="mannufacturerId">
                                 <option value="">--</option>
                                 <c:forEach var="company" items="${companies}">
                                     <option value="${company.id}"
-                                    ${computer.mannufacturerId==company.id?"selected='selected'":""}">${company.name}</option>
+                                    ${computer.mannufacturerId==company.id?"selected='selected'":""}>${company.name}</option>
                                 </c:forEach>
                             </select>
                             <c:if test="${not empty errors['mannufacturerId']}">
