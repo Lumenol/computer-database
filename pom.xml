@@ -23,8 +23,7 @@
 		<selenium.version>3.141.59</selenium.version>
 		<webdrivermanager.version>3.4.0</webdrivermanager.version>
 		<phantomjsdriver.version>1.4.4</phantomjsdriver.version>
-		<powermock.version>2.0.2</powermock.version>
-		<powermock-mockito.version>1.7.4</powermock-mockito.version>
+		<powermock.version>1.7.4</powermock.version>
 	</properties>
 
 	<dependencies>
@@ -105,19 +104,11 @@
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-module-junit4</artifactId>
 			<version>${powermock.version}</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-api-mockito</artifactId>
-			<version>${powermock-mockito.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-core</artifactId>
 			<version>${powermock.version}</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
