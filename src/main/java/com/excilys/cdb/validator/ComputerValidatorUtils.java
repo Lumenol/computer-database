@@ -8,6 +8,8 @@ import com.excilys.cdb.exception.ValidationException;
 import com.excilys.cdb.service.CompanyService;
 
 final class ComputerValidatorUtils {
+    private static final LocalDate _1970_01_01 = LocalDate.of(1970, 01, 01);
+
     private ComputerValidatorUtils() {
     }
 
@@ -41,7 +43,11 @@ final class ComputerValidatorUtils {
 	    return null;
 	}
 	try {
-	    return LocalDate.parse(date);
+	    final LocalDate localDate = LocalDate.parse(date);
+	    if (localDate.isBefore(_1970_01_01)) {
+		throw new ValidationException(field, "La date ne peux pas être avant le 01-01-1970.");
+	    }
+	    return localDate;
 	} catch (DateTimeParseException e) {
 	    throw new ValidationException(field, "La date est mal écrit.");
 	}
