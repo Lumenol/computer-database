@@ -14,11 +14,14 @@
 		<!-- Version des dépendances -->
 		<mysql-connector.version>8.0.15</mysql-connector.version>
 		<slf4j.version>1.7.26</slf4j.version>
+		<servlet.version>4.0.1</servlet.version>
+		<jstl.version>1.2</jstl.version>
+		<HikariCP.version>3.3.1</HikariCP.version>
+		
+		<!-- Test  -->
 		<junit.version>4.12</junit.version>
 		<mockito.version>1.10.19</mockito.version>
 		<h2.version>1.4.194</h2.version>
-		<servlet.version>4.0.1</servlet.version>
-		<jstl.version>1.2</jstl.version>
 		<JUnitParams.version>1.1.1</JUnitParams.version>
 		<selenium.version>3.141.59</selenium.version>
 		<webdrivermanager.version>3.4.0</webdrivermanager.version>
@@ -54,6 +57,12 @@
 			<artifactId>jstl</artifactId>
 			<version>${jstl.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>${HikariCP.version}</version>
+		</dependency>
+
 
 
 		<!-- Test -->
