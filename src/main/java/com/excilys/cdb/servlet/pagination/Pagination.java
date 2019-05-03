@@ -72,7 +72,7 @@ public class Pagination {
     }
 
     private void setCurrentPageIndex(HttpServletRequest request, long pageCurrent) {
-	request.setAttribute(parameters.getCurrent(), pageCurrent);
+	request.setAttribute(parameters.getPage(), pageCurrent);
     }
 
     private void setNextPage(HttpServletRequest request, long pageCurrent, long numberOfEntities, long pageSize) {

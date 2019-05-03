@@ -109,13 +109,13 @@
 
         <div class="btn-group btn-group-sm pull-right" role="group">
             <button type="button" class="btn btn-default"
-                    onclick="goToPage(${current},10)">10
+                    onclick="goToPage(${page},10)">10
             </button>
             <button type="button" class="btn btn-default"
-                    onclick="goToPage(${current},50)">50
+                    onclick="goToPage(${page},50)">50
             </button>
             <button type="button" class="btn btn-default"
-                    onclick="goToPage(${current},100)">100
+                    onclick="goToPage(${page},100)">100
             </button>
         </div>
     </div>
