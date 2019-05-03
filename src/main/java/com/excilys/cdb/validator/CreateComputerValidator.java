@@ -1,35 +1,38 @@
 package com.excilys.cdb.validator;
 
-import com.excilys.cdb.dto.CreateComputerDTO;
-import com.excilys.cdb.service.CompanyService;
+import static com.excilys.cdb.validator.ComputerValidatorUtils.checkDiscontinued;
+import static com.excilys.cdb.validator.ComputerValidatorUtils.checkIntroduced;
+import static com.excilys.cdb.validator.ComputerValidatorUtils.checkIntroducedIsBeforeDiscontinued;
+import static com.excilys.cdb.validator.ComputerValidatorUtils.checkMannufacturerId;
+import static com.excilys.cdb.validator.ComputerValidatorUtils.checkName;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
-import static com.excilys.cdb.validator.ComputerValidatorUtils.*;
+import com.excilys.cdb.dto.CreateComputerDTO;
 
 public class CreateComputerValidator implements Validator<CreateComputerDTO> {
 
     private static CreateComputerValidator instance;
-    private final CompanyService companyService = CompanyService.getInstance();
 
     private CreateComputerValidator() {
     }
 
     public static CreateComputerValidator getInstance() {
-        if (Objects.isNull(instance)) {
-            instance = new CreateComputerValidator();
-        }
-        return instance;
+	if (Objects.isNull(instance)) {
+	    instance = new CreateComputerValidator();
+	}
+	return instance;
     }
 
     @Override
     public void check(CreateComputerDTO toValidate) {
-        checkName(toValidate.getName());
-        final LocalDate introduced = checkIntroduced(toValidate.getIntroduced());
-        final LocalDate discontinued = checkDiscontinued(toValidate.getDiscontinued());
-        checkIntroducedIsBeforeDiscontinued(introduced, discontinued);
-        checkMannufacturerId(toValidate.getMannufacturerId());
+	Objects.requireNonNull(toValidate);
+	checkName(toValidate.getName());
+	final LocalDate introduced = checkIntroduced(toValidate.getIntroduced());
+	final LocalDate discontinued = checkDiscontinued(toValidate.getDiscontinued());
+	checkIntroducedIsBeforeDiscontinued(introduced, discontinued);
+	checkMannufacturerId(toValidate.getMannufacturerId());
     }
 
 }

@@ -1,9 +1,9 @@
 package com.excilys.cdb.mapper.dto;
 
+import java.util.Objects;
+
 import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.model.Company;
-
-import java.util.Objects;
 
 public class CompanyToCompanyDTOMapper implements Mapper<Company, CompanyDTO> {
 
@@ -13,15 +13,16 @@ public class CompanyToCompanyDTOMapper implements Mapper<Company, CompanyDTO> {
     }
 
     public static CompanyToCompanyDTOMapper getInstance() {
-        if (Objects.isNull(instance)) {
-            instance = new CompanyToCompanyDTOMapper();
-        }
-        return instance;
+	if (Objects.isNull(instance)) {
+	    instance = new CompanyToCompanyDTOMapper();
+	}
+	return instance;
     }
 
     @Override
     public CompanyDTO map(Company company) {
-        return CompanyDTO.builder().id(company.getId()).name(company.getName()).build();
+	Objects.requireNonNull(company);
+	return CompanyDTO.builder().id(company.getId()).name(company.getName()).build();
     }
 
 }

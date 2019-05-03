@@ -26,6 +26,13 @@ public class PaginationParameters {
     public PaginationParameters(long defaultSize, String size, String page, String previous, String current,
 	    String next, String pages) {
 	super();
+	Objects.requireNonNull(size);
+	Objects.requireNonNull(page);
+	Objects.requireNonNull(previous);
+	Objects.requireNonNull(current);
+	Objects.requireNonNull(next);
+	Objects.requireNonNull(pages);
+
 	this.defaultSize = defaultSize;
 	this.size = size;
 	this.page = page;
