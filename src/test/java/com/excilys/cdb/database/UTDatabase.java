@@ -1,6 +1,6 @@
 package com.excilys.cdb.database;
 
-import com.excilys.cdb.dao.ConnectionProvider;
+import com.excilys.cdb.dao.ConnectionManager;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
@@ -37,7 +37,7 @@ public class UTDatabase {
      * Ne retire pas les lignes de commentaires risque de ne pas marcher avec
      */
     private static void executeScript(String filename) throws SQLException, IOException {
-        try (final Connection connection = ConnectionProvider.getInstance().get();
+        try (final Connection connection = ConnectionManager.getInstance().getConnection();
              final Statement statement = connection.createStatement();
              final InputStream resourceAsStream = UTDatabase.class.getClassLoader().getResourceAsStream(filename);
              final Scanner scanner = new Scanner(resourceAsStream)) {

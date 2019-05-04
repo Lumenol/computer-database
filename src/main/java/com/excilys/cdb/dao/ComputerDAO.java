@@ -25,7 +25,7 @@ public class ComputerDAO {
     private static final String SQL_FIND_BY_ID = "SELECT A.id AS id,A.name AS name ,A.introduced AS introduced ,A.discontinued AS discontinued ,B.id AS company_id,B.name AS company_name FROM computer AS A LEFT JOIN company AS B ON A.company_id = B.id WHERE A.id = ? LIMIT 1";
     private static final String SQL_UPDATE = "UPDATE computer SET name = ?, introduced = ?,discontinued = ?,company_id = ? WHERE id = ?";
     private static ComputerDAO instance;
-    private final ConnectionProvider connectionProvider = ConnectionProvider.getInstance();
+    private final ConnectionManager connectionManager = ConnectionManager.getInstance();
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final ResultSetMapper<List<Computer>> resultSetMapper = new ResultSetToListMapper<>(
             ResultSetToComputerMapper.getInstance());
@@ -43,7 +43,7 @@ public class ComputerDAO {
 
     public long count() {
         try {
-            return JDBCUtils.find(resultSetToCountMapper, connectionProvider, SQL_COUNT);
+            return JDBCUtils.find(resultSetToCountMapper, connectionManager, SQL_COUNT);
         } catch (SQLException e) {
             logger.warn("count()", e);
             throw new ComputerDAOException(e);
@@ -53,7 +53,7 @@ public class ComputerDAO {
     public long create(Computer computer) {
         final SQLComputer sqlComputer = SQLComputer.from(computer);
         try {
-            return JDBCUtils.insert(connectionProvider, SQL_CREATE, sqlComputer.getName(), sqlComputer.getIntroduced(),
+            return JDBCUtils.insert(connectionManager, SQL_CREATE, sqlComputer.getName(), sqlComputer.getIntroduced(),
                     sqlComputer.getDiscontinued(), sqlComputer.getManufacturerId());
         } catch (SQLException e) {
             logger.warn("create(" + computer + ")", e);
@@ -64,7 +64,7 @@ public class ComputerDAO {
 
     public void deleteById(long id) {
         try {
-            JDBCUtils.delete(connectionProvider, SQL_DELETE, id);
+            JDBCUtils.delete(connectionManager, SQL_DELETE, id);
         } catch (SQLException e) {
             logger.warn("deleteById(" + id + ")", e);
             throw new ComputerDAOException(e);
@@ -73,7 +73,7 @@ public class ComputerDAO {
 
     public List<Computer> findAll(long offset, long limit) {
         try {
-            return JDBCUtils.find(resultSetMapper, connectionProvider, SQL_FIND_ALL_PAGED, limit, offset);
+            return JDBCUtils.find(resultSetMapper, connectionManager, SQL_FIND_ALL_PAGED, limit, offset);
         } catch (SQLException e) {
             logger.warn("findAll(" + offset + "," + limit + ")", e);
             throw new ComputerDAOException(e);
@@ -82,7 +82,7 @@ public class ComputerDAO {
 
     public Optional<Computer> findById(long id) {
         try {
-            List<Computer> computers = JDBCUtils.find(resultSetMapper, connectionProvider, SQL_FIND_BY_ID, id);
+            List<Computer> computers = JDBCUtils.find(resultSetMapper, connectionManager, SQL_FIND_BY_ID, id);
             return haveOneOrEmpty(computers);
         } catch (SQLException e) {
             logger.warn("findById(" + id + ")", e);
@@ -93,7 +93,7 @@ public class ComputerDAO {
     public void update(Computer computer) {
         final SQLComputer sqlComputer = SQLComputer.from(computer);
         try {
-            JDBCUtils.update(connectionProvider, SQL_UPDATE, sqlComputer.getName(), sqlComputer.getIntroduced(),
+            JDBCUtils.update(connectionManager, SQL_UPDATE, sqlComputer.getName(), sqlComputer.getIntroduced(),
                     sqlComputer.getDiscontinued(), sqlComputer.getManufacturerId(), sqlComputer.getId());
         } catch (SQLException e) {
             logger.warn("update(" + computer + ")", e);

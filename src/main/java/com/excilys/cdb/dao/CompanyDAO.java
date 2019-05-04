@@ -23,7 +23,7 @@ public class CompanyDAO {
     private static final String SQL_FIND_ALL = "SELECT id,name FROM company ORDER BY id";
     private static final String SQL_FIND_BY_ID = "SELECT id,name FROM company WHERE id = ? LIMIT 1";
     private static CompanyDAO instance;
-    private final ConnectionProvider connectionProvider = ConnectionProvider.getInstance();
+    private final ConnectionManager connectionManager = ConnectionManager.getInstance();
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final ResultSetMapper<List<Company>> resultSetMapper = new ResultSetToListMapper<>(
             ResultSetToCompanyMapper.getInstance());
@@ -41,7 +41,7 @@ public class CompanyDAO {
 
     public long count() {
         try {
-            return JDBCUtils.find(resultSetToCountMapper, connectionProvider, SQL_COUNT);
+            return JDBCUtils.find(resultSetToCountMapper, connectionManager, SQL_COUNT);
         } catch (SQLException e) {
             logger.warn("count()", e);
             throw new CompanyDAOException(e);
@@ -50,7 +50,7 @@ public class CompanyDAO {
 
     public List<Company> findAll(long offset, long limit) {
         try {
-            return JDBCUtils.find(resultSetMapper, connectionProvider, SQL_FIND_ALL_PAGED, limit, offset);
+            return JDBCUtils.find(resultSetMapper, connectionManager, SQL_FIND_ALL_PAGED, limit, offset);
         } catch (SQLException e) {
             logger.warn("findAll(" + offset + "," + limit + ")", e);
             throw new CompanyDAOException(e);
@@ -59,7 +59,7 @@ public class CompanyDAO {
 
     public Optional<Company> findById(long id) {
         try {
-            List<Company> companies = JDBCUtils.find(resultSetMapper, connectionProvider, SQL_FIND_BY_ID, id);
+            List<Company> companies = JDBCUtils.find(resultSetMapper, connectionManager, SQL_FIND_BY_ID, id);
             return haveOneOrEmpty(companies);
         } catch (SQLException e) {
             logger.warn("findById(" + id + ")", e);
@@ -69,7 +69,7 @@ public class CompanyDAO {
 
     public List<Company> findAll() {
         try {
-            return JDBCUtils.find(resultSetMapper, connectionProvider, SQL_FIND_ALL);
+            return JDBCUtils.find(resultSetMapper, connectionManager, SQL_FIND_ALL);
         } catch (SQLException e) {
             logger.warn("findAll()", e);
             throw new CompanyDAOException(e);

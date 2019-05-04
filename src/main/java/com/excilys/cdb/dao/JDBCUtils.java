@@ -22,15 +22,15 @@ final class JDBCUtils {
     private JDBCUtils() {
     }
 
-    public static void delete(ConnectionProvider connectionProvider, String sql, Object... args) throws SQLException {
-        execute(ResultSetMapper.identity(), connectionProvider, simpleStatementFactory, executeUpdate, noResult, sql,
+    public static void delete(ConnectionManager connectionManager, String sql, Object... args) throws SQLException {
+        execute(ResultSetMapper.identity(), connectionManager, simpleStatementFactory, executeUpdate, noResult, sql,
                 args);
     }
 
-    private static <T> T execute(ResultSetMapper<T> mapper, ConnectionProvider connectionProvider,
+    private static <T> T execute(ResultSetMapper<T> mapper, ConnectionManager connectionManager,
                                  StatementFactory statementFactory, StatementExecutor executor, ResultProvider resultProvider, String sql,
                                  Object[] args) throws SQLException {
-        try (Connection connection = connectionProvider.get();
+        try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = statementFactory.create(connection, sql)) {
             for (int i = 0; i < args.length; i++) {
                 statement.setObject(i + 1, args[i]);
@@ -42,18 +42,18 @@ final class JDBCUtils {
         }
     }
 
-    public static <T> T find(ResultSetMapper<T> mapper, ConnectionProvider connectionProvider, String sql,
+    public static <T> T find(ResultSetMapper<T> mapper, ConnectionManager connectionManager, String sql,
                              Object... args) throws SQLException {
-        return execute(mapper, connectionProvider, simpleStatementFactory, execute, resultSet, sql, args);
+        return execute(mapper, connectionManager, simpleStatementFactory, execute, resultSet, sql, args);
     }
 
-    public static Long insert(ConnectionProvider connectionProvider, String sql, Object... args) throws SQLException {
-        return execute(keyMapper, connectionProvider, generetedKeysStatementFactory, executeUpdate, generatedKeys, sql,
+    public static Long insert(ConnectionManager connectionManager, String sql, Object... args) throws SQLException {
+        return execute(keyMapper, connectionManager, generetedKeysStatementFactory, executeUpdate, generatedKeys, sql,
                 args);
     }
 
-    public static void update(ConnectionProvider connectionProvider, String sql, Object... args) throws SQLException {
-        execute(ResultSetMapper.identity(), connectionProvider, simpleStatementFactory, executeUpdate, noResult, sql,
+    public static void update(ConnectionManager connectionManager, String sql, Object... args) throws SQLException {
+        execute(ResultSetMapper.identity(), connectionManager, simpleStatementFactory, executeUpdate, noResult, sql,
                 args);
     }
 
