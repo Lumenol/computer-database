@@ -43,7 +43,7 @@ public class Transaction implements AutoCloseable {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws SQLException {
         connection.close();
         connection = proxy = null;
     }
