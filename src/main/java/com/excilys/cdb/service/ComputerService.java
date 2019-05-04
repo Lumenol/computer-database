@@ -20,7 +20,7 @@ public class ComputerService {
     private ComputerService() {
     }
 
-    public static ComputerService getInstance() {
+    public static synchronized ComputerService getInstance() {
         if (Objects.isNull(instance)) {
             instance = new ComputerService();
         }

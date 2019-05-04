@@ -1,15 +1,11 @@
 package com.excilys.cdb.validator;
 
-import static com.excilys.cdb.validator.ComputerValidatorUtils.checkDiscontinued;
-import static com.excilys.cdb.validator.ComputerValidatorUtils.checkIntroduced;
-import static com.excilys.cdb.validator.ComputerValidatorUtils.checkIntroducedIsBeforeDiscontinued;
-import static com.excilys.cdb.validator.ComputerValidatorUtils.checkMannufacturerId;
-import static com.excilys.cdb.validator.ComputerValidatorUtils.checkName;
+import com.excilys.cdb.dto.CreateComputerDTO;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
-import com.excilys.cdb.dto.CreateComputerDTO;
+import static com.excilys.cdb.validator.ComputerValidatorUtils.*;
 
 public class CreateComputerValidator implements Validator<CreateComputerDTO> {
 
@@ -18,7 +14,7 @@ public class CreateComputerValidator implements Validator<CreateComputerDTO> {
     private CreateComputerValidator() {
     }
 
-    public static CreateComputerValidator getInstance() {
+	public static synchronized CreateComputerValidator getInstance() {
 	if (Objects.isNull(instance)) {
 	    instance = new CreateComputerValidator();
 	}

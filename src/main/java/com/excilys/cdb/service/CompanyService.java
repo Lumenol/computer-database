@@ -19,7 +19,7 @@ public class CompanyService {
     private CompanyService() {
     }
 
-    public static CompanyService getInstance() {
+    public static synchronized CompanyService getInstance() {
         if (Objects.isNull(instance)) {
             instance = new CompanyService();
         }

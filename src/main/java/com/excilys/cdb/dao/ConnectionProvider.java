@@ -1,14 +1,13 @@
 package com.excilys.cdb.dao;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Objects;
 import java.util.TimeZone;
-
-import javax.sql.DataSource;
-
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 
 public class ConnectionProvider {
 
@@ -21,7 +20,7 @@ public class ConnectionProvider {
 	this.dataSource = dataSource;
     }
 
-    public static ConnectionProvider getInstance() {
+    public static synchronized ConnectionProvider getInstance() {
 	if (Objects.isNull(instance)) {
 	    TimeZone.setDefault(TIME_ZONE_UTC);
 	    HikariConfig config = new HikariConfig(DATASOURCE_PROPERTIES);

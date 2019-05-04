@@ -34,7 +34,7 @@ public class ComputerDAO {
     private ComputerDAO() {
     }
 
-    public static ComputerDAO getInstance() {
+    public static synchronized ComputerDAO getInstance() {
         if (Objects.isNull(instance)) {
             instance = new ComputerDAO();
         }

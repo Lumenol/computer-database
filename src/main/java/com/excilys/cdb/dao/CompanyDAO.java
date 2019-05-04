@@ -32,7 +32,7 @@ public class CompanyDAO {
     private CompanyDAO() {
     }
 
-    public static CompanyDAO getInstance() {
+    public static synchronized CompanyDAO getInstance() {
         if (Objects.isNull(instance)) {
             instance = new CompanyDAO();
         }

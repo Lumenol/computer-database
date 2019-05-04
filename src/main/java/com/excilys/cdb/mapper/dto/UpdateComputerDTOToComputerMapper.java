@@ -1,18 +1,17 @@
 package com.excilys.cdb.mapper.dto;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
-import java.util.Objects;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.excilys.cdb.dto.UpdateComputerDTO;
 import com.excilys.cdb.exception.CompanyServiceException;
 import com.excilys.cdb.exception.MapperException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.Objects;
 
 public class UpdateComputerDTOToComputerMapper implements Mapper<UpdateComputerDTO, Computer> {
 
@@ -23,7 +22,7 @@ public class UpdateComputerDTOToComputerMapper implements Mapper<UpdateComputerD
     private UpdateComputerDTOToComputerMapper() {
     }
 
-    public static UpdateComputerDTOToComputerMapper getInstance() {
+    public static synchronized UpdateComputerDTOToComputerMapper getInstance() {
 	if (Objects.isNull(instance)) {
 	    instance = new UpdateComputerDTOToComputerMapper();
 	}

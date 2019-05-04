@@ -1,10 +1,10 @@
 package com.excilys.cdb.mapper.dto;
 
-import java.time.LocalDate;
-import java.util.Objects;
-
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.model.Computer;
+
+import java.time.LocalDate;
+import java.util.Objects;
 
 public class ComputerToComputerDTOMapper implements Mapper<Computer, ComputerDTO> {
 
@@ -13,7 +13,7 @@ public class ComputerToComputerDTOMapper implements Mapper<Computer, ComputerDTO
     private ComputerToComputerDTOMapper() {
     }
 
-    public static ComputerToComputerDTOMapper getInstance() {
+    public static synchronized ComputerToComputerDTOMapper getInstance() {
 	if (Objects.isNull(instance)) {
 	    instance = new ComputerToComputerDTOMapper();
 	}

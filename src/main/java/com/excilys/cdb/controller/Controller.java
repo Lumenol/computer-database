@@ -38,7 +38,7 @@ public class Controller {
     private Controller() {
     }
 
-    public static Controller getInstance() {
+    public static synchronized Controller getInstance() {
         if (Objects.isNull(instance)) {
             instance = new Controller();
         }
