@@ -14,21 +14,21 @@ public class CreateComputerValidator implements Validator<CreateComputerDTO> {
     private CreateComputerValidator() {
     }
 
-	public static synchronized CreateComputerValidator getInstance() {
-	if (Objects.isNull(instance)) {
-	    instance = new CreateComputerValidator();
-	}
-	return instance;
+    public static synchronized CreateComputerValidator getInstance() {
+        if (Objects.isNull(instance)) {
+            instance = new CreateComputerValidator();
+        }
+        return instance;
     }
 
     @Override
     public void check(CreateComputerDTO toValidate) {
-	Objects.requireNonNull(toValidate);
-	checkName(toValidate.getName());
-	final LocalDate introduced = checkIntroduced(toValidate.getIntroduced());
-	final LocalDate discontinued = checkDiscontinued(toValidate.getDiscontinued());
-	checkIntroducedIsBeforeDiscontinued(introduced, discontinued);
-	checkMannufacturerId(toValidate.getMannufacturerId());
+        Objects.requireNonNull(toValidate);
+        checkName(toValidate.getName());
+        final LocalDate introduced = checkIntroduced(toValidate.getIntroduced());
+        final LocalDate discontinued = checkDiscontinued(toValidate.getDiscontinued());
+        checkIntroducedIsBeforeDiscontinued(introduced, discontinued);
+        checkMannufacturerId(toValidate.getMannufacturerId());
     }
 
 }

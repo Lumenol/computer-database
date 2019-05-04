@@ -17,20 +17,20 @@ public class ConnectionProvider {
     private final DataSource dataSource;
 
     private ConnectionProvider(DataSource dataSource) {
-	this.dataSource = dataSource;
+        this.dataSource = dataSource;
     }
 
     public static synchronized ConnectionProvider getInstance() {
-	if (Objects.isNull(instance)) {
-	    TimeZone.setDefault(TIME_ZONE_UTC);
-	    HikariConfig config = new HikariConfig(DATASOURCE_PROPERTIES);
-	    final HikariDataSource dataSource = new HikariDataSource(config);
-	    instance = new ConnectionProvider(dataSource);
-	}
-	return instance;
+        if (Objects.isNull(instance)) {
+            TimeZone.setDefault(TIME_ZONE_UTC);
+            HikariConfig config = new HikariConfig(DATASOURCE_PROPERTIES);
+            final HikariDataSource dataSource = new HikariDataSource(config);
+            instance = new ConnectionProvider(dataSource);
+        }
+        return instance;
     }
 
     public Connection get() throws SQLException {
-	return dataSource.getConnection();
+        return dataSource.getConnection();
     }
 }

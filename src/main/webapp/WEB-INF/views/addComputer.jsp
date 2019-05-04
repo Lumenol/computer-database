@@ -13,7 +13,7 @@
 <body>
 <header class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
-        <c:url var="dashboard" value="/"></c:url>
+        <c:url var="dashboard" value="/"/>
         <a class="navbar-brand" href="${dashboard}"> Application - Computer Database </a>
     </div>
 </header>

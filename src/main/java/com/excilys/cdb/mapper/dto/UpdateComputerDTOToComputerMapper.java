@@ -23,43 +23,43 @@ public class UpdateComputerDTOToComputerMapper implements Mapper<UpdateComputerD
     }
 
     public static synchronized UpdateComputerDTOToComputerMapper getInstance() {
-	if (Objects.isNull(instance)) {
-	    instance = new UpdateComputerDTOToComputerMapper();
-	}
-	return instance;
+        if (Objects.isNull(instance)) {
+            instance = new UpdateComputerDTOToComputerMapper();
+        }
+        return instance;
     }
 
     private boolean isBlank(String s) {
-	return Objects.isNull(s) || s.trim().isEmpty();
+        return Objects.isNull(s) || s.trim().isEmpty();
     }
 
     private LocalDate parseDate(String date) {
-	return isBlank(date) ? null : LocalDate.parse(date);
+        return isBlank(date) ? null : LocalDate.parse(date);
     }
 
     private Long parseMannufacturerId(String id) {
-	return isBlank(id) ? null : Long.valueOf(id);
+        return isBlank(id) ? null : Long.valueOf(id);
     }
 
     private long parseId(String id) {
-	return Long.parseLong(id);
+        return Long.parseLong(id);
     }
 
     @Override
     public Computer map(UpdateComputerDTO dto) {
-	Objects.requireNonNull(dto);
-	try {
-	    final Computer.ComputerBuilder builder = Computer.builder().id(parseId(dto.getId())).name(dto.getName())
-		    .introduced(parseDate(dto.getIntroduced())).discontinued(parseDate(dto.getDiscontinued()));
-	    final Long mannufacturerId = parseMannufacturerId(dto.getMannufacturerId());
-	    if (Objects.nonNull(mannufacturerId)) {
-		Company mannufacturer = companyService.findById(mannufacturerId).orElse(null);
-		builder.manufacturer(mannufacturer);
-	    }
-	    return builder.build();
-	} catch (CompanyServiceException | DateTimeParseException | NumberFormatException e) {
-	    logger.warn("map(" + dto + ")", e);
-	    throw new MapperException(e);
-	}
+        Objects.requireNonNull(dto);
+        try {
+            final Computer.ComputerBuilder builder = Computer.builder().id(parseId(dto.getId())).name(dto.getName())
+                    .introduced(parseDate(dto.getIntroduced())).discontinued(parseDate(dto.getDiscontinued()));
+            final Long mannufacturerId = parseMannufacturerId(dto.getMannufacturerId());
+            if (Objects.nonNull(mannufacturerId)) {
+                Company mannufacturer = companyService.findById(mannufacturerId).orElse(null);
+                builder.manufacturer(mannufacturer);
+            }
+            return builder.build();
+        } catch (CompanyServiceException | DateTimeParseException | NumberFormatException e) {
+            logger.warn("map(" + dto + ")", e);
+            throw new MapperException(e);
+        }
     }
 }

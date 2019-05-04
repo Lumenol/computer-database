@@ -25,8 +25,6 @@ public class ResultSetToCompanyMapperTest {
         return new Object[][]{{1l, "La premiere"}, {2l, "Le dexieme"}, {3l, "Le3eme"}, {4l, ""}};
     }
 
-    ;
-
     @Before
     public void mockResultSet() {
         mockResultSet = Mockito.mock(ResultSet.class);

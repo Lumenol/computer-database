@@ -1,6 +1,6 @@
 (function ($) {
     $('#introduced').change(function () {
-        let val = $(this).val()
+        var val = $(this).val();
         if (val) {
             $('#discontinued').attr('min', val);
         } else {
