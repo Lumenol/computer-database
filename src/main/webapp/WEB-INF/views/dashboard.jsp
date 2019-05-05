@@ -40,9 +40,10 @@
             </div>
         </div>
     </div>
-
-    <form id="deleteForm" action="#" method="POST">
-        <input type="hidden" name="selection" value="">
+    <c:url var="dashboard" value="/dashboard"/>
+    <form id="deleteForm" action="${dashboard}" method="POST">
+        <input type="hidden" name="page" value="${page}"/>
+        <input type="hidden" name="size" value="${size}"/>
     </form>
 
     <div class="container" style="margin-top: 10px;">
