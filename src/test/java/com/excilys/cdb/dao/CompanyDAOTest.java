@@ -2,6 +2,7 @@ package com.excilys.cdb.dao;
 
 import com.excilys.cdb.database.UTDatabase;
 import com.excilys.cdb.model.Company;
+import com.excilys.cdb.persistence.dao.CompanyDAO;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Before;

@@ -1,8 +1,8 @@
 package com.excilys.cdb.database;
 
-import com.excilys.cdb.dao.ConnectionManager;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.persistence.ConnectionManager;
 
 import java.io.IOException;
 import java.io.InputStream;

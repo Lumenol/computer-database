@@ -2,6 +2,9 @@ package com.excilys.cdb.dao;
 
 import com.excilys.cdb.database.UTDatabase;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.persistence.ConnectionManager;
+import com.excilys.cdb.persistence.dao.ComputerDAO;
+import com.excilys.cdb.persistence.transaction.Transaction;
 import org.junit.Before;
 import org.junit.Test;
 

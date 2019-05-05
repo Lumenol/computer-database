@@ -5,6 +5,7 @@ import com.excilys.cdb.exception.ComputerDAOException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Computer.ComputerBuilder;
+import com.excilys.cdb.persistence.dao.ComputerDAO;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Before;

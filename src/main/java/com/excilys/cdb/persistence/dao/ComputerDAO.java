@@ -1,4 +1,4 @@
-package com.excilys.cdb.dao;
+package com.excilys.cdb.persistence.dao;
 
 import com.excilys.cdb.exception.ComputerDAOException;
 import com.excilys.cdb.mapper.resultset.ResultSetMapper;
@@ -6,6 +6,8 @@ import com.excilys.cdb.mapper.resultset.ResultSetToComputerMapper;
 import com.excilys.cdb.mapper.resultset.ResultSetToCountMapper;
 import com.excilys.cdb.mapper.resultset.ResultSetToListMapper;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.persistence.ConnectionManager;
+import com.excilys.cdb.persistence.ConnectionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,8 +15,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
-import static com.excilys.cdb.dao.DAOUtils.haveOneOrEmpty;
 
 public class ComputerDAO {
 
@@ -25,7 +25,7 @@ public class ComputerDAO {
     private static final String SQL_FIND_BY_ID = "SELECT A.id AS id,A.name AS name ,A.introduced AS introduced ,A.discontinued AS discontinued ,B.id AS company_id,B.name AS company_name FROM computer AS A LEFT JOIN company AS B ON A.company_id = B.id WHERE A.id = ? LIMIT 1";
     private static final String SQL_UPDATE = "UPDATE computer SET name = ?, introduced = ?,discontinued = ?,company_id = ? WHERE id = ?";
     private static ComputerDAO instance;
-    private final ConnectionManager connectionManager = ConnectionManager.getInstance();
+    private final ConnectionProvider connectionManager = ConnectionManager.getInstance();
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final ResultSetMapper<List<Computer>> resultSetMapper = new ResultSetToListMapper<>(
             ResultSetToComputerMapper.getInstance());
@@ -83,7 +83,7 @@ public class ComputerDAO {
     public Optional<Computer> findById(long id) {
         try {
             List<Computer> computers = JDBCUtils.find(resultSetMapper, connectionManager, SQL_FIND_BY_ID, id);
-            return haveOneOrEmpty(computers);
+            return DAOUtils.haveOneOrEmpty(computers);
         } catch (SQLException e) {
             logger.warn("findById(" + id + ")", e);
             throw new ComputerDAOException(e);

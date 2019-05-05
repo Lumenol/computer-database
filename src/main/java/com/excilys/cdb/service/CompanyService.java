@@ -1,9 +1,9 @@
 package com.excilys.cdb.service;
 
-import com.excilys.cdb.dao.CompanyDAO;
 import com.excilys.cdb.exception.CompanyDAOException;
 import com.excilys.cdb.exception.CompanyServiceException;
 import com.excilys.cdb.model.Company;
+import com.excilys.cdb.persistence.dao.CompanyDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

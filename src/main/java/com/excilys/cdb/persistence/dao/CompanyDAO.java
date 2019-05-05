@@ -1,4 +1,4 @@
-package com.excilys.cdb.dao;
+package com.excilys.cdb.persistence.dao;
 
 import com.excilys.cdb.exception.CompanyDAOException;
 import com.excilys.cdb.mapper.resultset.ResultSetMapper;
@@ -6,6 +6,8 @@ import com.excilys.cdb.mapper.resultset.ResultSetToCompanyMapper;
 import com.excilys.cdb.mapper.resultset.ResultSetToCountMapper;
 import com.excilys.cdb.mapper.resultset.ResultSetToListMapper;
 import com.excilys.cdb.model.Company;
+import com.excilys.cdb.persistence.ConnectionManager;
+import com.excilys.cdb.persistence.ConnectionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.excilys.cdb.dao.DAOUtils.haveOneOrEmpty;
+import static com.excilys.cdb.persistence.dao.DAOUtils.haveOneOrEmpty;
 
 public class CompanyDAO {
 
@@ -23,7 +25,7 @@ public class CompanyDAO {
     private static final String SQL_FIND_ALL = "SELECT id,name FROM company ORDER BY id";
     private static final String SQL_FIND_BY_ID = "SELECT id,name FROM company WHERE id = ? LIMIT 1";
     private static CompanyDAO instance;
-    private final ConnectionManager connectionManager = ConnectionManager.getInstance();
+    private final ConnectionProvider connectionManager = ConnectionManager.getInstance();
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final ResultSetMapper<List<Company>> resultSetMapper = new ResultSetToListMapper<>(
             ResultSetToCompanyMapper.getInstance());
