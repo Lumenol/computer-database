@@ -83,9 +83,11 @@ public class DashboardServlet extends HttpServlet {
             redirectToPageNumber(response, 1, pageSize);
             return true;
         }
-        if (pageIndex > indexLastPage) {
-            redirectToPageNumber(response, indexLastPage, pageSize);
-            return true;
+        if (pageIndex > 1) {
+            if (pageIndex > indexLastPage) {
+                redirectToPageNumber(response, Math.max(indexLastPage, 1), pageSize);
+                return true;
+            }
         }
         return false;
     }
