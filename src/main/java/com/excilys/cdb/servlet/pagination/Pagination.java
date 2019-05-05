@@ -1,6 +1,7 @@
 package com.excilys.cdb.servlet.pagination;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.*;
 
 public class Pagination {
@@ -22,7 +23,11 @@ public class Pagination {
 
     public long getPageSize(HttpServletRequest request) {
         final Long pageSize = getParameterAsLong(request, parameters.getSize());
-        return Objects.nonNull(pageSize) ? pageSize : parameters.getDefaultSize();
+        if (Objects.nonNull(pageSize)) {
+            return Math.max(parameters.getMinPageSize(), Math.min(parameters.getMaxPageSize(), pageSize));
+        } else {
+            return parameters.getDefaultSize();
+        }
     }
 
     private Long getParameterAsLong(HttpServletRequest request, String parameterName) {
@@ -74,6 +79,29 @@ public class Pagination {
         if (pageCurrent * pageSize < numberOfEntities) {
             request.setAttribute(parameters.getNext(), pageCurrent + 1);
         }
+    }
+
+    /**
+     * si la valeur est positive elle donne la page qui doit etre affichée
+     *
+     * @param request
+     * @param numberOfEntities
+     * @return
+     * @throws IOException
+     */
+    public long redirectIfPageOutOfRange(HttpServletRequest request, double numberOfEntities) throws IOException {
+        long pageIndex = getPageIndex(request);
+        long pageSize = getPageSize(request);
+        long indexLastPage = indexLastPage(numberOfEntities, pageSize);
+        if (pageIndex < 1) {
+            return 1;
+        }
+        if (pageIndex > 1) {
+            if (pageIndex > indexLastPage) {
+                return Math.max(indexLastPage, 1);
+            }
+        }
+        return -1;
     }
 
     private void setPageSize(HttpServletRequest request, long pageSize) {

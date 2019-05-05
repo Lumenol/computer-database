@@ -44,16 +44,14 @@ public class DashboardServletTest {
 
     @Test
     public void testDoGetHttpServletRequestHttpServletResponse() throws ServletException, IOException {
-        Mockito.when(mockRequest.getParameter("page")).thenReturn("3");
-        Mockito.when(mockRequest.getParameter("size")).thenReturn("2");
+        Mockito.when(mockRequest.getParameter("page")).thenReturn("2");
+        Mockito.when(mockRequest.getParameter("size")).thenReturn("10");
         final long numberOfComputer = 500L;
         Mockito.when(mockComputerService.count()).thenReturn(numberOfComputer);
 
-        final Computer computer5 = UTDatabase.getInstance().findComputerById(5);
-        final Computer computer6 = UTDatabase.getInstance().findComputerById(6);
-        final List<Computer> computers = Arrays.asList(computer5, computer6);
+        final List<Computer> computers = UTDatabase.getInstance().findAllComputers(10, 10);
 
-        Mockito.when(mockComputerService.findAll(4, 2)).thenReturn(computers);
+        Mockito.when(mockComputerService.findAll(10, 10)).thenReturn(computers);
 
         final DashboardServlet dashboardServlet = Mockito.spy(new DashboardServlet());
 
@@ -69,12 +67,12 @@ public class DashboardServletTest {
         final List<ComputerDTO> computersDTO = computers.stream().map(ComputerToComputerDTOMapper.getInstance()::map)
                 .collect(Collectors.toList());
         Mockito.verify(mockRequest).setAttribute("computers", computersDTO);
-        Mockito.verify(mockRequest).setAttribute("previous", 2L);
-        Mockito.verify(mockRequest).setAttribute("next", 4L);
+        Mockito.verify(mockRequest).setAttribute("previous", 1L);
+        Mockito.verify(mockRequest).setAttribute("next", 3L);
         Mockito.verify(mockRequest).setAttribute("pages", Arrays.asList(1L, 2L, 3L, 4L, 5L));
 
-        Mockito.verify(mockRequest).setAttribute("size", 2L);
-        Mockito.verify(mockRequest).setAttribute("page", 3L);
+        Mockito.verify(mockRequest).setAttribute("size", 10L);
+        Mockito.verify(mockRequest).setAttribute("page", 2L);
     }
 
 }

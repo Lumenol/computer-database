@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class DashboardServlet extends HttpServlet {
-    private static final Pagination PAGINATION = Pagination.DEFAULT_PAGINATION;
+    private final Pagination pagination = Pagination.DEFAULT_PAGINATION;
 
     private static final String DASHBOARD_JSP = "/WEB-INF/views/dashboard.jsp";
 
@@ -48,19 +48,21 @@ public class DashboardServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         final List<Long> removeComputersId = getRemoveComputersId(request);
         removeComputersId.stream().forEach(computerService::delete);
-        final long page = PAGINATION.getPageIndex(request);
-        final long size = PAGINATION.getPageSize(request);
+        final long page = pagination.getPageIndex(request);
+        final long size = pagination.getPageSize(request);
         redirectToPageNumber(response, page, size);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        final long pageIndex = PAGINATION.getPageIndex(request);
-        final long pageSize = PAGINATION.getPageSize(request);
+        final long pageIndex = pagination.getPageIndex(request);
+        final long pageSize = pagination.getPageSize(request);
 
         final long numberOfComputers = computerService.count();
-        if (redirectIfPageOutOfRange(response, pageIndex, numberOfComputers, pageSize)) {
+        final long pageOutOfRange = pagination.redirectIfPageOutOfRange(request, numberOfComputers);
+        if (pageOutOfRange > 0) {
+            redirectToPageNumber(response, pageOutOfRange, pageSize);
             return;
         }
 
@@ -71,29 +73,13 @@ public class DashboardServlet extends HttpServlet {
         setNumberOfComputers(request, numberOfComputers);
         setComputers(request, computers);
 
-        PAGINATION.setPaggingParameters(request, pageIndex, numberOfComputers, pageSize);
+        pagination.setPaggingParameters(request, pageIndex, numberOfComputers, pageSize);
 
         getServletContext().getRequestDispatcher(DASHBOARD_JSP).forward(request, response);
     }
 
-    private boolean redirectIfPageOutOfRange(HttpServletResponse response, long pageIndex, double numberOfComputers,
-                                             long pageSize) throws IOException {
-        long indexLastPage = PAGINATION.indexLastPage(numberOfComputers, pageSize);
-        if (pageIndex < 1) {
-            redirectToPageNumber(response, 1, pageSize);
-            return true;
-        }
-        if (pageIndex > 1) {
-            if (pageIndex > indexLastPage) {
-                redirectToPageNumber(response, Math.max(indexLastPage, 1), pageSize);
-                return true;
-            }
-        }
-        return false;
-    }
-
     private void redirectToPageNumber(HttpServletResponse response, long pageNumber, long pageSize) throws IOException {
-        final PaginationParameters parameters = PAGINATION.getParameters();
+        final PaginationParameters parameters = pagination.getParameters();
         response.sendRedirect(DASHBOARD + "?" + parameters.getPage() + "=" + pageNumber + "&" + parameters.getSize()
                 + "=" + pageSize);
     }
