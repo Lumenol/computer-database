@@ -1,6 +1,7 @@
 package com.excilys.cdb.dao;
 
 import com.excilys.cdb.database.UTDatabase;
+import com.excilys.cdb.exception.TransactionException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.ConnectionManager;
 import com.excilys.cdb.persistence.dao.ComputerDAO;
@@ -97,7 +98,7 @@ public class TransactionTest {
                 computerDAO.deleteById(1);
                 computerDAO.deleteById(4);
                 transaction.rollback();
-            } catch (SQLException e) {
+            } catch (TransactionException e) {
                 fail("Exception rollback");
             }
         });
@@ -107,7 +108,7 @@ public class TransactionTest {
                 computerDAO.deleteById(2);
                 computerDAO.deleteById(6);
                 transaction.commit();
-            } catch (SQLException e) {
+            } catch (TransactionException e) {
                 fail("Exception commit");
             }
         });
@@ -142,7 +143,7 @@ public class TransactionTest {
                 connections1.add(transaction.getConnection());
                 connections1.add(transaction.getConnection());
                 connections1.add(transaction.getConnection());
-            } catch (SQLException e) {
+            } catch (TransactionException e) {
                 fail("Exception");
             }
         });
@@ -153,7 +154,7 @@ public class TransactionTest {
                 connections2.add(transaction.getConnection());
                 connections2.add(transaction.getConnection());
                 connections2.add(transaction.getConnection());
-            } catch (SQLException e) {
+            } catch (TransactionException e) {
                 fail("Exception");
             }
         });
