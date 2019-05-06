@@ -36,7 +36,7 @@ public class ConnectionManager implements ConnectionProvider {
 
     public Transaction getTransaction() throws TransactionException {
 	final Transaction stored = transactionThreadLocal.get();
-	if (Objects.isNull(stored)) {
+	if (Objects.isNull(stored) || stored.isClose()) {
 	    try {
 		final Transaction transaction = new Transaction(getConnection());
 		transactionThreadLocal.set(transaction);
