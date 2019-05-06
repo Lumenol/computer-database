@@ -8,10 +8,10 @@ final class DAOUtils {
     }
 
     static <T> Optional<T> haveOneOrEmpty(List<T> list) {
-        if (list.isEmpty()) {
-            return Optional.empty();
-        } else {
-            return Optional.of(list.get(0));
-        }
+	if (list.isEmpty()) {
+	    return Optional.empty();
+	} else {
+	    return Optional.of(list.get(0));
+	}
     }
 }
