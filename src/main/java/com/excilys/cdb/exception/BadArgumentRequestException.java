@@ -5,14 +5,14 @@ public class BadArgumentRequestException extends RuntimeException {
     }
 
     public BadArgumentRequestException(String message) {
-	super(message);
+        super(message);
     }
 
     public BadArgumentRequestException(String message, Throwable cause) {
-	super(message, cause);
+        super(message, cause);
     }
 
     public BadArgumentRequestException(Throwable cause) {
-	super(cause);
+        super(cause);
     }
 }

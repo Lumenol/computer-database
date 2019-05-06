@@ -9,109 +9,112 @@ public class CreateComputerDTO {
     private String name;
 
     CreateComputerDTO(String discontinued, String introduced, String mannufacturerId, String name) {
-	this.discontinued = discontinued;
-	this.introduced = introduced;
-	this.mannufacturerId = mannufacturerId;
-	this.name = name;
+        this.discontinued = discontinued;
+        this.introduced = introduced;
+        this.mannufacturerId = mannufacturerId;
+        this.name = name;
     }
 
     public CreateComputerDTO() {
     }
 
     public static CreateComputerDTOBuilder builder() {
-	return new CreateComputerDTOBuilder();
+        return new CreateComputerDTOBuilder();
     }
 
     @Override
     public String toString() {
-	return "CreateComputerDTO{" + "discontinued='" + discontinued + '\'' + ", introduced='" + introduced + '\''
-		+ ", mannufacturerId='" + mannufacturerId + '\'' + ", name='" + name + '\'' + '}';
+        return "CreateComputerDTO{" +
+                "discontinued='" + discontinued + '\'' +
+                ", introduced='" + introduced + '\'' +
+                ", mannufacturerId='" + mannufacturerId + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-	if (this == o)
-	    return true;
-	if (o == null || getClass() != o.getClass())
-	    return false;
-	CreateComputerDTO that = (CreateComputerDTO) o;
-	return Objects.equals(discontinued, that.discontinued) && Objects.equals(introduced, that.introduced)
-		&& Objects.equals(mannufacturerId, that.mannufacturerId) && Objects.equals(name, that.name);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CreateComputerDTO that = (CreateComputerDTO) o;
+        return Objects.equals(discontinued, that.discontinued) &&
+                Objects.equals(introduced, that.introduced) &&
+                Objects.equals(mannufacturerId, that.mannufacturerId) &&
+                Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-	return Objects.hash(discontinued, introduced, mannufacturerId, name);
+        return Objects.hash(discontinued, introduced, mannufacturerId, name);
     }
 
     public String getDiscontinued() {
-	return discontinued;
+        return discontinued;
     }
 
     public void setDiscontinued(String discontinued) {
-	this.discontinued = discontinued;
+        this.discontinued = discontinued;
     }
 
     public String getIntroduced() {
-	return introduced;
+        return introduced;
     }
 
     public void setIntroduced(String introduced) {
-	this.introduced = introduced;
+        this.introduced = introduced;
     }
 
     public String getMannufacturerId() {
-	return mannufacturerId;
+        return mannufacturerId;
     }
 
     public void setMannufacturerId(String mannufacturerId) {
-	this.mannufacturerId = mannufacturerId;
+        this.mannufacturerId = mannufacturerId;
     }
 
     public String getName() {
-	return name;
+        return name;
     }
 
     public void setName(String name) {
-	this.name = name;
+        this.name = name;
     }
 
     public static class CreateComputerDTOBuilder {
-	private String discontinued;
-	private String introduced;
-	private String mannufacturerId;
-	private String name;
+        private String discontinued;
+        private String introduced;
+        private String mannufacturerId;
+        private String name;
 
-	CreateComputerDTOBuilder() {
-	}
+        CreateComputerDTOBuilder() {
+        }
 
-	public CreateComputerDTOBuilder discontinued(String discontinued) {
-	    this.discontinued = discontinued;
-	    return this;
-	}
+        public CreateComputerDTOBuilder discontinued(String discontinued) {
+            this.discontinued = discontinued;
+            return this;
+        }
 
-	public CreateComputerDTOBuilder introduced(String introduced) {
-	    this.introduced = introduced;
-	    return this;
-	}
+        public CreateComputerDTOBuilder introduced(String introduced) {
+            this.introduced = introduced;
+            return this;
+        }
 
-	public CreateComputerDTOBuilder mannufacturerId(String mannufacturerId) {
-	    this.mannufacturerId = mannufacturerId;
-	    return this;
-	}
+        public CreateComputerDTOBuilder mannufacturerId(String mannufacturerId) {
+            this.mannufacturerId = mannufacturerId;
+            return this;
+        }
 
-	public CreateComputerDTOBuilder name(String name) {
-	    this.name = name;
-	    return this;
-	}
+        public CreateComputerDTOBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
 
-	public CreateComputerDTO build() {
-	    return new CreateComputerDTO(discontinued, introduced, mannufacturerId, name);
-	}
+        public CreateComputerDTO build() {
+            return new CreateComputerDTO(discontinued, introduced, mannufacturerId, name);
+        }
 
-	public String toString() {
-	    return "CreateComputerDTO.CreateComputerDTOBuilder(discontinued=" + this.discontinued + ", introduced="
-		    + this.introduced + ", mannufacturerId=" + this.mannufacturerId + ", name=" + this.name + ")";
-	}
+        public String toString() {
+            return "CreateComputerDTO.CreateComputerDTOBuilder(discontinued=" + this.discontinued + ", introduced=" + this.introduced + ", mannufacturerId=" + this.mannufacturerId + ", name=" + this.name + ")";
+        }
     }
 }

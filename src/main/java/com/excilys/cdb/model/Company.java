@@ -8,68 +8,68 @@ public class Company {
     private final String name;
 
     private Company(Long id, String name) {
-	Objects.requireNonNull(name);
-	this.id = id;
-	this.name = name;
+        Objects.requireNonNull(name);
+        this.id = id;
+        this.name = name;
     }
 
     public static CompanyBuilder builder() {
-	return new CompanyBuilder();
+        return new CompanyBuilder();
     }
 
     @Override
     public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	Company other = (Company) obj;
-	return Objects.equals(id, other.id) && Objects.equals(name, other.name);
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Company other = (Company) obj;
+        return Objects.equals(id, other.id) && Objects.equals(name, other.name);
     }
 
     public Long getId() {
-	return id;
+        return id;
     }
 
     public String getName() {
-	return name;
+        return name;
     }
 
     @Override
     public int hashCode() {
-	return Objects.hash(id, name);
+        return Objects.hash(id, name);
     }
 
     @Override
     public String toString() {
-	return "Compagny [id=" + id + ", name=" + name + "]";
+        return "Compagny [id=" + id + ", name=" + name + "]";
     }
 
     public static class CompanyBuilder {
-	private Long id;
-	private String name;
+        private Long id;
+        private String name;
 
-	CompanyBuilder() {
-	}
+        CompanyBuilder() {
+        }
 
-	public CompanyBuilder id(Long id) {
-	    this.id = id;
-	    return this;
-	}
+        public CompanyBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
 
-	public CompanyBuilder name(String name) {
-	    this.name = name;
-	    return this;
-	}
+        public CompanyBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
 
-	public Company build() {
-	    return new Company(id, name);
-	}
+        public Company build() {
+            return new Company(id, name);
+        }
 
-	public String toString() {
-	    return "Company.CompanyBuilder(id=" + this.id + ", name=" + this.name + ")";
-	}
+        public String toString() {
+            return "Company.CompanyBuilder(id=" + this.id + ", name=" + this.name + ")";
+        }
     }
 }
