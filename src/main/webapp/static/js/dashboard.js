@@ -103,7 +103,16 @@ $(document).keydown(function (e) {
     }
 });
 
+function seek(size) {
+    goToPage(1,size,$('#searchbox').val());
+    return false;
+}
 
-function goToPage(index, size) {
-    window.location.href = encodeURI("?page=" + index + "&size=" + size);
+function goToPage(index, size, search) {
+    var url = "dashboard?page=" + index + "&size=" + size;
+    if (search) {
+        url += "&search=" + search;
+    }
+    window.location.href = encodeURI(url);
+    return false;
 }
