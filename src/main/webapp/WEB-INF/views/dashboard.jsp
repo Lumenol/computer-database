@@ -27,10 +27,10 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${numberOfComputers}Computersfound</h1>
+			<h1 id="homeTitle">${numberOfComputers} Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
-					<form id="searchForm" action="#" method="GET" class="form-inline">
+					<form id="searchForm" onsubmit="return seek(${size})" class="form-inline">
 						<input type="search" id="searchbox" name="search"
 							class="form-control" placeholder="Search name" /> <input
 							type="submit" id="searchsubmit" value="Filter by name"
@@ -101,17 +101,17 @@
 			<ul class="pagination">
 				<c:if test="${not empty previous}">
 					<li><a aria-label="Previous"
-						onclick="goToPage(${previous},${size})"> <span
+						onclick="goToPage(${previous},${size},'${search}')"> <span
 							aria-hidden="true">&laquo;</span>
 					</a></li>
 				</c:if>
 
 				<c:forEach var="page" items="${pages}">
-					<li><a onclick="goToPage(${page},${size})">${page}</a></li>
+					<li><a onclick="goToPage(${page},${size},'${search}')">${page}</a></li>
 				</c:forEach>
 
 				<c:if test="${not empty next}">
-					<li><a aria-label="Next" onclick="goToPage(${next},${size})">
+					<li><a aria-label="Next" onclick="goToPage(${next},${size},'${search}')">
 							<span aria-hidden="true">&raquo;</span>
 					</a></li>
 				</c:if>
@@ -119,11 +119,11 @@
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<button type="button" class="btn btn-default"
-					onclick="goToPage(${page},10)">10</button>
+					onclick="goToPage(${page},10,'${search}')">10</button>
 				<button type="button" class="btn btn-default"
-					onclick="goToPage(${page},50)">50</button>
+					onclick="goToPage(${page},50,'${search}')">50</button>
 				<button type="button" class="btn btn-default"
-					onclick="goToPage(${page},100)">100</button>
+					onclick="goToPage(${page},100,'${search}')">100</button>
 			</div>
 		</div>
 	</footer>
