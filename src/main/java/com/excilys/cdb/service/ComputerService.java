@@ -3,7 +3,6 @@ package com.excilys.cdb.service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,14 +91,21 @@ public class ComputerService {
 	}
     }
 
-    public List<Computer> search(long offset, long pageSize, String search) {
-	return findAll(0, Long.MAX_VALUE).stream()
-		.filter(c -> c.getName().contains(search)
-			|| Objects.nonNull(c.getManufacturer()) && c.getManufacturer().getName().contains(search))
-		.skip(offset).limit(pageSize).collect(Collectors.toList());
+    public List<Computer> search(long offset, long limit, String search) {
+	try {
+	    return computerDAO.search(offset, limit, search);
+	} catch (ComputerDAOException e) {
+	    logger.warn("search(" + offset + "," + limit + "," + search + ")", e);
+	    throw new ComputerServiceException(e);
+	}
     }
 
     public long countSearch(String search) {
-	return search(0, Long.MAX_VALUE, search).size();
+	try {
+	    return computerDAO.countSearch(search);
+	} catch (ComputerDAOException e) {
+	    logger.warn("countSearch(" + search + ")", e);
+	    throw new ComputerServiceException(e);
+	}
     }
 }

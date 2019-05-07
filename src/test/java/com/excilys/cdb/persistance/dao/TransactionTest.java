@@ -1,4 +1,4 @@
-package com.excilys.cdb.dao;
+package com.excilys.cdb.persistance.dao;
 
 import com.excilys.cdb.database.UTDatabase;
 import com.excilys.cdb.exception.TransactionException;
