@@ -118,14 +118,29 @@ function setParameter(name, val) {
     $("#parameters input[name|='" + name + "']").val(val);
 }
 
+function orderBy(field, meaning) {
+    setParameter('order-by', field);
+    setParameter('meaning', meaning);
+    load();
+    return false;
+}
+
 function load() {
     var index = getParameter('index');
     var size = getParameter('size');
     var search = getParameter('search');
+    var orderBy = getParameter('order-by');
+    var meaning = getParameter('meaning');
 
     var url = "dashboard?page=" + index + "&size=" + size;
     if (search) {
         url += "&search=" + search;
+    }
+    if (orderBy) {
+        url += "&order-by=" + orderBy;
+        if (meaning) {
+            url += "&meaning=" + meaning;
+        }
     }
 
     window.location.href = encodeURI(url);

@@ -1,12 +1,5 @@
 package com.excilys.cdb.service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.excilys.cdb.exception.CompanyDAOException;
 import com.excilys.cdb.exception.CompanyServiceException;
 import com.excilys.cdb.exception.ComputerDAOException;
@@ -15,7 +8,14 @@ import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.ConnectionManager;
 import com.excilys.cdb.persistence.dao.CompanyDAO;
 import com.excilys.cdb.persistence.dao.ComputerDAO;
+import com.excilys.cdb.persistence.page.Page;
 import com.excilys.cdb.persistence.transaction.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 public class CompanyService {
     private static CompanyService instance;
@@ -50,11 +50,11 @@ public class CompanyService {
 	}
     }
 
-    public List<Company> findAll(long offset, long limit) {
+    public List<Company> findAll(Page page) {
 	try {
-	    return companyDAO.findAll(offset, limit);
+        return companyDAO.findAll(page);
 	} catch (CompanyDAOException e) {
-	    logger.warn("findAll(" + offset + "," + limit + ")", e);
+        logger.warn("findAll(" + page + ")", e);
 	    throw new CompanyServiceException(e);
 	}
     }

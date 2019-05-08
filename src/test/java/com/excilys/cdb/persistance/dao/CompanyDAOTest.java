@@ -3,6 +3,7 @@ package com.excilys.cdb.persistance.dao;
 import com.excilys.cdb.database.UTDatabase;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.dao.CompanyDAO;
+import com.excilys.cdb.persistence.page.Page;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Before;
@@ -50,7 +51,8 @@ public class CompanyDAOTest {
     @Test
     @Parameters(method = "provideOffsetLimit")
     public void findAll(long offset, long limit) {
-        final List<Company> actual = CompanyDAO.getInstance().findAll(offset, limit);
+        final Page page = Page.builder().offset(offset).limit(limit).build();
+        final List<Company> actual = CompanyDAO.getInstance().findAll(page);
         final List<Company> expected = UTDatabase.getInstance().findAllCompanies(offset, limit);
         assertEquals(expected, actual);
     }

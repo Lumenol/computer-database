@@ -25,7 +25,6 @@
 		<JUnitParams.version>1.1.1</JUnitParams.version>
 		<selenium.version>3.141.59</selenium.version>
 		<webdrivermanager.version>3.4.0</webdrivermanager.version>
-		<phantomjsdriver.version>1.4.4</phantomjsdriver.version>
 		<powermock.version>1.7.4</powermock.version>
 	</properties>
 
@@ -101,12 +100,6 @@
 			<groupId>io.github.bonigarcia</groupId>
 			<artifactId>webdrivermanager</artifactId>
 			<version>${webdrivermanager.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.codeborne</groupId>
-			<artifactId>phantomjsdriver</artifactId>
-			<version>${phantomjsdriver.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
