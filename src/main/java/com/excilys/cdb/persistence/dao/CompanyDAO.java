@@ -22,8 +22,8 @@ import static com.excilys.cdb.persistence.dao.DAOUtils.haveOneOrEmpty;
 public class CompanyDAO {
 
     private static final String SQL_COUNT = "SELECT COUNT(id) AS count FROM company";
-    private static final String SQL_FIND_ALL_PAGED = "SELECT id,name FROM company ORDER BY id LIMIT ? OFFSET ?";
-    private static final String SQL_FIND_ALL = "SELECT id,name FROM company ORDER BY id";
+    private static final String SQL_FIND_ALL_PAGED = "SELECT id,name FROM company ORDER BY name LIMIT ? OFFSET ?";
+    private static final String SQL_FIND_ALL = "SELECT id,name FROM company ORDER BY name";
     private static final String SQL_FIND_BY_ID = "SELECT id,name FROM company WHERE id = ? LIMIT 1";
     private static final String SQL_DELETE = "DELETE FROM company WHERE id=?";
     private static CompanyDAO instance;

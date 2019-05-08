@@ -185,7 +185,7 @@ public class UTDatabase {
     }
 
     public List<Company> findAllCompanies() {
-        return companies.values().stream().sorted(Comparator.comparingLong(Company::getId))
+        return companies.values().stream().sorted(Comparator.comparing(Company::getName))
                 .collect(Collectors.toList());
     }
 
