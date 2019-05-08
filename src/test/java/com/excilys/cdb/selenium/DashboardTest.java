@@ -5,9 +5,10 @@ import com.excilys.cdb.dto.ComputerDTO;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.*;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 
 import java.util.List;
 import java.util.Objects;
@@ -51,12 +52,14 @@ public class DashboardTest {
 
     @BeforeClass
     public static void setUpClass() {
-        WebDriverManager.firefoxdriver().setup();
+        WebDriverManager.phantomjs().setup();
     }
 
     @Before
     public void setUp() {
-        driver = new FirefoxDriver();
+        driver = new PhantomJSDriver();
+        driver.manage().window().setSize(new Dimension(1366, 768));
+        driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
     }
 
     @After
@@ -97,7 +100,6 @@ public class DashboardTest {
 
     private void clickPaginationButton(String text) {
         getPaginationPageContainer().findElement(By.linkText(text)).click();
-        pageLoadTimeout();
     }
 
     private void checkPagination(String... expectedPagination) {
@@ -117,7 +119,6 @@ public class DashboardTest {
 
     private void clickButtonSize(int size) {
         driver.findElement(By.xpath("//button[.=" + size + "]")).click();
-        pageLoadTimeout();
     }
 
     private void search(String s) {
@@ -222,7 +223,4 @@ public class DashboardTest {
 
     }
 
-    private void pageLoadTimeout() {
-        driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
-    }
 }
