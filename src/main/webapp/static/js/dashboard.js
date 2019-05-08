@@ -103,16 +103,43 @@ $(document).keydown(function (e) {
     }
 });
 
-function seek(size) {
-    goToPage(1,size,$('#searchbox').val());
+function goSearch() {
+    var search = $('#searchbox').val();
+    setParameter('search', search);
+    goPage(1);
     return false;
 }
 
-function goToPage(index, size, search) {
+function getParameter(name) {
+    return $("#parameters input[name|='" + name + "']").val();
+}
+
+function setParameter(name, val) {
+    $("#parameters input[name|='" + name + "']").val(val);
+}
+
+function load() {
+    var index = getParameter('index');
+    var size = getParameter('size');
+    var search = getParameter('search');
+
     var url = "dashboard?page=" + index + "&size=" + size;
     if (search) {
         url += "&search=" + search;
     }
+
     window.location.href = encodeURI(url);
+    return false;
+}
+
+function goSize(size) {
+    setParameter('size', size);
+    load();
+    return false;
+}
+
+function goPage(index) {
+    setParameter('index', index);
+    load();
     return false;
 }
