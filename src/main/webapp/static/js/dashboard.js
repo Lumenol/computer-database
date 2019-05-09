@@ -121,7 +121,7 @@ function setParameter(name, val) {
 function orderBy(field, meaning) {
     setParameter('order-by', field);
     setParameter('meaning', meaning);
-    load();
+    goPage(1);
     return false;
 }
 

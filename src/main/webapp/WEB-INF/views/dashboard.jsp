@@ -68,27 +68,27 @@
 						</span></th>
                 <th>Computer name
                     <c:set var="name" value="name"/>
-                    <c:set var="meaning" value="${orderByUtils.apply(name)}"/>
+                    <c:set var="meaning" value="${order_utils.apply(name)}"/>
                     <c:set var="arrow" value="${meaning.equalsIgnoreCase('desc')?'down':'up'}"/>
                     <button class="float-right fa fa-arrow-${arrow}" onclick="orderBy('${name}','${meaning}')"></button>
                 </th>
                 <th>Introduced date
                     <c:set var="name" value="introduced"/>
-                    <c:set var="meaning" value="${orderByUtils.apply(name)}"/>
+                    <c:set var="meaning" value="${order_utils.apply(name)}"/>
                     <c:set var="arrow" value="${meaning.equalsIgnoreCase('desc')?'down':'up'}"/>
                     <button class="float-right fa fa-arrow-${arrow}" onclick="orderBy('${name}','${meaning}')"></button>
                 </th>
                 <!-- Table header for Discontinued Date -->
                 <th>Discontinued date
                     <c:set var="name" value="discontinued"/>
-                    <c:set var="meaning" value="${orderByUtils.apply(name)}"/>
+                    <c:set var="meaning" value="${order_utils.apply(name)}"/>
                     <c:set var="arrow" value="${meaning.equalsIgnoreCase('desc')?'down':'up'}"/>
                     <button class="float-right fa fa-arrow-${arrow}" onclick="orderBy('${name}','${meaning}')"></button>
                 </th>
                 <!-- Table header for Company -->
                 <th>Company
                     <c:set var="name" value="company"/>
-                    <c:set var="meaning" value="${orderByUtils.apply(name)}"/>
+                    <c:set var="meaning" value="${order_utils.apply(name)}"/>
                     <c:set var="arrow" value="${meaning.equalsIgnoreCase('desc')?'down':'up'}"/>
                     <button class="float-right fa fa-arrow-${arrow}" onclick="orderBy('${name}','${meaning}')"></button>
                 </th>
@@ -159,8 +159,8 @@
     <input name="index" value="${page}">
     <input name="size" value="${size}">
     <input name="search" value="${search}">
-    <input name="order-by" value="${orderBy.field.identifier}">
-    <input name="meaning" value="${orderBy.meaning.identifier}">
+    <input name="order-by" value="${order_by}">
+    <input name="meaning" value="${meaning}">
 </form>
 </body>
 </html>
