@@ -37,8 +37,6 @@ public class ResultSetToComputerMapperTest {
                 {4l, "Le 4eme", null, LocalDate.of(2017, 10, 10), 6l, "La 6eme"}};
     }
 
-    ;
-
     @Before
     public void mockResultSet() {
         mockResultSet = Mockito.mock(ResultSet.class);

@@ -15,7 +15,7 @@ public class ResultSetToCompanyMapper implements ResultSetMapper<Company> {
     private ResultSetToCompanyMapper() {
     }
 
-    public static ResultSetToCompanyMapper getInstance() {
+    public static synchronized ResultSetToCompanyMapper getInstance() {
         if (Objects.isNull(instance)) {
             instance = new ResultSetToCompanyMapper();
         }

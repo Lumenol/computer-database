@@ -13,7 +13,7 @@
 <body>
 <header class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
-        <c:url var="dashboard" value="/"></c:url>
+        <c:url var="dashboard" value="/"/>
         <a class="navbar-brand" href="${dashboard}"> Application - Computer Database </a>
     </div>
 </header>
@@ -65,7 +65,7 @@
                                 <option value="">--</option>
                                 <c:forEach var="company" items="${companies}">
                                     <option value="${company.id}"
-                                    ${computer.mannufacturerId==company.id?"selected='selected'":""}>${company.name}</option>
+                                        ${computer.mannufacturerId==company.id?"selected='selected'":""}>${company.name}</option>
                                 </c:forEach>
                             </select>
                             <c:if test="${not empty errors['mannufacturerId']}">

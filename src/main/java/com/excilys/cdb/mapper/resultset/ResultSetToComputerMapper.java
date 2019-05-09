@@ -24,7 +24,7 @@ public class ResultSetToComputerMapper implements ResultSetMapper<Computer> {
     private ResultSetToComputerMapper() {
     }
 
-    public static ResultSetToComputerMapper getInstance() {
+    public static synchronized ResultSetToComputerMapper getInstance() {
         if (Objects.isNull(instance)) {
             instance = new ResultSetToComputerMapper();
         }

@@ -1,9 +1,10 @@
 package com.excilys.cdb.service;
 
-import com.excilys.cdb.dao.ComputerDAO;
 import com.excilys.cdb.exception.ComputerDAOException;
 import com.excilys.cdb.exception.ComputerServiceException;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.persistence.dao.ComputerDAO;
+import com.excilys.cdb.persistence.page.Pageable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +21,7 @@ public class ComputerService {
     private ComputerService() {
     }
 
-    public static ComputerService getInstance() {
+    public static synchronized ComputerService getInstance() {
         if (Objects.isNull(instance)) {
             instance = new ComputerService();
         }
@@ -63,11 +64,11 @@ public class ComputerService {
         }
     }
 
-    public List<Computer> findAll(long offset, long limit) {
+    public List<Computer> findAll(Pageable pageable) {
         try {
-            return computerDAO.findAll(offset, limit);
+            return computerDAO.findAll(pageable);
         } catch (ComputerDAOException e) {
-            logger.warn("findAll(" + offset + "," + limit + ")", e);
+            logger.warn("findAll(" + pageable + ")", e);
             throw new ComputerServiceException(e);
         }
     }
@@ -86,6 +87,24 @@ public class ComputerService {
             computerDAO.update(computer);
         } catch (ComputerDAOException e) {
             logger.warn("update(" + computer + ")", e);
+            throw new ComputerServiceException(e);
+        }
+    }
+
+    public List<Computer> search(Pageable pageable, String search) {
+        try {
+            return computerDAO.search(pageable, search);
+        } catch (ComputerDAOException e) {
+            logger.warn("search(" + pageable + "," + search + ")", e);
+            throw new ComputerServiceException(e);
+        }
+    }
+
+    public long countSearch(String search) {
+        try {
+            return computerDAO.countSearch(search);
+        } catch (ComputerDAOException e) {
+            logger.warn("countSearch(" + search + ")", e);
             throw new ComputerServiceException(e);
         }
     }

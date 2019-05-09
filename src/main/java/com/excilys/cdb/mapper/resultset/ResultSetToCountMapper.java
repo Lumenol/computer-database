@@ -11,7 +11,7 @@ public class ResultSetToCountMapper implements ResultSetMapper<Long> {
     private ResultSetToCountMapper() {
     }
 
-    public static ResultSetToCountMapper getInstance() {
+    public static synchronized ResultSetToCountMapper getInstance() {
         if (Objects.isNull(instance)) {
             instance = new ResultSetToCountMapper();
         }

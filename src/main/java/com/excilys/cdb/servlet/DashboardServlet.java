@@ -1,11 +1,12 @@
 package com.excilys.cdb.servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
@@ -14,153 +15,157 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.dto.ComputerDTO;
+import com.excilys.cdb.exception.BadArgumentRequestException;
 import com.excilys.cdb.mapper.dto.ComputerToComputerDTOMapper;
+import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.persistence.page.OrderBy;
+import com.excilys.cdb.persistence.page.Page;
+import com.excilys.cdb.persistence.page.Pageable;
 import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.servlet.pagination.Pagination;
+import com.excilys.cdb.servlet.pagination.PaginationParameters;
+import com.excilys.cdb.servlet.sorting.Sorting;
+import com.excilys.cdb.servlet.sorting.SortingParameters;
 
 public class DashboardServlet extends HttpServlet {
-    private static final int DEFAULT_PAGE_SIZE = 50;
+
+    private static final String PARAMETER_SEARCH = "search";
     private static final String DASHBOARD_JSP = "/WEB-INF/views/dashboard.jsp";
-    private static final String PARAMETER_SIZE = "size";
-    private static final String PARAMETER_PAGE = "page";
-    private static final String PARAMETER_NUMBER_OF_COMPUTERS = "numberOfComputers";
-    private static final String PARAMETER_PREVIOUS = "previous";
-    private static final String PARAMETER_NEXT = "next";
     private static final String PARAMETER_COMPUTERS = "computers";
-    private static final String PARAMETER_CURRENT = "current";
-    private static final String PARAMETER_PAGES = "pages";
+    private static final String PARAMETER_NUMBER_OF_COMPUTERS = "numberOfComputers";
     private static final long serialVersionUID = 1L;
     private static final String DASHBOARD = "dashboard";
+    private final Pagination pagination = Pagination.DEFAULT_PAGINATION;
+    private final Sorting sorting = Sorting.DEFAULT_SORTING;
     private final ComputerService computerService = ComputerService.getInstance();
 
-    private List<Long> indexOfPages(long pageCurrent, long pageSize, long numberOfEntities) {
-	final Set<Long> pages = new TreeSet<>();
-	int shift = 0;
-	boolean more = true;
-	while (pages.size() < 5 && more) {
-	    more = false;
-
-	    final long before = pageCurrent - shift;
-	    if (before >= 1) {
-		pages.add(before);
-		more = true;
+    private List<Long> getRemoveComputersId(HttpServletRequest request) {
+	try {
+	    final String[] selections = request.getParameterValues("selection");
+	    if (Objects.isNull(selections)) {
+		return Collections.emptyList();
+	    } else {
+		return Arrays.stream(selections).map(Long::valueOf).collect(Collectors.toList());
 	    }
-
-	    final long next = pageCurrent + shift;
-	    if ((next - 1) * pageSize < numberOfEntities) {
-		pages.add(next);
-		more = true;
-	    }
-
-	    shift++;
+	} catch (NumberFormatException e) {
+	    throw new BadArgumentRequestException("Les identifiants des ordinateurs à supprimer sont incorects", e);
 	}
-	return new ArrayList<>(pages);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	final List<Long> removeComputersId = getRemoveComputersId(request);
+	removeComputersId.stream().forEach(computerService::delete);
+	final OrderBy orderBy = sorting.getOrderBy(request);
+	final Page page = pagination.getPage(request);
+	final Pageable pageable = Pageable.builder().orderBy(orderBy).page(page).build();
+	final String search = getParameterSearch(request);
+	redirectToPageNumber(response, pageable, search);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
-	final long pageIndex = getPageIndex(request);
-	final long pageSize = getPageSize(request);
+	final String search = getParameterSearch(request);
+	final OrderBy orderBy = sorting.getOrderBy(request);
 
-	final long numberOfComputers = computerService.count();
-	if (redirectIfPageOutOfRange(response, pageIndex, numberOfComputers, pageSize)) {
+	final long numberOfComputers = getComputerCount(search);
+	final Page page = pagination.getPage(request);
+	final long pageOutOfRange = pagination.redirectIfPageOutOfRange(request, numberOfComputers);
+	if (pageOutOfRange > 0) {
+	    final Page pageRedirection = Page.builder().page(pageOutOfRange).limit(page.getLimit()).build();
+	    final Pageable pageable = Pageable.builder().page(pageRedirection).orderBy(orderBy).build();
+	    redirectToPageNumber(response, pageable, search);
 	    return;
 	}
 
-	final long offset = (pageIndex - 1) * pageSize;
-	final List<ComputerDTO> computers = computerService.findAll(offset, pageSize).stream()
-		.map(ComputerToComputerDTOMapper.getInstance()::map).collect(Collectors.toList());
+	final Pageable pageable = Pageable.builder().page(page).orderBy(orderBy).build();
+	final List<ComputerDTO> computers = getComputers(pageable, search);
 
 	setNumberOfComputers(request, numberOfComputers);
 	setComputers(request, computers);
-	setPaggingParameters(request, pageIndex, numberOfComputers, pageSize);
+	setSearch(request, search);
+	pagination.setPageParameters(request, page, numberOfComputers);
 
-	setPageSize(request, pageSize);
-	setCurrentPageIndex(request, pageIndex);
+	sorting.setOrderBy(request, orderBy);
 
 	getServletContext().getRequestDispatcher(DASHBOARD_JSP).forward(request, response);
     }
 
-    private boolean redirectIfPageOutOfRange(HttpServletResponse response, long pageIndex, double numberOfComputers,
-	    long pageSize) throws IOException {
-	long indexLastPage = indexLastPage(numberOfComputers, pageSize);
-	if (pageIndex < 1) {
-	    redirectToPageNumber(response, 1, pageSize);
-	    return true;
+    private List<ComputerDTO> getComputers(Pageable pageable, String search) {
+	final List<Computer> computers;
+	if (Objects.isNull(search)) {
+	    computers = computerService.findAll(pageable);
+	} else {
+	    computers = computerService.search(pageable, search);
 	}
-	if (pageIndex > indexLastPage) {
-	    redirectToPageNumber(response, indexLastPage, pageSize);
-	    return true;
+
+	return computers.stream().map(ComputerToComputerDTOMapper.getInstance()::map).collect(Collectors.toList());
+    }
+
+    private long getComputerCount(String search) {
+	if (Objects.isNull(search)) {
+	    return computerService.count();
+	} else {
+	    return computerService.countSearch(search);
 	}
-	return false;
+
     }
 
-    private long indexLastPage(double numberOfEntities, long pageSize) {
-	return (long) Math.ceil(numberOfEntities / pageSize);
+    private String getParameterSearch(HttpServletRequest request) {
+	final String search = request.getParameter(PARAMETER_SEARCH);
+	if (Objects.isNull(search) || search.isEmpty()) {
+	    return null;
+	}
+	return search;
     }
 
-    private void redirectToPageNumber(HttpServletResponse response, long pageNumber, long pageSize) throws IOException {
-	response.sendRedirect(
-		DASHBOARD + "?" + PARAMETER_PAGE + "=" + pageNumber + "&" + PARAMETER_SIZE + "=" + pageSize);
+    private void setSearch(HttpServletRequest request, String search) {
+	request.setAttribute(PARAMETER_SEARCH, search);
     }
 
-    private void setPaggingParameters(HttpServletRequest request, long pageCurrent, long numberOfEntities,
-	    long pageSize) {
-	setPreviousPage(request, pageCurrent);
-	setNextPage(request, pageCurrent, numberOfEntities, pageSize);
-	setPagesNumbers(request, pageCurrent, numberOfEntities, pageSize);
+    private void redirectToPageNumber(HttpServletResponse response, Pageable pageable, String search)
+	    throws IOException {
+	final PaginationParameters paggingParameters = pagination.getParameters();
+	final SortingParameters sortingParameters = sorting.getParameters();
+	final StringBuilder stringBuilder = new StringBuilder(DASHBOARD).append("?");
+
+	final Page page = pageable.getPage();
+	stringBuilder.append(paggingParameters.getPage()).append("=").append(page.getPage());
+	stringBuilder.append("&");
+	stringBuilder.append(paggingParameters.getSize()).append("=").append(page.getLimit());
+
+	if (Objects.nonNull(search)) {
+	    stringBuilder.append("&");
+	    stringBuilder.append(encode(PARAMETER_SEARCH)).append("=").append(encode(search));
+	}
+
+	final OrderBy orderBy = pageable.getOrderBy();
+	if (Objects.nonNull(orderBy.getField())) {
+	    stringBuilder.append("&");
+	    stringBuilder.append(encode(sortingParameters.getOrderBy())).append("=")
+		    .append(encode(orderBy.getField().getIdentifier()));
+	}
+
+	if (Objects.nonNull(orderBy.getMeaning())) {
+	    stringBuilder.append("&");
+	    stringBuilder.append(encode(sortingParameters.getMeaning())).append("=")
+		    .append(encode(orderBy.getMeaning().getIdentifier()));
+	}
+
+	response.sendRedirect(stringBuilder.toString());
     }
 
-    private void setPagesNumbers(HttpServletRequest request, long pageCurrent, long numberOfEntries, long pageSize) {
-	final List<Long> pages = indexOfPages(pageCurrent, pageSize, numberOfEntries);
-	request.setAttribute(PARAMETER_PAGES, pages);
-    }
-
-    private void setCurrentPageIndex(HttpServletRequest request, long pageCurrent) {
-	request.setAttribute(PARAMETER_CURRENT, pageCurrent);
-    }
-
-    private void setPageSize(HttpServletRequest request, long pageSize) {
-	request.setAttribute(PARAMETER_SIZE, pageSize);
+    private String encode(String s) throws UnsupportedEncodingException {
+	return URLEncoder.encode(s, "UTF-8");
     }
 
     private void setComputers(HttpServletRequest request, List<ComputerDTO> computers) {
 	request.setAttribute(PARAMETER_COMPUTERS, computers);
     }
 
-    private void setNextPage(HttpServletRequest request, long pageCurrent, long numberOfEntities, long pageSize) {
-	if (pageCurrent * pageSize < numberOfEntities) {
-	    request.setAttribute(PARAMETER_NEXT, pageCurrent + 1);
-	}
-    }
-
-    private void setPreviousPage(HttpServletRequest request, long pageCurrent) {
-	if (pageCurrent > 1) {
-	    request.setAttribute(PARAMETER_PREVIOUS, pageCurrent - 1);
-	}
-    }
-
     private void setNumberOfComputers(HttpServletRequest request, long numberOfComputers) {
 	request.setAttribute(PARAMETER_NUMBER_OF_COMPUTERS, numberOfComputers);
-    }
-
-    private long getPageIndex(HttpServletRequest request) {
-	final Long pageIndex = getParameterAsLong(request, PARAMETER_PAGE);
-	return Objects.nonNull(pageIndex) ? pageIndex : 1;
-    }
-
-    private Long getParameterAsLong(HttpServletRequest request, String nameParameter) {
-	final String parameter = request.getParameter(nameParameter);
-	try {
-	    return Long.parseLong(parameter);
-	} catch (NumberFormatException e) {
-	    return null;
-	}
-    }
-
-    private long getPageSize(HttpServletRequest request) {
-	final Long pageSize = getParameterAsLong(request, PARAMETER_SIZE);
-	return Objects.nonNull(pageSize) ? pageSize : DEFAULT_PAGE_SIZE;
     }
 
 }
