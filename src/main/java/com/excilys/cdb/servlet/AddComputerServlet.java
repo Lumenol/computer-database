@@ -9,6 +9,7 @@ import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.validator.CreateComputerValidator;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,7 +31,10 @@ public class AddComputerServlet extends HttpServlet {
     private static final String PARAMETER_INTRODUCED = "introduced";
     private static final String PARAMETER_DISCONTINUED = "discontinued";
     private static final String PARAMETER_MANNUFACTURER_ID = "mannufacturerId";
-    private final CompanyService companyService = CompanyService.getInstance();
+    private final CompanyService companyService = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext()).getBean(CompanyService.class);
+    private final CreateComputerDTOToComputerMapper createComputerDTOToComputerMapper = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext()).getBean(CreateComputerDTOToComputerMapper.class);
+    private final CreateComputerValidator createComputerValidator = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext()).getBean(CreateComputerValidator.class);
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -52,8 +56,8 @@ public class AddComputerServlet extends HttpServlet {
         final CreateComputerDTO createComputerDTO = CreateComputerDTO.builder().name(name).introduced(introduced).discontinued(discontinued).mannufacturerId(mannufacturerId).build();
 
         try {
-            CreateComputerValidator.getInstance().check(createComputerDTO);
-            final Computer computer = CreateComputerDTOToComputerMapper.getInstance().map(createComputerDTO);
+            createComputerValidator.check(createComputerDTO);
+            final Computer computer = createComputerDTOToComputerMapper.map(createComputerDTO);
             ComputerService.getInstance().create(computer);
             request.setAttribute(PARAMETER_SUCCESS, true);
         } catch (ValidationException e) {

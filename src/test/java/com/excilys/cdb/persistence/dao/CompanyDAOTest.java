@@ -1,6 +1,13 @@
 package com.excilys.cdb.persistence.dao;
 
-import static org.junit.Assert.assertEquals;
+import com.excilys.cdb.database.UTDatabase;
+import com.excilys.cdb.model.Company;
+import com.excilys.cdb.persistence.page.Page;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -8,19 +15,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import com.excilys.cdb.database.UTDatabase;
-import com.excilys.cdb.model.Company;
-import com.excilys.cdb.persistence.page.Page;
-
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnitParamsRunner.class)
 public class CompanyDAOTest {
+
+    private CompanyDAO companyDAO;
 
     public Object[] provideCompanyId() {
 	final Stream.Builder<Long> builder = Stream.builder();
@@ -45,7 +45,7 @@ public class CompanyDAOTest {
     @Parameters(method = "provideCompanyId")
     public void findById(long id) {
 	final Optional<Company> expected = Optional.ofNullable(UTDatabase.getInstance().findCompanyById(id));
-	final Optional<Company> actual = CompanyDAO.getInstance().findById(id);
+        final Optional<Company> actual = companyDAO.findById(id);
 	assertEquals(expected, actual);
     }
 
@@ -53,21 +53,21 @@ public class CompanyDAOTest {
     @Parameters(method = "providePageLimit")
     public void findAll(long index, long limit) {
 	final Page page = Page.builder().page(index).limit(limit).build();
-	final List<Company> actual = CompanyDAO.getInstance().findAll(page);
+        final List<Company> actual = companyDAO.findAll(page);
 	final List<Company> expected = UTDatabase.getInstance().findAllCompanies(index, limit);
 	assertEquals(expected, actual);
     }
 
     @Test
     public void findAll() {
-	final List<Company> actual = CompanyDAO.getInstance().findAll();
+        final List<Company> actual = companyDAO.findAll();
 	final List<Company> expected = UTDatabase.getInstance().findAllCompanies();
 	assertEquals(expected, actual);
     }
 
     @Test
     public void count() {
-	final long count = CompanyDAO.getInstance().count();
+        final long count = companyDAO.count();
 	assertEquals(UTDatabase.getInstance().findAllCompanies().size(), count);
     }
 }

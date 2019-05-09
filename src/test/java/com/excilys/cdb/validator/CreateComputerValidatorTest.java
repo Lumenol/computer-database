@@ -15,6 +15,8 @@ import static org.junit.Assert.fail;
 
 public class CreateComputerValidatorTest {
 
+    private CreateComputerValidator createComputerValidator;
+
     @Before
     public void loadEnttries() throws IOException, SQLException {
         UTDatabase.getInstance().reload();
@@ -24,7 +26,7 @@ public class CreateComputerValidatorTest {
     public void validWithoutDateAndMannufacturerId() {
         final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
         createComputerDTO.setName("Un nom correct");
-        CreateComputerValidator.getInstance().check(createComputerDTO);
+        createComputerValidator.check(createComputerDTO);
     }
 
     @Test
@@ -32,7 +34,7 @@ public class CreateComputerValidatorTest {
         final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
         createComputerDTO.setName("Un nom correct");
         createComputerDTO.setMannufacturerId("5");
-        CreateComputerValidator.getInstance().check(createComputerDTO);
+        createComputerValidator.check(createComputerDTO);
     }
 
     @Test
@@ -42,7 +44,7 @@ public class CreateComputerValidatorTest {
         createComputerDTO.setMannufacturerId("5");
         createComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4).toString());
         createComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20).toString());
-        CreateComputerValidator.getInstance().check(createComputerDTO);
+        createComputerValidator.check(createComputerDTO);
     }
 
     @Test
@@ -53,7 +55,7 @@ public class CreateComputerValidatorTest {
         createComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4).toString());
         createComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20).toString());
         try {
-            CreateComputerValidator.getInstance().check(createComputerDTO);
+            createComputerValidator.check(createComputerDTO);
             fail("La validation a échoué");
         } catch (ValidationException e) {
             assertEquals("name", e.getField());
@@ -68,7 +70,7 @@ public class CreateComputerValidatorTest {
         createComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4).toString());
         createComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20).toString());
         try {
-            CreateComputerValidator.getInstance().check(createComputerDTO);
+            createComputerValidator.check(createComputerDTO);
             fail("La validation a échoué");
         } catch (ValidationException e) {
             assertEquals("mannufacturerId", e.getField());
@@ -83,7 +85,7 @@ public class CreateComputerValidatorTest {
         createComputerDTO.setIntroduced(LocalDate.of(2016, 2, 4).toString());
         createComputerDTO.setDiscontinued(LocalDate.of(2012, 10, 20).toString());
         try {
-            CreateComputerValidator.getInstance().check(createComputerDTO);
+            createComputerValidator.check(createComputerDTO);
             fail("La validation a échoué");
         } catch (ValidationException e) {
             assertEquals("discontinued", e.getField());

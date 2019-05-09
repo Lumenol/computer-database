@@ -1,16 +1,15 @@
 package com.excilys.cdb.persistence;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Objects;
-import java.util.TimeZone;
-
-import javax.sql.DataSource;
-
 import com.excilys.cdb.exception.TransactionException;
 import com.excilys.cdb.persistence.transaction.Transaction;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Objects;
+import java.util.TimeZone;
 
 public class ConnectionManager implements ConnectionProvider {
 

@@ -14,6 +14,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public class UpdateComputerValidatorTest {
+
+    private UpdateComputerValidator updateComputerValidator;
+
     @Before
     public void loadEnttries() throws IOException, SQLException {
         UTDatabase.getInstance().reload();
@@ -24,7 +27,7 @@ public class UpdateComputerValidatorTest {
         final UpdateComputerDTO updateComputerDTO = new UpdateComputerDTO();
         updateComputerDTO.setId("5");
         updateComputerDTO.setName("Un nom correct");
-        UpdateComputerValidator.getInstance().check(updateComputerDTO);
+        updateComputerValidator.check(updateComputerDTO);
     }
 
     @Test
@@ -33,7 +36,7 @@ public class UpdateComputerValidatorTest {
         updateComputerDTO.setId("3");
         updateComputerDTO.setName("Un nom correct");
         updateComputerDTO.setMannufacturerId("5");
-        UpdateComputerValidator.getInstance().check(updateComputerDTO);
+        updateComputerValidator.check(updateComputerDTO);
     }
 
     @Test
@@ -44,7 +47,7 @@ public class UpdateComputerValidatorTest {
         updateComputerDTO.setMannufacturerId("5");
         updateComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4).toString());
         updateComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20).toString());
-        UpdateComputerValidator.getInstance().check(updateComputerDTO);
+        updateComputerValidator.check(updateComputerDTO);
     }
 
     @Test
@@ -56,7 +59,7 @@ public class UpdateComputerValidatorTest {
         updateComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4).toString());
         updateComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20).toString());
         try {
-            UpdateComputerValidator.getInstance().check(updateComputerDTO);
+            updateComputerValidator.check(updateComputerDTO);
         } catch (ValidationException e) {
             assertEquals("name", e.getField());
             return;
@@ -74,7 +77,7 @@ public class UpdateComputerValidatorTest {
         updateComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4).toString());
         updateComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20).toString());
         try {
-            UpdateComputerValidator.getInstance().check(updateComputerDTO);
+            updateComputerValidator.check(updateComputerDTO);
             fail("La validation a échoué");
         } catch (ValidationException e) {
             assertEquals("mannufacturerId", e.getField());
@@ -90,7 +93,7 @@ public class UpdateComputerValidatorTest {
         updateComputerDTO.setIntroduced(LocalDate.of(2016, 2, 4).toString());
         updateComputerDTO.setDiscontinued(LocalDate.of(2012, 10, 20).toString());
         try {
-            UpdateComputerValidator.getInstance().check(updateComputerDTO);
+            updateComputerValidator.check(updateComputerDTO);
             fail("La validation a échoué");
         } catch (ValidationException e) {
             assertEquals("discontinued", e.getField());
@@ -106,7 +109,7 @@ public class UpdateComputerValidatorTest {
         updateComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4).toString());
         updateComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20).toString());
         try {
-            UpdateComputerValidator.getInstance().check(updateComputerDTO);
+            updateComputerValidator.check(updateComputerDTO);
             fail("La validation a échoué");
         } catch (ValidationException e) {
             assertEquals("id", e.getField());
