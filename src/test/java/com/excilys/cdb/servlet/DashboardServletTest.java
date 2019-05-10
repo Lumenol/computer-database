@@ -14,11 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.excilys.cdb.database.UTDatabase;
 import com.excilys.cdb.dto.ComputerDTO;
@@ -29,8 +25,6 @@ import com.excilys.cdb.persistence.page.Page;
 import com.excilys.cdb.persistence.page.Pageable;
 import com.excilys.cdb.service.ComputerService;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(ComputerService.class)
 public class DashboardServletTest {
 
     private HttpServletRequest mockRequest;
@@ -40,14 +34,14 @@ public class DashboardServletTest {
 
     private DashboardServlet dashboardServlet;
 
+    private ComputerToComputerDTOMapper computerToComputerDTOMapper;
+    private UTDatabase database;
+
     @Before
     public void setUp() {
 	mockRequest = Mockito.mock(HttpServletRequest.class);
 	mockResponse = Mockito.mock(HttpServletResponse.class);
 	mockComputerService = Mockito.mock(ComputerService.class);
-	PowerMockito.mockStatic(ComputerService.class);
-
-	Mockito.when(ComputerService.getInstance()).thenReturn(mockComputerService);
 
 	dashboardServlet = Mockito.spy(new DashboardServlet());
 
@@ -68,13 +62,13 @@ public class DashboardServletTest {
 	final OrderBy orderBy = OrderBy.builder().field(OrderBy.Field.NAME).build();
 	final Pageable pageable = Pageable.builder().page(page).orderBy(orderBy).build();
 
-	final List<Computer> computers = UTDatabase.getInstance().findAllComputers(pageable);
+	final List<Computer> computers = database.findAllComputers(pageable);
 	Mockito.when(mockComputerService.findAll(pageable)).thenReturn(computers);
 
 	dashboardServlet.doGet(mockRequest, mockResponse);
 
 	Mockito.verify(mockRequest).setAttribute("numberOfComputers", numberOfComputer);
-	final List<ComputerDTO> computersDTO = computers.stream().map(ComputerToComputerDTOMapper.getInstance()::map)
+	final List<ComputerDTO> computersDTO = computers.stream().map(computerToComputerDTOMapper::map)
 		.collect(Collectors.toList());
 	Mockito.verify(mockRequest).setAttribute("computers", computersDTO);
 	Mockito.verify(mockRequest).setAttribute("previous", 1L);
@@ -93,7 +87,6 @@ public class DashboardServletTest {
 	Mockito.when(mockComputerService.countSearch(search)).thenReturn(numberOfComputer);
 
 	final List<Computer> computers = new ArrayList<>();
-	final UTDatabase database = UTDatabase.getInstance();
 	computers.add(database.findComputerById(1));
 	computers.add(database.findComputerById(6));
 	computers.add(database.findComputerById(7));
@@ -115,7 +108,7 @@ public class DashboardServletTest {
 	dashboardServlet.doGet(mockRequest, mockResponse);
 
 	Mockito.verify(mockRequest).setAttribute("numberOfComputers", numberOfComputer);
-	final List<ComputerDTO> computersDTO = computers.stream().map(ComputerToComputerDTOMapper.getInstance()::map)
+	final List<ComputerDTO> computersDTO = computers.stream().map(computerToComputerDTOMapper::map)
 		.collect(Collectors.toList());
 	Mockito.verify(mockRequest).setAttribute("computers", computersDTO);
 	Mockito.verify(mockRequest).setAttribute("pages", Arrays.asList(1L));

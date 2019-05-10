@@ -15,37 +15,37 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.persistence.ConnectionManager;
+import com.excilys.cdb.persistence.ConnectionProvider;
 import com.excilys.cdb.persistence.page.OrderBy;
 import com.excilys.cdb.persistence.page.Pageable;
 
+@Component
 public class UTDatabase {
 
     private static final String ENTRIES_SQL = "entriesUT.sql";
 
     private static final String SCHEMA_SQL = "schema.sql";
 
-    private static UTDatabase instance = new UTDatabase();
+    private final ConnectionProvider connectionProvider;
 
-    private Map<Long, Company> companies = new TreeMap<>();
-    private Map<Long, Computer> computers = new TreeMap<>();
+    private final Map<Long, Company> companies = new TreeMap<>();
+    private final Map<Long, Computer> computers = new TreeMap<>();
 
-    private UTDatabase() {
+    public UTDatabase(ConnectionProvider connectionProvider) {
+	this.connectionProvider = connectionProvider;
 	addCompanies();
 	addComputers();
-    }
-
-    public static UTDatabase getInstance() {
-	return instance;
     }
 
     /*
      * Ne retire pas les lignes de commentaires risque de ne pas marcher avec
      */
-    private static void executeScript(String filename) throws SQLException, IOException {
-	try (final Connection connection = ConnectionManager.getInstance().getConnection();
+    private void executeScript(String filename) throws SQLException, IOException {
+	try (final Connection connection = connectionProvider.getConnection();
 		final Statement statement = connection.createStatement();
 		final InputStream resourceAsStream = UTDatabase.class.getClassLoader().getResourceAsStream(filename);
 		final Scanner scanner = new Scanner(resourceAsStream)) {
@@ -144,9 +144,9 @@ public class UTDatabase {
 		if (o1.getIntroduced() == o2.getIntroduced()) {
 		    return byName.compare(o1, o2);
 		} else if (Objects.isNull(o1.getIntroduced())) {
-		    return -1;
-		} else if (Objects.isNull(o2.getIntroduced())) {
 		    return 1;
+		} else if (Objects.isNull(o2.getIntroduced())) {
+		    return -1;
 		} else {
 		    return o1.getIntroduced().compareTo(o2.getIntroduced());
 		}
@@ -157,9 +157,9 @@ public class UTDatabase {
 		if (o1.getDiscontinued() == o2.getDiscontinued()) {
 		    return byName.compare(o1, o2);
 		} else if (Objects.isNull(o1.getDiscontinued())) {
-		    return -1;
-		} else if (Objects.isNull(o2.getDiscontinued())) {
 		    return 1;
+		} else if (Objects.isNull(o2.getDiscontinued())) {
+		    return -1;
 		} else {
 		    return o1.getDiscontinued().compareTo(o2.getDiscontinued());
 		}
@@ -170,9 +170,9 @@ public class UTDatabase {
 		if (o1.getManufacturer() == o2.getManufacturer()) {
 		    return byName.compare(o1, o2);
 		} else if (Objects.isNull(o1.getManufacturer())) {
-		    return -1;
-		} else if (Objects.isNull(o2.getManufacturer())) {
 		    return 1;
+		} else if (Objects.isNull(o2.getManufacturer())) {
+		    return -1;
 		} else {
 		    return o1.getManufacturer().getName().compareTo(o2.getManufacturer().getName());
 		}

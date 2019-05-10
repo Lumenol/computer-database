@@ -1,32 +1,23 @@
 package com.excilys.cdb.mapper.resultset;
 
-import com.excilys.cdb.model.Company;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Objects;
 
+import org.springframework.stereotype.Component;
+
+import com.excilys.cdb.model.Company;
+
+@Component
 public class ResultSetToCompanyMapper implements ResultSetMapper<Company> {
 
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_NAME = "name";
-    private static ResultSetToCompanyMapper instance;
-
-    private ResultSetToCompanyMapper() {
-    }
-
-    public static synchronized ResultSetToCompanyMapper getInstance() {
-        if (Objects.isNull(instance)) {
-            instance = new ResultSetToCompanyMapper();
-        }
-        return instance;
-    }
 
     @Override
     public Company map(ResultSet rs) throws SQLException {
-        long id = rs.getLong(COLUMN_ID);
-        String name = rs.getString(COLUMN_NAME);
-        return Company.builder().id(id).name(name).build();
+	long id = rs.getLong(COLUMN_ID);
+	String name = rs.getString(COLUMN_NAME);
+	return Company.builder().id(id).name(name).build();
     }
 
 }

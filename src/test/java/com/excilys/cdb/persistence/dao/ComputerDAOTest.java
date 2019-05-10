@@ -31,9 +31,12 @@ import junitparams.Parameters;
 @RunWith(JUnitParamsRunner.class)
 public class ComputerDAOTest {
 
+    private ComputerDAO computerDAO;
+    private UTDatabase database;
+
     public Object[] provideComputerId() {
 	final Stream.Builder<Long> builder = Stream.builder();
-	final List<Computer> allComputers = UTDatabase.getInstance().findAllComputers();
+	final List<Computer> allComputers = database.findAllComputers();
 	final Computer lastComputers = allComputers.get(allComputers.size() - 1);
 	for (long i = -5; i < lastComputers.getId() + 5; i++) {
 	    builder.add(i);
@@ -79,19 +82,19 @@ public class ComputerDAOTest {
 
     @Before
     public void loadEnttries() throws IOException, SQLException {
-	UTDatabase.getInstance().reload();
+	database.reload();
     }
 
     @Test
     public void create() {
-	final Company company = UTDatabase.getInstance().findCompanyById(5L);
+	final Company company = database.findCompanyById(5L);
 	final ComputerBuilder builder = Computer.builder().introduced(LocalDate.of(2012, 4, 14))
 		.discontinued(LocalDate.of(2020, 5, 10)).name("Le modifié").manufacturer(company);
 	final Computer cree = builder.build();
-	final long id = ComputerDAO.getInstance().create(cree);
+	final long id = computerDAO.create(cree);
 
 	final Computer expected = builder.id(id).build();
-	final Computer actual = ComputerDAO.getInstance().findById(id).get();
+	final Computer actual = computerDAO.findById(id).get();
 	assertEquals(expected, actual);
     }
 
@@ -101,15 +104,15 @@ public class ComputerDAOTest {
 	final ComputerBuilder builder = Computer.builder().introduced(LocalDate.of(2012, 4, 14))
 		.discontinued(LocalDate.of(2020, 5, 10)).name("Le modifié").manufacturer(company);
 	final Computer cree = builder.build();
-	ComputerDAO.getInstance().create(cree);
+	computerDAO.create(cree);
     }
 
     @Test
     public void deleteById() {
 	final int id = 5;
-	final Optional<Computer> le5avant = ComputerDAO.getInstance().findById(id);
-	ComputerDAO.getInstance().deleteById(id);
-	final Optional<Computer> le5apres = ComputerDAO.getInstance().findById(id);
+	final Optional<Computer> le5avant = computerDAO.findById(id);
+	computerDAO.deleteById(id);
+	final Optional<Computer> le5apres = computerDAO.findById(id);
 	assertTrue(le5avant.isPresent());
 	assertFalse(le5apres.isPresent());
     }
@@ -117,16 +120,16 @@ public class ComputerDAOTest {
     @Test
     @Parameters(method = "providePageable")
     public void findAll(Pageable pageable) {
-	final List<Computer> actual = ComputerDAO.getInstance().findAll(pageable);
-	final List<Computer> expected = UTDatabase.getInstance().findAllComputers(pageable);
+	final List<Computer> actual = computerDAO.findAll(pageable);
+	final List<Computer> expected = database.findAllComputers(pageable);
 	assertEquals(expected, actual);
     }
 
     @Test
     @Parameters(method = "provideComputerId")
     public void findById(long id) {
-	final Optional<Computer> expected = Optional.ofNullable(UTDatabase.getInstance().findComputerById(id));
-	final Optional<Computer> actual = ComputerDAO.getInstance().findById(id);
+	final Optional<Computer> expected = Optional.ofNullable(database.findComputerById(id));
+	final Optional<Computer> actual = computerDAO.findById(id);
 	assertEquals(expected, actual);
     }
 
@@ -135,29 +138,29 @@ public class ComputerDAOTest {
 	final long id = 5;
 	final Computer expected = Computer.builder().id(id).introduced(LocalDate.of(2012, 4, 14))
 		.discontinued(LocalDate.of(2020, 5, 10)).name("Le modifié").build();
-	ComputerDAO.getInstance().update(expected);
-	final Computer actual = ComputerDAO.getInstance().findById(id).get();
+	computerDAO.update(expected);
+	final Computer actual = computerDAO.findById(id).get();
 	assertEquals(expected, actual);
     }
 
     @Test
     public void count() {
-	final long count = ComputerDAO.getInstance().count();
-	assertEquals(UTDatabase.getInstance().findAllComputers().size(), count);
+	final long count = computerDAO.count();
+	assertEquals(database.findAllComputers().size(), count);
     }
 
     @Test
     @Parameters(value = { "Apple | 11", "App | 11", "aPp | 11" })
     public void countSearch(String search, long expected) {
-	final long actual = ComputerDAO.getInstance().countSearch(search);
+	final long actual = computerDAO.countSearch(search);
 	assertEquals(expected, actual);
     }
 
     @Test
     @Parameters(method = "providePageableAndSearch")
     public void search(Pageable pageable, String search) {
-	final List<Computer> actual = ComputerDAO.getInstance().search(pageable, search);
-	final List<Computer> expected = UTDatabase.getInstance().searchComputer(pageable, search);
+	final List<Computer> actual = computerDAO.search(pageable, search);
+	final List<Computer> expected = database.searchComputer(pageable, search);
 	assertEquals(expected, actual);
     }
 }
