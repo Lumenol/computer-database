@@ -1,6 +1,21 @@
 package com.excilys.cdb.mapper.resultset;
 
-import static org.junit.Assert.assertEquals;
+import com.excilys.cdb.config.AppConfig;
+import com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Computer.ComputerBuilder;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.rules.SpringClassRule;
+import org.springframework.test.context.junit4.rules.SpringMethodRule;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -8,19 +23,10 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-
-import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.model.Computer.ComputerBuilder;
-
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnitParamsRunner.class)
+@ContextConfiguration(classes = AppConfig.class)
 public class ResultSetToComputerMapperTest {
 
     private static final String COLUMN_COMPANY_ID = "company_id";
@@ -30,7 +36,14 @@ public class ResultSetToComputerMapperTest {
     private static final String COLUMN_INTRODUCED = "introduced";
     private static final String COLUMN_NAME = "name";
 
-    private ResultSetToComputerMapper resultSetToComputerMapper;
+
+	@ClassRule
+	public static final SpringClassRule springClassRule = new SpringClassRule();
+	@Rule
+	public final SpringMethodRule springMethodRule = new SpringMethodRule();
+
+	@Autowired
+	private ResultSetToComputerMapper resultSetToComputerMapper;
 
     private ResultSet mockResultSet;
 

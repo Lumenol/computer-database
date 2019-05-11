@@ -1,14 +1,5 @@
 package com.excilys.cdb.persistence.dao;
 
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
-
 import com.excilys.cdb.exception.ComputerDAOException;
 import com.excilys.cdb.mapper.resultset.ResultSetMapper;
 import com.excilys.cdb.mapper.resultset.ResultSetToCountMapper;
@@ -16,6 +7,14 @@ import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.ConnectionProvider;
 import com.excilys.cdb.persistence.page.OrderBy;
 import com.excilys.cdb.persistence.page.Pageable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Repository
 public class ComputerDAO {
@@ -116,7 +115,6 @@ public class ComputerDAO {
 	    final long offset = pageable.getPage().getOffset();
 	    final long limit = pageable.getPage().getLimit();
 	    final String query = insertOrderByInQuery(SQL_FIND_ALL_PAGED, pageable.getOrderBy());
-	    logger.debug("Query findAll: " + query);
 	    return JDBCUtils.find(resultSetMapper, connectionManager, query, limit, offset);
 	} catch (SQLException e) {
 	    logger.warn("findAll(" + pageable + ")", e);

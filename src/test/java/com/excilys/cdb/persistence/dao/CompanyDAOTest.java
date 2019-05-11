@@ -1,6 +1,20 @@
 package com.excilys.cdb.persistence.dao;
 
-import static org.junit.Assert.assertEquals;
+import com.excilys.cdb.config.AppConfig;
+import com.excilys.cdb.database.UTDatabase;
+import com.excilys.cdb.model.Company;
+import com.excilys.cdb.persistence.page.Page;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.rules.SpringClassRule;
+import org.springframework.test.context.junit4.rules.SpringMethodRule;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -8,28 +22,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import com.excilys.cdb.database.UTDatabase;
-import com.excilys.cdb.model.Company;
-import com.excilys.cdb.persistence.page.Page;
-
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnitParamsRunner.class)
+@ContextConfiguration(classes = AppConfig.class)
 public class CompanyDAOTest {
+    @ClassRule
+    public static final SpringClassRule springClassRule = new SpringClassRule();
+    @Rule
+    public final SpringMethodRule springMethodRule = new SpringMethodRule();
 
+    @Autowired
     private UTDatabase database;
+    @Autowired
     private CompanyDAO companyDAO;
 
     public Object[] provideCompanyId() {
 	final Stream.Builder<Long> builder = Stream.builder();
-	final List<Company> companies = database.findAllCompanies();
-	final Company lastCcompanies = companies.get(companies.size() - 1);
-	for (long i = -5; i < lastCcompanies.getId() + 5; i++) {
+        for (long i = 0; i < 25; i++) {
 	    builder.add(i);
 	}
 	return builder.build().toArray();

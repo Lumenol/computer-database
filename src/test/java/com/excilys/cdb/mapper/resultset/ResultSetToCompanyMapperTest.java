@@ -1,26 +1,38 @@
 package com.excilys.cdb.mapper.resultset;
 
-import static org.junit.Assert.assertEquals;
+import com.excilys.cdb.config.AppConfig;
+import com.excilys.cdb.model.Company;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.rules.SpringClassRule;
+import org.springframework.test.context.junit4.rules.SpringMethodRule;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-
-import com.excilys.cdb.model.Company;
-
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnitParamsRunner.class)
+@ContextConfiguration(classes = AppConfig.class)
 public class ResultSetToCompanyMapperTest {
 
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_NAME = "name";
 
+    @ClassRule
+    public static final SpringClassRule springClassRule = new SpringClassRule();
+    @Rule
+    public final SpringMethodRule springMethodRule = new SpringMethodRule();
+
+    @Autowired
     private ResultSetToCompanyMapper resultSetToCompanyMapper;
 
     private ResultSet mockResultSet;

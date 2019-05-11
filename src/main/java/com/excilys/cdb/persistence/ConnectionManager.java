@@ -1,15 +1,13 @@
 package com.excilys.cdb.persistence;
 
+import com.excilys.cdb.exception.TransactionException;
+import com.excilys.cdb.persistence.transaction.Transaction;
+import org.springframework.stereotype.Component;
+
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Objects;
-
-import javax.sql.DataSource;
-
-import org.springframework.stereotype.Component;
-
-import com.excilys.cdb.exception.TransactionException;
-import com.excilys.cdb.persistence.transaction.Transaction;
 
 @Component
 public class ConnectionManager implements ConnectionProvider {
@@ -17,7 +15,7 @@ public class ConnectionManager implements ConnectionProvider {
     private final DataSource dataSource;
     private final ThreadLocal<Transaction> transactionThreadLocal = new ThreadLocal<>();
 
-    private ConnectionManager(DataSource dataSource) {
+	public ConnectionManager(DataSource dataSource) {
 	this.dataSource = dataSource;
     }
 
