@@ -2,11 +2,11 @@ package com.excilys.cdb.database;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.persistence.ConnectionProvider;
 import com.excilys.cdb.persistence.page.OrderBy;
 import com.excilys.cdb.persistence.page.Pageable;
 import org.springframework.stereotype.Component;
 
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -24,13 +24,13 @@ public class UTDatabase {
 
     private static final String SCHEMA_SQL = "schema.sql";
 
-    private final ConnectionProvider connectionProvider;
+    private final DataSource dataSource;
 
     private final Map<Long, Company> companies = new TreeMap<>();
     private final Map<Long, Computer> computers = new TreeMap<>();
 
-    public UTDatabase(ConnectionProvider connectionProvider) {
-        this.connectionProvider = connectionProvider;
+    public UTDatabase(DataSource dataSource) {
+        this.dataSource = dataSource;
         addCompanies();
         addComputers();
     }
@@ -39,7 +39,7 @@ public class UTDatabase {
      * Ne retire pas les lignes de commentaires risque de ne pas marcher avec
      */
     private void executeScript(String filename) throws SQLException, IOException {
-        try (final Connection connection = connectionProvider.getConnection();
+        try (final Connection connection = dataSource.getConnection();
              final Statement statement = connection.createStatement();
              final InputStream resourceAsStream = UTDatabase.class.getClassLoader().getResourceAsStream(filename);
              final Scanner scanner = new Scanner(resourceAsStream)) {

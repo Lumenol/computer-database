@@ -3,13 +3,10 @@ package com.excilys.cdb.service;
 import com.excilys.cdb.exception.CompanyDAOException;
 import com.excilys.cdb.exception.CompanyServiceException;
 import com.excilys.cdb.exception.ComputerDAOException;
-import com.excilys.cdb.exception.TransactionException;
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.persistence.ConnectionManager;
 import com.excilys.cdb.persistence.dao.CompanyDAO;
 import com.excilys.cdb.persistence.dao.ComputerDAO;
 import com.excilys.cdb.persistence.page.Page;
-import com.excilys.cdb.persistence.transaction.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -21,12 +18,10 @@ import java.util.Optional;
 public class CompanyService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final CompanyDAO companyDAO;
-    private final ConnectionManager connectionManager;
     private final ComputerDAO computerDAO;
 
-    public CompanyService(CompanyDAO companyDAO, ConnectionManager connectionManager, ComputerDAO computerDAO) {
+    public CompanyService(CompanyDAO companyDAO, ComputerDAO computerDAO) {
         this.companyDAO = companyDAO;
-        this.connectionManager = connectionManager;
         this.computerDAO = computerDAO;
     }
 
@@ -76,11 +71,9 @@ public class CompanyService {
     }
 
     public void delete(long id) {
-        try (final Transaction transaction = connectionManager.getTransaction()) {
-            computerDAO.deleteAllByCompanyId(id);
+        try {
             companyDAO.deleteById(id);
-            transaction.commit();
-        } catch (TransactionException | ComputerDAOException | CompanyDAOException e) {
+        } catch (ComputerDAOException | CompanyDAOException e) {
             logger.warn("delete(" + id + ")", e);
             throw new CompanyServiceException(e);
         }
