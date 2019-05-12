@@ -46,7 +46,8 @@
                         <div class='form-group ${not empty errors["introduced"]?"has-error":""}'>
                             <label for="introduced">Introduced date</label>
                             <input type="date" class="form-control" name="introduced" id="introduced"
-                                   placeholder="Introduced date" value="${computer.introduced}" min="1970-01-01">
+                                   placeholder="Introduced date" value="${computer.introduced}" min="1970-01-01"
+                                   max="2038-01-19">
                             <c:if test="${not empty errors['introduced']}">
                                 <div class="help-block">${errors['introduced']}</div>
                             </c:if>
@@ -54,7 +55,8 @@
                         <div class='form-group ${not empty errors["discontinued"]?"has-error":""}'>
                             <label for="discontinued">Discontinued date</label>
                             <input type="date" class="form-control" name="discontinued" id="discontinued"
-                                   placeholder="Discontinued date" value="${computer.discontinued}" min="1970-01-01">
+                                   placeholder="Discontinued date" value="${computer.discontinued}" min="1970-01-01"
+                                   max="2038-01-19">
                             <c:if test="${not empty errors['discontinued']}">
                                 <div class="help-block">${errors['discontinued']}</div>
                             </c:if>

@@ -20,10 +20,14 @@ import java.util.TimeZone;
 public class AppConfig {
 
     @Bean(destroyMethod = "close")
-    public HikariDataSource dataSource() {
+    public HikariDataSource dataSource(HikariConfig configuration) {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-        HikariConfig config = new HikariConfig("/datasource.properties");
-        return new HikariDataSource(config);
+        return new HikariDataSource(configuration);
+    }
+
+    @Bean
+    public HikariConfig hikariConfig() {
+        return new HikariConfig("/datasource.properties");
     }
 
     @Bean

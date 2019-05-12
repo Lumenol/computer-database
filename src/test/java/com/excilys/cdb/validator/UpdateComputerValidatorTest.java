@@ -111,9 +111,9 @@ public class UpdateComputerValidatorTest {
     }
 
     @Test
-    public void unvalidBecauseComputerDoesNotExist() {
+    public void unvalidBecauseComputerIdNotNumber() {
         final UpdateComputerDTO updateComputerDTO = new UpdateComputerDTO();
-        updateComputerDTO.setId("984");
+        updateComputerDTO.setId("");
         updateComputerDTO.setName("Un nom correct");
         updateComputerDTO.setMannufacturerId("5");
         updateComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4).toString());
@@ -123,6 +123,22 @@ public class UpdateComputerValidatorTest {
             fail("La validation a échoué");
         } catch (ValidationException e) {
             assertEquals("id", e.getField());
+        }
+    }
+
+    @Test
+    public void unvalidBecauseIntroducedIsBefore1970() {
+        final UpdateComputerDTO updateComputerDTO = new UpdateComputerDTO();
+        updateComputerDTO.setId("2");
+        updateComputerDTO.setName("Un nom correct");
+        updateComputerDTO.setMannufacturerId("5");
+        updateComputerDTO.setIntroduced(LocalDate.of(1969, 10, 20).toString());
+        updateComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20).toString());
+        try {
+            updateComputerValidator.check(updateComputerDTO);
+            fail("La validation a échoué");
+        } catch (ValidationException e) {
+            assertEquals("introduced", e.getField());
         }
     }
 

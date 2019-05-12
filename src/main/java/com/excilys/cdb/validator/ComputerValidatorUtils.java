@@ -11,6 +11,7 @@ import java.util.Objects;
 @Component
 final class ComputerValidatorUtils {
     private static final LocalDate _1970_01_01 = LocalDate.of(1970, 01, 01);
+    private static final LocalDate _2038_01_19 = LocalDate.of(2038, 1, 19);
     private final CompanyService companyService;
 
     public ComputerValidatorUtils(CompanyService companyService) {
@@ -50,6 +51,8 @@ final class ComputerValidatorUtils {
             final LocalDate localDate = LocalDate.parse(date);
             if (localDate.isBefore(_1970_01_01)) {
                 throw new ValidationException(field, "La date ne peux pas être avant le 01-01-1970.");
+            } else if (localDate.isAfter(_2038_01_19)) {
+                throw new ValidationException(field, "La date ne peux pas être après le 19-01-2038.");
             }
             return localDate;
         } catch (DateTimeParseException e) {
@@ -57,7 +60,7 @@ final class ComputerValidatorUtils {
         }
     }
 
-    public void checkMannufacturerId(String id) {
+    void checkMannufacturerId(String id) {
         if (Objects.isNull(id) || id.isEmpty()) {
             return;
         }
