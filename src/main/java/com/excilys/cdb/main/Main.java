@@ -1,16 +1,18 @@
 package com.excilys.cdb.main;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
+
 import com.excilys.cdb.config.AppConfig;
 import com.excilys.cdb.ui.Cli;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Main {
 
     public static void main(String[] args) {
-        ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
-        final Cli cli = ctx.getBean(Cli.class);
-        cli.run();
+	AbstractApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
+	final Cli cli = ctx.getBean(Cli.class);
+	cli.run();
+	ctx.close();
     }
 
 }
