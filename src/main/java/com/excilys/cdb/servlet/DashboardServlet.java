@@ -38,8 +38,8 @@ public class DashboardServlet extends HttpServlet {
     private static final String PARAMETER_NUMBER_OF_COMPUTERS = "numberOfComputers";
     private static final long serialVersionUID = 1L;
     private static final String DASHBOARD = "dashboard";
-    private final Pagination pagination = Pagination.DEFAULT_PAGINATION;
-    private final Sorting sorting = Sorting.DEFAULT_SORTING;
+    private Pagination pagination;
+    private Sorting sorting;
     private ComputerService computerService;
     private ComputerToComputerDTOMapper computerToComputerDTOMapper;
 
@@ -50,6 +50,8 @@ public class DashboardServlet extends HttpServlet {
 		.getRequiredWebApplicationContext(getServletContext());
 	computerToComputerDTOMapper = webApplicationContext.getBean(ComputerToComputerDTOMapper.class);
 	computerService = webApplicationContext.getBean(ComputerService.class);
+	pagination = webApplicationContext.getBean(Pagination.class);
+	sorting = webApplicationContext.getBean(Sorting.class);
     }
 
     private List<Long> getRemoveComputersId(HttpServletRequest request) {
