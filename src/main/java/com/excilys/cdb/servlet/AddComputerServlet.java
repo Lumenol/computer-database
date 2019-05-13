@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.excilys.cdb.dto.CompanyDTO;
@@ -42,14 +43,12 @@ public class AddComputerServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
 	super.init();
-	companyService = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext())
-		.getBean(CompanyService.class);
-	createComputerDTOToComputerMapper = WebApplicationContextUtils
-		.getRequiredWebApplicationContext(getServletContext()).getBean(CreateComputerDTOToComputerMapper.class);
-	createComputerValidator = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext())
-		.getBean(CreateComputerValidator.class);
-	companyToCompanyDTOMapper = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext())
-		.getBean(CompanyToCompanyDTOMapper.class);
+	final WebApplicationContext webApplicationContext = WebApplicationContextUtils
+		.getRequiredWebApplicationContext(getServletContext());
+	companyService = webApplicationContext.getBean(CompanyService.class);
+	createComputerDTOToComputerMapper = webApplicationContext.getBean(CreateComputerDTOToComputerMapper.class);
+	createComputerValidator = webApplicationContext.getBean(CreateComputerValidator.class);
+	companyToCompanyDTOMapper = webApplicationContext.getBean(CompanyToCompanyDTOMapper.class);
     }
 
     @Override

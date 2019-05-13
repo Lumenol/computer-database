@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.excilys.cdb.dto.ComputerDTO;
@@ -45,10 +46,10 @@ public class DashboardServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
 	super.init();
-	computerToComputerDTOMapper = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext())
-		.getBean(ComputerToComputerDTOMapper.class);
-	computerService = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext())
-		.getBean(ComputerService.class);
+	final WebApplicationContext webApplicationContext = WebApplicationContextUtils
+		.getRequiredWebApplicationContext(getServletContext());
+	computerToComputerDTOMapper = webApplicationContext.getBean(ComputerToComputerDTOMapper.class);
+	computerService = webApplicationContext.getBean(ComputerService.class);
     }
 
     private List<Long> getRemoveComputersId(HttpServletRequest request) {

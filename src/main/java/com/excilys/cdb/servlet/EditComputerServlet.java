@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.excilys.cdb.dto.CompanyDTO;
@@ -46,18 +47,14 @@ public class EditComputerServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
 	super.init();
-	companyService = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext())
-		.getBean(CompanyService.class);
-	updateComputerDTOToComputerMapper = WebApplicationContextUtils
-		.getRequiredWebApplicationContext(getServletContext()).getBean(UpdateComputerDTOToComputerMapper.class);
-	updateComputerValidator = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext())
-		.getBean(UpdateComputerValidator.class);
-	companyToCompanyDTOMapper = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext())
-		.getBean(CompanyToCompanyDTOMapper.class);
-	computerService = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext())
-		.getBean(ComputerService.class);
-	computerToUpdateComputerDTOMapper = WebApplicationContextUtils
-		.getRequiredWebApplicationContext(getServletContext()).getBean(ComputerToUpdateComputerDTOMapper.class);
+	final WebApplicationContext webApplicationContext = WebApplicationContextUtils
+		.getRequiredWebApplicationContext(getServletContext());
+	companyService = webApplicationContext.getBean(CompanyService.class);
+	updateComputerDTOToComputerMapper = webApplicationContext.getBean(UpdateComputerDTOToComputerMapper.class);
+	updateComputerValidator = webApplicationContext.getBean(UpdateComputerValidator.class);
+	companyToCompanyDTOMapper = webApplicationContext.getBean(CompanyToCompanyDTOMapper.class);
+	computerService = webApplicationContext.getBean(ComputerService.class);
+	computerToUpdateComputerDTOMapper = webApplicationContext.getBean(ComputerToUpdateComputerDTOMapper.class);
     }
 
     @Override
