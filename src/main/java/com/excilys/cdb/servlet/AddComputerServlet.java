@@ -15,7 +15,9 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.dto.CreateComputerDTO;
+import com.excilys.cdb.dto.CreateComputerDTO.CreateComputerDTOBuilder;
 import com.excilys.cdb.exception.ValidationException;
+import com.excilys.cdb.mapper.MapperUtils;
 import com.excilys.cdb.mapper.dto.CompanyToCompanyDTOMapper;
 import com.excilys.cdb.mapper.dto.CreateComputerDTOToComputerMapper;
 import com.excilys.cdb.model.Computer;
@@ -68,17 +70,22 @@ public class AddComputerServlet extends HttpServlet {
 	final String discontinued = request.getParameter(PARAMETER_DISCONTINUED);
 	final String mannufacturerId = request.getParameter(PARAMETER_MANNUFACTURER_ID);
 
-	final CreateComputerDTO createComputerDTO = CreateComputerDTO.builder().name(name).introduced(introduced)
-		.discontinued(discontinued).mannufacturerId(mannufacturerId).build();
-
 	try {
-	    createComputerValidator.check(createComputerDTO);
-	    final Computer computer = createComputerDTOToComputerMapper.map(createComputerDTO);
+	    final CreateComputerDTOBuilder builder = CreateComputerDTO.builder().name(name);
+	    builder.introduced(MapperUtils.parseDate("introduced", introduced));
+	    builder.discontinued(MapperUtils.parseDate("discontinued", discontinued));
+	    builder.mannufacturerId(MapperUtils.parseId("mannufacturerId", mannufacturerId));
+	    final CreateComputerDTO dto = builder.build();
+	    createComputerValidator.check(dto);
+	    final Computer computer = createComputerDTOToComputerMapper.map(dto);
 	    computerService.create(computer);
 	    request.setAttribute(PARAMETER_SUCCESS, true);
 	} catch (ValidationException e) {
 	    request.setAttribute(PARAMETER_SUCCESS, false);
-	    request.setAttribute(PARAMETER_COMPUTER, createComputerDTO);
+	    request.setAttribute(PARAMETER_COMPUTER_NAME, name);
+	    request.setAttribute(PARAMETER_INTRODUCED, introduced);
+	    request.setAttribute(PARAMETER_DISCONTINUED, discontinued);
+	    request.setAttribute(PARAMETER_MANNUFACTURER_ID, mannufacturerId);
 	    request.setAttribute(PARAMETER_ERRORS, Collections.singletonMap(e.getField(), e.getMessage()));
 	}
 	doGet(request, response);
