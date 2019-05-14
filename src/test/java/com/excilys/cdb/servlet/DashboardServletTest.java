@@ -16,10 +16,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 
+import com.excilys.cdb.config.AppConfig;
 import com.excilys.cdb.database.UTDatabase;
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.mapper.dto.ComputerToComputerDTOMapper;
@@ -28,9 +30,11 @@ import com.excilys.cdb.persistence.page.OrderBy;
 import com.excilys.cdb.persistence.page.Page;
 import com.excilys.cdb.persistence.page.Pageable;
 import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.servlet.pagination.Pagination;
+import com.excilys.cdb.servlet.sorting.Sorting;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(ComputerService.class)
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = AppConfig.class)
 public class DashboardServletTest {
 
     private HttpServletRequest mockRequest;
@@ -40,16 +44,27 @@ public class DashboardServletTest {
 
     private DashboardServlet dashboardServlet;
 
+    @Autowired
+    private ComputerToComputerDTOMapper computerToComputerDTOMapper;
+    @Autowired
+    private UTDatabase database;
+    @Autowired
+    private Pagination pagination;
+    @Autowired
+    private Sorting sorting;
+
     @Before
     public void setUp() {
 	mockRequest = Mockito.mock(HttpServletRequest.class);
 	mockResponse = Mockito.mock(HttpServletResponse.class);
 	mockComputerService = Mockito.mock(ComputerService.class);
-	PowerMockito.mockStatic(ComputerService.class);
-
-	Mockito.when(ComputerService.getInstance()).thenReturn(mockComputerService);
 
 	dashboardServlet = Mockito.spy(new DashboardServlet());
+
+	ReflectionTestUtils.setField(dashboardServlet, "computerService", mockComputerService);
+	ReflectionTestUtils.setField(dashboardServlet, "computerToComputerDTOMapper", computerToComputerDTOMapper);
+	ReflectionTestUtils.setField(dashboardServlet, "pagination", pagination);
+	ReflectionTestUtils.setField(dashboardServlet, "sorting", sorting);
 
 	final ServletContext mockServletContext = Mockito.mock(ServletContext.class);
 	final RequestDispatcher mockRequestDispatcher = Mockito.mock(RequestDispatcher.class);
@@ -68,13 +83,13 @@ public class DashboardServletTest {
 	final OrderBy orderBy = OrderBy.builder().field(OrderBy.Field.NAME).build();
 	final Pageable pageable = Pageable.builder().page(page).orderBy(orderBy).build();
 
-	final List<Computer> computers = UTDatabase.getInstance().findAllComputers(pageable);
+	final List<Computer> computers = database.findAllComputers(pageable);
 	Mockito.when(mockComputerService.findAll(pageable)).thenReturn(computers);
 
 	dashboardServlet.doGet(mockRequest, mockResponse);
 
 	Mockito.verify(mockRequest).setAttribute("numberOfComputers", numberOfComputer);
-	final List<ComputerDTO> computersDTO = computers.stream().map(ComputerToComputerDTOMapper.getInstance()::map)
+	final List<ComputerDTO> computersDTO = computers.stream().map(computerToComputerDTOMapper::map)
 		.collect(Collectors.toList());
 	Mockito.verify(mockRequest).setAttribute("computers", computersDTO);
 	Mockito.verify(mockRequest).setAttribute("previous", 1L);
@@ -93,7 +108,6 @@ public class DashboardServletTest {
 	Mockito.when(mockComputerService.countSearch(search)).thenReturn(numberOfComputer);
 
 	final List<Computer> computers = new ArrayList<>();
-	final UTDatabase database = UTDatabase.getInstance();
 	computers.add(database.findComputerById(1));
 	computers.add(database.findComputerById(6));
 	computers.add(database.findComputerById(7));
@@ -115,7 +129,7 @@ public class DashboardServletTest {
 	dashboardServlet.doGet(mockRequest, mockResponse);
 
 	Mockito.verify(mockRequest).setAttribute("numberOfComputers", numberOfComputer);
-	final List<ComputerDTO> computersDTO = computers.stream().map(ComputerToComputerDTOMapper.getInstance()::map)
+	final List<ComputerDTO> computersDTO = computers.stream().map(computerToComputerDTOMapper::map)
 		.collect(Collectors.toList());
 	Mockito.verify(mockRequest).setAttribute("computers", computersDTO);
 	Mockito.verify(mockRequest).setAttribute("pages", Arrays.asList(1L));

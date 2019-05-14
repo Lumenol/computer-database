@@ -9,8 +9,6 @@ import com.excilys.cdb.persistence.page.OrderBy;
 
 public class Sorting {
 
-    public static final Sorting DEFAULT_SORTING = new Sorting(SortingParameters.DEFAULT_SORTING_PARAMETERS);
-
     private final SortingParameters parameters;
 
     public Sorting(SortingParameters parameters) {

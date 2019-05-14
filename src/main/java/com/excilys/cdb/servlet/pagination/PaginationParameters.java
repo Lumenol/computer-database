@@ -4,21 +4,6 @@ import java.util.Objects;
 
 public class PaginationParameters {
 
-    private static final int MIN_PAGE_SIZE = 10;
-    private static final int MAX_PAGE_SIZE = 100;
-    private static final int DEFAULT_PAGE_SIZE = 50;
-    private static final String PARAMETER_NEXT = "next";
-    private static final String PARAMETER_PAGE = "page";
-    private static final String PARAMETER_PAGES = "pages";
-    private static final String PARAMETER_PREVIOUS = "previous";
-    private static final String PARAMETER_SIZE = "size";
-    private static final String PARAMETER_ORDER_BY = "order-by";
-    private static final String PARAMETER_MEANING = "meaning";
-
-    static final PaginationParameters DEFAULT_PAGINATION_PARAMETERS = new PaginationParameters(MIN_PAGE_SIZE,
-	    MAX_PAGE_SIZE, DEFAULT_PAGE_SIZE, PARAMETER_SIZE, PARAMETER_PAGE, PARAMETER_PREVIOUS, PARAMETER_NEXT,
-	    PARAMETER_PAGES, PARAMETER_ORDER_BY, PARAMETER_MEANING);
-
     private final int minPageSize;
     private final int maxPageSize;
     private final int defaultSize;

@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.exception.BadArgumentRequestException;
 import com.excilys.cdb.mapper.dto.ComputerToComputerDTOMapper;
@@ -35,9 +38,21 @@ public class DashboardServlet extends HttpServlet {
     private static final String PARAMETER_NUMBER_OF_COMPUTERS = "numberOfComputers";
     private static final long serialVersionUID = 1L;
     private static final String DASHBOARD = "dashboard";
-    private final Pagination pagination = Pagination.DEFAULT_PAGINATION;
-    private final Sorting sorting = Sorting.DEFAULT_SORTING;
-    private final ComputerService computerService = ComputerService.getInstance();
+    private Pagination pagination;
+    private Sorting sorting;
+    private ComputerService computerService;
+    private ComputerToComputerDTOMapper computerToComputerDTOMapper;
+
+    @Override
+    public void init() throws ServletException {
+	super.init();
+	final WebApplicationContext webApplicationContext = WebApplicationContextUtils
+		.getRequiredWebApplicationContext(getServletContext());
+	computerToComputerDTOMapper = webApplicationContext.getBean(ComputerToComputerDTOMapper.class);
+	computerService = webApplicationContext.getBean(ComputerService.class);
+	pagination = webApplicationContext.getBean(Pagination.class);
+	sorting = webApplicationContext.getBean(Sorting.class);
+    }
 
     private List<Long> getRemoveComputersId(HttpServletRequest request) {
 	try {
@@ -100,7 +115,7 @@ public class DashboardServlet extends HttpServlet {
 	    computers = computerService.search(pageable, search);
 	}
 
-	return computers.stream().map(ComputerToComputerDTOMapper.getInstance()::map).collect(Collectors.toList());
+	return computers.stream().map(computerToComputerDTOMapper::map).collect(Collectors.toList());
     }
 
     private long getComputerCount(String search) {

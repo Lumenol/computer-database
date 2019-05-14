@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
 import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.dto.UpdateComputerDTO;
 import com.excilys.cdb.exception.ValidationException;
@@ -34,7 +37,25 @@ public class EditComputerServlet extends HttpServlet {
     private static final String PARAMETER_INTRODUCED = "introduced";
     private static final String PARAMETER_DISCONTINUED = "discontinued";
     private static final String PARAMETER_MANNUFACTURER_ID = "mannufacturerId";
-    private final CompanyService companyService = CompanyService.getInstance();
+    private CompanyService companyService;
+    private UpdateComputerDTOToComputerMapper updateComputerDTOToComputerMapper;
+    private UpdateComputerValidator updateComputerValidator;
+    private CompanyToCompanyDTOMapper companyToCompanyDTOMapper;
+    private ComputerService computerService;
+    private ComputerToUpdateComputerDTOMapper computerToUpdateComputerDTOMapper;
+
+    @Override
+    public void init() throws ServletException {
+	super.init();
+	final WebApplicationContext webApplicationContext = WebApplicationContextUtils
+		.getRequiredWebApplicationContext(getServletContext());
+	companyService = webApplicationContext.getBean(CompanyService.class);
+	updateComputerDTOToComputerMapper = webApplicationContext.getBean(UpdateComputerDTOToComputerMapper.class);
+	updateComputerValidator = webApplicationContext.getBean(UpdateComputerValidator.class);
+	companyToCompanyDTOMapper = webApplicationContext.getBean(CompanyToCompanyDTOMapper.class);
+	computerService = webApplicationContext.getBean(ComputerService.class);
+	computerToUpdateComputerDTOMapper = webApplicationContext.getBean(ComputerToUpdateComputerDTOMapper.class);
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -42,8 +63,8 @@ public class EditComputerServlet extends HttpServlet {
 
 	try {
 	    final long id = Long.parseLong(getParameterId(request));
-	    final Optional<UpdateComputerDTO> computer = ComputerService.getInstance().findById(id)
-		    .map(ComputerToUpdateComputerDTOMapper.getInstance()::map);
+	    final Optional<UpdateComputerDTO> computer = computerService.findById(id)
+		    .map(computerToUpdateComputerDTOMapper::map);
 
 	    if (!computer.isPresent()) {
 		response.sendError(404);
@@ -67,8 +88,8 @@ public class EditComputerServlet extends HttpServlet {
     }
 
     private void setParameterCompanies(HttpServletRequest request) {
-	final List<CompanyDTO> companies = companyService.findAll().stream()
-		.map(CompanyToCompanyDTOMapper.getInstance()::map).collect(Collectors.toList());
+	final List<CompanyDTO> companies = companyService.findAll().stream().map(companyToCompanyDTOMapper::map)
+		.collect(Collectors.toList());
 	request.setAttribute(PARAMETER_COMPANIES, companies);
     }
 
@@ -93,9 +114,9 @@ public class EditComputerServlet extends HttpServlet {
 		.discontinued(discontinued).mannufacturerId(mannufacturerId).build();
 
 	try {
-	    UpdateComputerValidator.getInstance().check(updateComputerDTO);
-	    final Computer computer = UpdateComputerDTOToComputerMapper.getInstance().map(updateComputerDTO);
-	    ComputerService.getInstance().update(computer);
+	    updateComputerValidator.check(updateComputerDTO);
+	    final Computer computer = updateComputerDTOToComputerMapper.map(updateComputerDTO);
+	    computerService.update(computer);
 	    request.setAttribute(PARAMETER_SUCCESS, true);
 	    doGet(request, response);
 	} catch (ValidationException e) {

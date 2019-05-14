@@ -3,22 +3,13 @@ package com.excilys.cdb.mapper.dto;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.dto.UpdateComputerDTO;
 import com.excilys.cdb.model.Computer;
 
+@Component
 public class ComputerToUpdateComputerDTOMapper implements Mapper<Computer, UpdateComputerDTO> {
-
-    private static ComputerToUpdateComputerDTOMapper instance;
-
-    private ComputerToUpdateComputerDTOMapper() {
-    }
-
-    public static synchronized ComputerToUpdateComputerDTOMapper getInstance() {
-	if (Objects.isNull(instance)) {
-	    instance = new ComputerToUpdateComputerDTOMapper();
-	}
-	return instance;
-    }
 
     private String toString(LocalDate date) {
 	return Objects.toString(date, null);
