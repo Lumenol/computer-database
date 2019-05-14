@@ -27,7 +27,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-					<div class="label label-default pull-right">id: ${computer.id}</div>
+					<div class="label label-default pull-right">id: ${id}</div>
 					<h1>Edit Computer</h1>
 					<c:if test="${(not empty success) && success}">
 						<div class="alert alert-success" role="alert">
@@ -46,7 +46,7 @@
 								class='form-group ${not empty errors["name"]?"has-error":""}'>
 								<label for="computerName">Computer name</label> <input
 									type="text" class="form-control" name="name" id="computerName"
-									placeholder="Computer name" value="${computer.name}" required>
+									placeholder="Computer name" value="${name}" required>
 								<c:if test="${not empty errors['name']}">
 									<div class="help-block">${errors['name']}</div>
 								</c:if>
@@ -56,7 +56,7 @@
 								<label for="introduced">Introduced date</label> <input
 									type="date" class="form-control" name="introduced"
 									id="introduced" placeholder="Introduced date"
-									value="${computer.introduced}" min="1970-01-01" max="2038-01-19">
+									value="${introduced}" min="1970-01-01" max="2038-01-19">
 								<c:if test="${not empty errors['introduced']}">
 									<div class="help-block">${errors['introduced']}</div>
 								</c:if>
@@ -66,7 +66,7 @@
 								<label for="discontinued">Discontinued date</label> <input
 									type="date" class="form-control" name="discontinued"
 									id="discontinued" placeholder="Discontinued date"
-									value="${computer.discontinued}"
+									value="${discontinued}"
 									min='${not empty computer.introduced?computer.introduced:"1970-01-01"}'
 									max="2038-01-19">
 								<c:if test="${not empty errors['discontinued']}">

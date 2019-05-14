@@ -1,6 +1,5 @@
 package com.excilys.cdb.validator;
 
-import java.time.LocalDate;
 import java.util.Objects;
 
 import org.springframework.stereotype.Component;
@@ -20,14 +19,11 @@ public class UpdateComputerValidator implements Validator<UpdateComputerDTO> {
 	this.computerService = computerService;
     }
 
-    private void checkId(String id) {
-	try {
-	    final long i = Long.parseLong(id);
-	    if (!computerService.exist(i)) {
-		throw new ValidationException("id", "L'id n'exist pas.");
-	    }
-	} catch (NumberFormatException e) {
-	    throw new ValidationException("id", "L'id est mal écrit.");
+    private void checkId(Long id) {
+	if (Objects.isNull(id)) {
+	    throw new ValidationException("id", "L'id ne peut pas être nul.");
+	} else if (!computerService.exist(id)) {
+	    throw new ValidationException("id", "L'id n'exist pas.");
 	}
     }
 
@@ -35,9 +31,10 @@ public class UpdateComputerValidator implements Validator<UpdateComputerDTO> {
     public void check(UpdateComputerDTO toValidate) {
 	Objects.requireNonNull(toValidate);
 	computerValidatorUtils.checkName(toValidate.getName());
-	final LocalDate introduced = computerValidatorUtils.checkIntroduced(toValidate.getIntroduced());
-	final LocalDate discontinued = computerValidatorUtils.checkDiscontinued(toValidate.getDiscontinued());
-	computerValidatorUtils.checkIntroducedIsBeforeDiscontinued(introduced, discontinued);
+	computerValidatorUtils.checkIntroduced(toValidate.getIntroduced());
+	computerValidatorUtils.checkDiscontinued(toValidate.getDiscontinued());
+	computerValidatorUtils.checkIntroducedIsBeforeDiscontinued(toValidate.getIntroduced(),
+		toValidate.getDiscontinued());
 	computerValidatorUtils.checkMannufacturerId(toValidate.getMannufacturerId());
 	checkId(toValidate.getId());
     }

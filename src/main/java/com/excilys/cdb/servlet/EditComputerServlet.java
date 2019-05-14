@@ -17,6 +17,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.dto.UpdateComputerDTO;
 import com.excilys.cdb.exception.ValidationException;
+import com.excilys.cdb.mapper.MapperUtils;
 import com.excilys.cdb.mapper.dto.CompanyToCompanyDTOMapper;
 import com.excilys.cdb.mapper.dto.ComputerToUpdateComputerDTOMapper;
 import com.excilys.cdb.mapper.dto.UpdateComputerDTOToComputerMapper;
@@ -110,18 +111,25 @@ public class EditComputerServlet extends HttpServlet {
 	final String discontinued = request.getParameter(PARAMETER_DISCONTINUED);
 	final String mannufacturerId = request.getParameter(PARAMETER_MANNUFACTURER_ID);
 
-	final UpdateComputerDTO updateComputerDTO = UpdateComputerDTO.builder().id(id).name(name).introduced(introduced)
-		.discontinued(discontinued).mannufacturerId(mannufacturerId).build();
-
 	try {
-	    updateComputerValidator.check(updateComputerDTO);
-	    final Computer computer = updateComputerDTOToComputerMapper.map(updateComputerDTO);
+	    final UpdateComputerDTO.UpdateComputerDTOBuilder builder = UpdateComputerDTO.builder().name(name);
+	    builder.introduced(MapperUtils.parseDate("introduced", introduced));
+	    builder.discontinued(MapperUtils.parseDate("discontinued", discontinued));
+	    builder.mannufacturerId(MapperUtils.parseId("mannufacturerId", mannufacturerId));
+	    builder.id(MapperUtils.parseId("id", id));
+	    final UpdateComputerDTO dto = builder.build();
+	    updateComputerValidator.check(dto);
+	    final Computer computer = updateComputerDTOToComputerMapper.map(dto);
 	    computerService.update(computer);
 	    request.setAttribute(PARAMETER_SUCCESS, true);
 	    doGet(request, response);
 	} catch (ValidationException e) {
 	    request.setAttribute(PARAMETER_SUCCESS, false);
-	    request.setAttribute(PARAMETER_COMPUTER, updateComputerDTO);
+	    request.setAttribute(PARAMETER_ID, id);
+	    request.setAttribute(PARAMETER_COMPUTER_NAME, name);
+	    request.setAttribute(PARAMETER_INTRODUCED, introduced);
+	    request.setAttribute(PARAMETER_DISCONTINUED, discontinued);
+	    request.setAttribute(PARAMETER_MANNUFACTURER_ID, mannufacturerId);
 	    request.setAttribute(PARAMETER_ERRORS, Collections.singletonMap(e.getField(), e.getMessage()));
 	    setParameterCompanies(request);
 	    forwardToJsp(request, response);

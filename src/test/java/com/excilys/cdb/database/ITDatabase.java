@@ -67,8 +67,8 @@ public class ITDatabase {
     }
 
     private void addComputer(long id, String name, LocalDate introduced, LocalDate discontinued, Long companyId) {
-	final ComputerDTO.ComputerDTOBuilder builder = ComputerDTO.builder().id(id).name(name)
-		.introduced(Objects.toString(introduced, null)).discontinued(Objects.toString(discontinued, null));
+	final ComputerDTO.ComputerDTOBuilder builder = ComputerDTO.builder().id(id).name(name).introduced(introduced)
+		.discontinued(discontinued);
 
 	final CompanyDTO company = findCompanyById(companyId);
 	if (Objects.nonNull(company)) {
