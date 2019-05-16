@@ -1,21 +1,16 @@
 package com.excilys.cdb.ui;
 
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Scanner;
-import java.util.function.LongConsumer;
-import java.util.function.LongSupplier;
-import java.util.stream.Collectors;
-
-import com.excilys.cdb.controller.Controller;
+import com.excilys.cdb.controller.cli.Controller;
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.exception.ControllerException;
 import com.excilys.cdb.exception.ValidationException;
+
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.util.*;
+import java.util.function.LongConsumer;
+import java.util.function.LongSupplier;
+import java.util.stream.Collectors;
 
 public class Cli {
 
