@@ -1,11 +1,13 @@
-package com.excilys.cdb.mapper.resultset;
+package com.excilys.cdb.mapper.rowmapper;
 
-import com.excilys.cdb.config.AppConfig;
-import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.model.Computer.ComputerBuilder;
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
+import static org.junit.Assert.assertEquals;
+
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.Objects;
+
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -17,17 +19,17 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.rules.SpringClassRule;
 import org.springframework.test.context.junit4.rules.SpringMethodRule;
 
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.Objects;
+import com.excilys.cdb.config.AppConfig;
+import com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Computer.ComputerBuilder;
 
-import static org.junit.Assert.assertEquals;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 
 @RunWith(JUnitParamsRunner.class)
 @ContextConfiguration(classes = AppConfig.class)
-public class ResultSetToComputerMapperTest {
+public class ComputerRowMapperTest {
 
     private static final String COLUMN_COMPANY_ID = "company_id";
     private static final String COLUMN_COMPANY_NAME = "company_name";
@@ -36,14 +38,13 @@ public class ResultSetToComputerMapperTest {
     private static final String COLUMN_INTRODUCED = "introduced";
     private static final String COLUMN_NAME = "name";
 
+    @ClassRule
+    public static final SpringClassRule springClassRule = new SpringClassRule();
+    @Rule
+    public final SpringMethodRule springMethodRule = new SpringMethodRule();
 
-	@ClassRule
-	public static final SpringClassRule springClassRule = new SpringClassRule();
-	@Rule
-	public final SpringMethodRule springMethodRule = new SpringMethodRule();
-
-	@Autowired
-	private ResultSetToComputerMapper resultSetToComputerMapper;
+    @Autowired
+    private ComputerRowMapper computerRowMapper;
 
     private ResultSet mockResultSet;
 
@@ -78,7 +79,7 @@ public class ResultSetToComputerMapperTest {
 
 	Mockito.when(mockResultSet.getString(COLUMN_COMPANY_NAME)).thenReturn(companyName);
 
-	Computer computer = resultSetToComputerMapper.map(mockResultSet);
+	Computer computer = computerRowMapper.mapRow(mockResultSet, 0);
 
 	ComputerBuilder computerBuilder = Computer.builder().id(id).name(name).introduced(introduced)
 		.discontinued(discontinued);
