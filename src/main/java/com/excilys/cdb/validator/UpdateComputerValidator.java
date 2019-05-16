@@ -1,47 +1,41 @@
 package com.excilys.cdb.validator;
 
+import java.util.Objects;
+
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.dto.UpdateComputerDTO;
 import com.excilys.cdb.exception.ValidationException;
 import com.excilys.cdb.service.ComputerService;
 
-import java.time.LocalDate;
-import java.util.Objects;
-
-import static com.excilys.cdb.validator.ComputerValidatorUtils.*;
-
+@Component
 public class UpdateComputerValidator implements Validator<UpdateComputerDTO> {
+    private final ComputerValidatorUtils computerValidatorUtils;
+    private final ComputerService computerService;
 
-    private static UpdateComputerValidator instance;
-
-    private UpdateComputerValidator() {
+    public UpdateComputerValidator(ComputerValidatorUtils computerValidatorUtils, ComputerService computerService) {
+	super();
+	this.computerValidatorUtils = computerValidatorUtils;
+	this.computerService = computerService;
     }
 
-    public static synchronized UpdateComputerValidator getInstance() {
-        if (Objects.isNull(instance)) {
-            instance = new UpdateComputerValidator();
-        }
-        return instance;
-    }
-
-    private void checkId(String id) {
-        try {
-            final long i = Long.parseLong(id);
-            if (!ComputerService.getInstance().exist(i)) {
-                throw new ValidationException("id", "L'id n'exist pas.");
-            }
-        } catch (NumberFormatException e) {
-            throw new ValidationException("id", "L'id est mal écrit.");
-        }
+    private void checkId(Long id) {
+	if (Objects.isNull(id)) {
+	    throw new ValidationException("id", "L'id ne peut pas être nul.");
+	} else if (!computerService.exist(id)) {
+	    throw new ValidationException("id", "L'id n'exist pas.");
+	}
     }
 
     @Override
     public void check(UpdateComputerDTO toValidate) {
-        Objects.requireNonNull(toValidate);
-        checkName(toValidate.getName());
-        final LocalDate introduced = checkIntroduced(toValidate.getIntroduced());
-        final LocalDate discontinued = checkDiscontinued(toValidate.getDiscontinued());
-        checkIntroducedIsBeforeDiscontinued(introduced, discontinued);
-        checkMannufacturerId(toValidate.getMannufacturerId());
-        checkId(toValidate.getId());
+	Objects.requireNonNull(toValidate);
+	computerValidatorUtils.checkName(toValidate.getName());
+	computerValidatorUtils.checkIntroduced(toValidate.getIntroduced());
+	computerValidatorUtils.checkDiscontinued(toValidate.getDiscontinued());
+	computerValidatorUtils.checkIntroducedIsBeforeDiscontinued(toValidate.getIntroduced(),
+		toValidate.getDiscontinued());
+	computerValidatorUtils.checkMannufacturerId(toValidate.getMannufacturerId());
+	checkId(toValidate.getId());
     }
 }

@@ -13,9 +13,6 @@ import com.excilys.cdb.persistence.page.Page;
 
 public class Pagination {
 
-    public static final Pagination DEFAULT_PAGINATION = new Pagination(
-	    PaginationParameters.DEFAULT_PAGINATION_PARAMETERS);
-
     private final PaginationParameters parameters;
 
     public Pagination(PaginationParameters parameters) {

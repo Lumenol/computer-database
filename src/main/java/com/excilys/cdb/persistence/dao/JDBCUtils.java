@@ -1,8 +1,8 @@
 package com.excilys.cdb.persistence.dao;
 
 import com.excilys.cdb.mapper.resultset.ResultSetMapper;
-import com.excilys.cdb.persistence.ConnectionProvider;
 
+import javax.sql.DataSource;
 import java.sql.*;
 
 final class JDBCUtils {
@@ -23,16 +23,28 @@ final class JDBCUtils {
     private JDBCUtils() {
     }
 
-    public static void delete(ConnectionProvider connectionProvider, String sql, Object... args) throws SQLException {
-        execute(ResultSetMapper.identity(), connectionProvider, simpleStatementFactory, executeUpdate, noResult, sql,
+    public static void delete(DataSource dataSource, String sql, Object... args) throws SQLException {
+        execute(ResultSetMapper.identity(), dataSource, simpleStatementFactory, executeUpdate, noResult, sql,
                 args);
     }
 
-    private static <T> T execute(ResultSetMapper<T> mapper, ConnectionProvider connectionProvider,
+    public static void delete(Connection connection, String sql, Object... args) throws SQLException {
+        execute(ResultSetMapper.identity(), connection, simpleStatementFactory, executeUpdate, noResult, sql,
+                args);
+    }
+
+    private static <T> T execute(ResultSetMapper<T> mapper, DataSource dataSource,
                                  StatementFactory statementFactory, StatementExecutor executor, ResultProvider resultProvider, String sql,
                                  Object[] args) throws SQLException {
-        try (Connection connection = connectionProvider.getConnection();
-             PreparedStatement statement = statementFactory.create(connection, sql)) {
+        try (Connection connection = dataSource.getConnection()) {
+            return execute(mapper, connection, statementFactory, executor, resultProvider, sql, args);
+        }
+    }
+
+    private static <T> T execute(ResultSetMapper<T> mapper, Connection connection,
+                                 StatementFactory statementFactory, StatementExecutor executor, ResultProvider resultProvider, String sql,
+                                 Object[] args) throws SQLException {
+        try (PreparedStatement statement = statementFactory.create(connection, sql)) {
             for (int i = 0; i < args.length; i++) {
                 statement.setObject(i + 1, args[i]);
             }
@@ -43,18 +55,18 @@ final class JDBCUtils {
         }
     }
 
-    public static <T> T find(ResultSetMapper<T> mapper, ConnectionProvider connectionProvider, String sql,
+    public static <T> T find(ResultSetMapper<T> mapper, DataSource dataSource, String sql,
                              Object... args) throws SQLException {
-        return execute(mapper, connectionProvider, simpleStatementFactory, execute, resultSet, sql, args);
+        return execute(mapper, dataSource, simpleStatementFactory, execute, resultSet, sql, args);
     }
 
-    public static Long insert(ConnectionProvider connectionProvider, String sql, Object... args) throws SQLException {
-        return execute(keyMapper, connectionProvider, generetedKeysStatementFactory, executeUpdate, generatedKeys, sql,
+    public static Long insert(DataSource dataSource, String sql, Object... args) throws SQLException {
+        return execute(keyMapper, dataSource, generetedKeysStatementFactory, executeUpdate, generatedKeys, sql,
                 args);
     }
 
-    public static void update(ConnectionProvider connectionProvider, String sql, Object... args) throws SQLException {
-        execute(ResultSetMapper.identity(), connectionProvider, simpleStatementFactory, executeUpdate, noResult, sql,
+    public static void update(DataSource dataSource, String sql, Object... args) throws SQLException {
+        execute(ResultSetMapper.identity(), dataSource, simpleStatementFactory, executeUpdate, noResult, sql,
                 args);
     }
 

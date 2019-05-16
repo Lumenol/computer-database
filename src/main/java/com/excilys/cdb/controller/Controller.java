@@ -1,21 +1,21 @@
 package com.excilys.cdb.controller;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.dto.CreateComputerDTO;
+import com.excilys.cdb.dto.CreateComputerDTO.CreateComputerDTOBuilder;
 import com.excilys.cdb.dto.UpdateComputerDTO;
 import com.excilys.cdb.exception.ControllerException;
 import com.excilys.cdb.exception.ValidationException;
-import com.excilys.cdb.mapper.dto.CompanyToCompanyDTOMapper;
-import com.excilys.cdb.mapper.dto.ComputerToComputerDTOMapper;
+import com.excilys.cdb.mapper.MapperUtils;
 import com.excilys.cdb.mapper.dto.CreateComputerDTOToComputerMapper;
 import com.excilys.cdb.mapper.dto.Mapper;
 import com.excilys.cdb.mapper.dto.UpdateComputerDTOToComputerMapper;
@@ -29,41 +29,32 @@ import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.validator.CreateComputerValidator;
 import com.excilys.cdb.validator.UpdateComputerValidator;
 
+@Component
 public class Controller {
-    private static Controller instance;
-    private final CompanyService companyService = CompanyService.getInstance();
-    private final Mapper<Company, CompanyDTO> companyToCompanyDTO = CompanyToCompanyDTOMapper.getInstance();
-    private final ComputerService computerService = ComputerService.getInstance();
-    private final Mapper<Computer, ComputerDTO> computerToComputerDTO = ComputerToComputerDTOMapper.getInstance();
-    private final CreateComputerDTOToComputerMapper createComputerDTOToComputerMapper = CreateComputerDTOToComputerMapper
-	    .getInstance();
-    private final CreateComputerValidator createComputerValidator = CreateComputerValidator.getInstance();
+    private final CompanyService companyService;
+    private final Mapper<Company, CompanyDTO> companyToCompanyDTO;
+    private final ComputerService computerService;
+    private final Mapper<Computer, ComputerDTO> computerToComputerDTO;
+    private final CreateComputerDTOToComputerMapper createComputerDTOToComputerMapper;
+    private final CreateComputerValidator createComputerValidator;
+    private final UpdateComputerDTOToComputerMapper updateComputerDTOToComputerMapper;
+    private final UpdateComputerValidator updateComputerValidator;
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private final UpdateComputerDTOToComputerMapper updateComputerDTOToComputerMapper = UpdateComputerDTOToComputerMapper
-	    .getInstance();
-    private final UpdateComputerValidator updateComputerValidator = UpdateComputerValidator.getInstance();
 
-    private Controller() {
-    }
-
-    public static synchronized Controller getInstance() {
-	if (Objects.isNull(instance)) {
-	    instance = new Controller();
-	}
-	return instance;
-    }
-
-    public void createComputer(CreateComputerDTO dto) {
-	try {
-	    createComputerValidator.check(dto);
-	    computerService.create(createComputerDTOToComputerMapper.map(dto));
-	} catch (ValidationException e) {
-	    logger.warn("createComputer(" + dto + ")", e);
-	    throw e;
-	} catch (RuntimeException e) {
-	    logger.warn("createComputer(" + dto + ")", e);
-	    throw new ControllerException();
-	}
+    public Controller(CompanyService companyService, Mapper<Company, CompanyDTO> companyToCompanyDTO,
+	    ComputerService computerService, Mapper<Computer, ComputerDTO> computerToComputerDTO,
+	    CreateComputerDTOToComputerMapper createComputerDTOToComputerMapper,
+	    CreateComputerValidator createComputerValidator,
+	    UpdateComputerDTOToComputerMapper updateComputerDTOToComputerMapper,
+	    UpdateComputerValidator updateComputerValidator) {
+	this.companyService = companyService;
+	this.companyToCompanyDTO = companyToCompanyDTO;
+	this.computerService = computerService;
+	this.computerToComputerDTO = computerToComputerDTO;
+	this.createComputerDTOToComputerMapper = createComputerDTOToComputerMapper;
+	this.createComputerValidator = createComputerValidator;
+	this.updateComputerDTOToComputerMapper = updateComputerDTOToComputerMapper;
+	this.updateComputerValidator = updateComputerValidator;
     }
 
     public void deleteComputer(long id) {
@@ -77,7 +68,7 @@ public class Controller {
 
     public List<CompanyDTO> getCompanies(long offset, long limit) {
 	try {
-	    final Page page = Page.builder().page(offset / limit).limit(limit).build();
+	    final Page page = Page.builder().page(offset / limit + 1).limit(limit).build();
 	    return companyService.findAll(page).stream().map(companyToCompanyDTO::map).collect(Collectors.toList());
 	} catch (RuntimeException e) {
 	    logger.warn("getCompanies(" + offset + "," + limit + ")", e);
@@ -96,7 +87,7 @@ public class Controller {
 
     public List<ComputerDTO> getComputers(long offset, long limit) {
 	try {
-	    final Page page = Page.builder().page(offset / limit).limit(limit).build();
+	    final Page page = Page.builder().page(offset / limit + 1).limit(limit).build();
 	    final OrderBy orderBy = OrderBy.builder().build();
 	    final Pageable pageable = Pageable.builder().page(page).orderBy(orderBy).build();
 	    return computerService.findAll(pageable).stream().map(computerToComputerDTO::map)
@@ -125,19 +116,6 @@ public class Controller {
 	}
     }
 
-    public void updateComputer(UpdateComputerDTO dto) {
-	try {
-	    updateComputerValidator.check(dto);
-	    computerService.update(updateComputerDTOToComputerMapper.map(dto));
-	} catch (ValidationException e) {
-	    logger.warn("updateComputer(" + dto + ")", e);
-	    throw e;
-	} catch (RuntimeException e) {
-	    logger.warn("updateComputer(" + dto + ")", e);
-	    throw new ControllerException();
-	}
-    }
-
     public boolean companyExist(long id) {
 	return companyService.exist(id);
     }
@@ -150,4 +128,48 @@ public class Controller {
 	    throw new ControllerException();
 	}
     }
+
+    public void createComputer(String name, String introduced, String discontinued, String mannufacturerId) {
+	try {
+	    final CreateComputerDTOBuilder builder = CreateComputerDTO.builder().name(name);
+	    builder.introduced(MapperUtils.parseDate("introduced", introduced));
+	    builder.discontinued(MapperUtils.parseDate("discontinued", discontinued));
+	    builder.mannufacturerId(MapperUtils.parseId("mannufacturerId", mannufacturerId));
+	    final CreateComputerDTO dto = builder.build();
+	    createComputerValidator.check(dto);
+	    computerService.create(createComputerDTOToComputerMapper.map(dto));
+	} catch (ValidationException e) {
+	    logger.warn(
+		    "createComputer(" + name + ", " + introduced + ", " + discontinued + ", " + mannufacturerId + ")",
+		    e);
+	    throw e;
+	} catch (RuntimeException e) {
+	    logger.warn(
+		    "createComputer(" + name + ", " + introduced + ", " + discontinued + ", " + mannufacturerId + ")",
+		    e);
+	    throw new ControllerException();
+	}
+    }
+
+    public void updateComputer(String id, String name, String introduced, String discontinued, String mannufacturerId) {
+	try {
+	    final UpdateComputerDTO.UpdateComputerDTOBuilder builder = UpdateComputerDTO.builder().name(name);
+	    builder.introduced(MapperUtils.parseDate("introduced", introduced));
+	    builder.discontinued(MapperUtils.parseDate("discontinued", discontinued));
+	    builder.mannufacturerId(MapperUtils.parseId("mannufacturerId", mannufacturerId));
+	    builder.id(MapperUtils.parseId("id", id));
+	    final UpdateComputerDTO dto = builder.build();
+	    updateComputerValidator.check(dto);
+	    computerService.update(updateComputerDTOToComputerMapper.map(dto));
+	} catch (ValidationException e) {
+	    logger.warn("updateComputer(" + id + ", " + name + ", " + introduced + ", " + discontinued + ", "
+		    + mannufacturerId + ")", e);
+	    throw e;
+	} catch (RuntimeException e) {
+	    logger.warn("updateComputer(" + id + ", " + name + ", " + introduced + ", " + discontinued + ", "
+		    + mannufacturerId + ")", e);
+	    throw new ControllerException();
+	}
+    }
+
 }

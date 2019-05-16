@@ -14,8 +14,6 @@ import java.util.stream.Collectors;
 
 import com.excilys.cdb.controller.Controller;
 import com.excilys.cdb.dto.ComputerDTO;
-import com.excilys.cdb.dto.CreateComputerDTO;
-import com.excilys.cdb.dto.UpdateComputerDTO;
 import com.excilys.cdb.exception.ControllerException;
 import com.excilys.cdb.exception.ValidationException;
 
@@ -24,12 +22,13 @@ public class Cli {
     private static final String DATE_FORMAT_ALLOWED = "Les dates doivents être vide ou aaaa-mm-jj";
     private static final String ID_MANNUFACTURER_FORMAT_ALLOWED = "L'id du fabricant peut être vide";
     private static final int PAGE_SIZE = 20;
-    private final Controller controller = Controller.getInstance();
+    private final Controller controller;
     private final Scanner in;
     private final PrintStream out;
     private boolean quit = false;
 
-    public Cli(InputStream in, PrintStream out) {
+    public Cli(Controller controller, InputStream in, PrintStream out) {
+	this.controller = controller;
 	this.in = new Scanner(in);
 	this.out = out;
     }
@@ -43,10 +42,12 @@ public class Cli {
 	final List<String> tokens = readLine(delim);
 	final int numberOfToken = 4;
 	if (tokens.size() == numberOfToken) {
-	    final CreateComputerDTO createComputerDTO = CreateComputerDTO.builder().name(tokens.get(0))
-		    .introduced(tokens.get(1)).discontinued(tokens.get(2)).mannufacturerId(tokens.get(3)).build();
+	    final String name = tokens.get(0);
+	    final String introduced = tokens.get(1);
+	    final String discontinued = tokens.get(2);
+	    final String mannufacturerId = tokens.get(3);
 	    try {
-		controller.createComputer(createComputerDTO);
+		controller.createComputer(name, introduced, discontinued, mannufacturerId);
 	    } catch (ValidationException e) {
 		out.println(e.getMessage());
 	    }
@@ -263,11 +264,13 @@ public class Cli {
 	final List<String> tokens = readLine(delim);
 	final int numberOfToken = 5;
 	if (tokens.size() == numberOfToken) {
-	    final UpdateComputerDTO updateComputerDTO = UpdateComputerDTO.builder().id(tokens.get(0))
-		    .name(tokens.get(1)).introduced(tokens.get(2)).discontinued(tokens.get(3))
-		    .mannufacturerId(tokens.get(4)).build();
+	    final String id = tokens.get(0);
+	    final String name = tokens.get(1);
+	    final String introduced = tokens.get(2);
+	    final String discontinued = tokens.get(3);
+	    final String mannufacturerId = tokens.get(4);
 	    try {
-		controller.updateComputer(updateComputerDTO);
+		controller.updateComputer(id, name, introduced, discontinued, mannufacturerId);
 	    } catch (ValidationException e) {
 		out.println(e.getMessage());
 	    }

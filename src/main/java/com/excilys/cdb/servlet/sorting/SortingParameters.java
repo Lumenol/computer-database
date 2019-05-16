@@ -4,13 +4,6 @@ import java.util.Objects;
 
 public class SortingParameters {
 
-    private static final String PARAMETER_ORDER_BY = "order-by";
-    private static final String PARAMETER_MEANING = "meaning";
-    private static final String PARAMETER_ORDER_BY_UTILS = "order-utils";
-
-    static final SortingParameters DEFAULT_SORTING_PARAMETERS = new SortingParameters(PARAMETER_ORDER_BY,
-	    PARAMETER_MEANING, PARAMETER_ORDER_BY_UTILS);
-
     private final String orderBy;
     private final String meaning;
     private final String orderByUtils;

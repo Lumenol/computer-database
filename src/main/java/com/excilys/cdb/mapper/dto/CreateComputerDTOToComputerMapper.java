@@ -7,29 +7,23 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.dto.CreateComputerDTO;
 import com.excilys.cdb.exception.CompanyServiceException;
 import com.excilys.cdb.exception.MapperException;
-import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Computer.ComputerBuilder;
 import com.excilys.cdb.service.CompanyService;
 
+@Component
 public class CreateComputerDTOToComputerMapper implements Mapper<CreateComputerDTO, Computer> {
 
-    private static CreateComputerDTOToComputerMapper instance;
-    private final CompanyService companyService = CompanyService.getInstance();
+    private final CompanyService companyService;
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private CreateComputerDTOToComputerMapper() {
-    }
-
-    public static synchronized CreateComputerDTOToComputerMapper getInstance() {
-	if (Objects.isNull(instance)) {
-	    instance = new CreateComputerDTOToComputerMapper();
-	}
-	return instance;
+    public CreateComputerDTOToComputerMapper(CompanyService companyService) {
+	this.companyService = companyService;
     }
 
     private boolean isBlank(String s) {
@@ -48,14 +42,12 @@ public class CreateComputerDTOToComputerMapper implements Mapper<CreateComputerD
     public Computer map(CreateComputerDTO dto) {
 	Objects.requireNonNull(dto);
 	try {
-	    ComputerBuilder builder = Computer.builder().name(dto.getName().trim())
-		    .introduced(parseDate(dto.getIntroduced())).discontinued(parseDate(dto.getDiscontinued()));
+	    ComputerBuilder builder = Computer.builder().name(dto.getName().trim()).introduced(dto.getIntroduced())
+		    .discontinued(dto.getDiscontinued());
 
-	    final Long mannufacturerID = parseId(dto.getMannufacturerId());
-	    if (Objects.nonNull(mannufacturerID)) {
-		final Optional<Company> company = companyService.findById(mannufacturerID);
-		builder.manufacturer(company.orElse(null));
-	    }
+	    Optional.ofNullable(dto.getMannufacturerId()).flatMap(companyService::findById)
+		    .ifPresent(builder::manufacturer);
+
 	    return builder.build();
 	} catch (CompanyServiceException | DateTimeParseException | NumberFormatException e) {
 	    logger.warn("map(" + dto + ")", e);
