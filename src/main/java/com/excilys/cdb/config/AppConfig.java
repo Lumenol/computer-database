@@ -1,26 +1,27 @@
 package com.excilys.cdb.config;
 
-import java.util.TimeZone;
-
-import javax.sql.DataSource;
-
+import com.excilys.cdb.controller.cli.Controller;
+import com.excilys.cdb.controller.web.pagination.Pagination;
+import com.excilys.cdb.controller.web.pagination.PaginationParameters;
+import com.excilys.cdb.controller.web.sorting.Sorting;
+import com.excilys.cdb.controller.web.sorting.SortingParameters;
+import com.excilys.cdb.ui.Cli;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.excilys.cdb.controller.Controller;
-import com.excilys.cdb.servlet.pagination.Pagination;
-import com.excilys.cdb.servlet.pagination.PaginationParameters;
-import com.excilys.cdb.servlet.sorting.Sorting;
-import com.excilys.cdb.servlet.sorting.SortingParameters;
-import com.excilys.cdb.ui.Cli;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import javax.sql.DataSource;
+import java.util.TimeZone;
 
 @Configuration
 @ComponentScan(basePackages = "com.excilys.cdb")
+@EnableTransactionManagement
 public class AppConfig {
 
     @Bean(destroyMethod = "close")
@@ -81,7 +82,7 @@ public class AppConfig {
     }
 
     @Bean
-    public DataSourceTransactionManager transactionManager(DataSource dataSource) {
+    public PlatformTransactionManager transactionManager(DataSource dataSource) {
 	return new DataSourceTransactionManager(dataSource);
     }
 
