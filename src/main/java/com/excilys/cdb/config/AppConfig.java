@@ -2,9 +2,12 @@ package com.excilys.cdb.config;
 
 import java.util.TimeZone;
 
+import javax.sql.DataSource;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.excilys.cdb.controller.Controller;
 import com.excilys.cdb.mapper.resultset.ResultSetToCompanyMapper;
@@ -86,6 +89,11 @@ public class AppConfig {
     @Bean
     public Sorting sorting(SortingParameters parameters) {
 	return new Sorting(parameters);
+    }
+
+    @Bean
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+	return new JdbcTemplate(dataSource);
     }
 
 }
