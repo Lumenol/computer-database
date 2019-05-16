@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.exception.ComputerDAOException;
 import com.excilys.cdb.exception.ComputerServiceException;
@@ -14,6 +15,7 @@ import com.excilys.cdb.persistence.dao.ComputerDAO;
 import com.excilys.cdb.persistence.page.Pageable;
 
 @Service
+@Transactional(readOnly = true)
 public class ComputerService {
 
     private final ComputerDAO computerDAO;
@@ -33,6 +35,7 @@ public class ComputerService {
 	}
     }
 
+    @Transactional
     public void create(Computer computer) {
 	try {
 	    computerDAO.create(computer);
@@ -42,6 +45,7 @@ public class ComputerService {
 	}
     }
 
+    @Transactional
     public void delete(long id) {
 	try {
 	    computerDAO.deleteById(id);
@@ -78,6 +82,7 @@ public class ComputerService {
 	}
     }
 
+    @Transactional
     public void update(Computer computer) {
 	try {
 	    computerDAO.update(computer);

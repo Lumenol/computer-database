@@ -8,13 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import com.excilys.cdb.controller.Controller;
-import com.excilys.cdb.mapper.resultset.ResultSetToCompanyMapper;
-import com.excilys.cdb.mapper.resultset.ResultSetToComputerMapper;
-import com.excilys.cdb.mapper.resultset.ResultSetToListMapper;
-import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.servlet.pagination.Pagination;
 import com.excilys.cdb.servlet.pagination.PaginationParameters;
 import com.excilys.cdb.servlet.sorting.Sorting;
@@ -36,18 +32,6 @@ public class AppConfig {
     @Bean
     public HikariConfig hikariConfig() {
 	return new HikariConfig("/datasource.properties");
-    }
-
-    @Bean
-    public ResultSetToListMapper<Company> companyResultSetToListMapper(
-	    ResultSetToCompanyMapper resultSetToCompanyMapper) {
-	return new ResultSetToListMapper<>(resultSetToCompanyMapper);
-    }
-
-    @Bean
-    public ResultSetToListMapper<Computer> computerResultSetToListMapper(
-	    ResultSetToComputerMapper resultSetToComputerMapper) {
-	return new ResultSetToListMapper<>(resultSetToComputerMapper);
     }
 
     @Bean
@@ -94,6 +78,11 @@ public class AppConfig {
     @Bean
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
 	return new JdbcTemplate(dataSource);
+    }
+
+    @Bean
+    public DataSourceTransactionManager transactionManager(DataSource dataSource) {
+	return new DataSourceTransactionManager(dataSource);
     }
 
 }
