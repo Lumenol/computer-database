@@ -1,22 +1,30 @@
 package com.excilys.cdb.persistence.dao;
 
-import com.excilys.cdb.exception.ComputerDAOException;
-import com.excilys.cdb.mapper.resultset.ResultSetMapper;
-import com.excilys.cdb.mapper.resultset.ResultSetToCountMapper;
-import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.persistence.page.OrderBy;
-import com.excilys.cdb.persistence.page.Pageable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
-
-import javax.sql.DataSource;
-import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.excilys.cdb.exception.ComputerDAOException;
+import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.persistence.page.OrderBy;
+import com.excilys.cdb.persistence.page.Page;
+import com.excilys.cdb.persistence.page.Pageable;
+
 @Repository
+@Transactional(readOnly = true)
 public class ComputerDAO {
 
     private static final String SQL_COUNT = "SELECT COUNT(id) AS count FROM computer";
@@ -25,53 +33,75 @@ public class ComputerDAO {
     private static final String SQL_CREATE = "INSERT INTO computer (name, introduced,discontinued,company_id) VALUES (?,?,?,?)";
 
     private static final String SQL_DELETE = "DELETE FROM computer WHERE id=?";
-
+    private static final String SQL_DELETE_ALL_BY_COMPANY_ID = "DELETE FROM computer WHERE company_id=?";
     private static final String SQL_FIND_ALL_PAGED = "SELECT A.id AS id,A.name AS name ,A.introduced AS introduced ,A.discontinued AS discontinued ,B.id AS company_id,B.name AS company_name FROM computer AS A LEFT JOIN company AS B ON A.company_id = B.id ORDER BY %s LIMIT ? OFFSET ?";
     private static final String SQL_SEARCH = "SELECT A.id AS id,A.name AS name ,A.introduced AS introduced ,A.discontinued AS discontinued ,B.id AS company_id,B.name AS company_name FROM computer AS A LEFT JOIN company AS B ON A.company_id = B.id WHERE UPPER(A.name) LIKE ? OR UPPER(B.name) LIKE ? ORDER BY %s LIMIT ? OFFSET ?";
     private static final String SQL_FIND_BY_ID = "SELECT A.id AS id,A.name AS name ,A.introduced AS introduced ,A.discontinued AS discontinued ,B.id AS company_id,B.name AS company_name FROM computer AS A LEFT JOIN company AS B ON A.company_id = B.id WHERE A.id = ? LIMIT 1";
 
     private static final String SQL_UPDATE = "UPDATE computer SET name = ?, introduced = ?,discontinued = ?,company_id = ? WHERE id = ?";
 
-	private final DataSource dataSource;
+    private final JdbcTemplate jdbcTemplate;
+    private final RowMapper<Computer> computeRowMapper;
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private final ResultSetMapper<List<Computer>> resultSetMapper;
 
-	public ComputerDAO(DataSource dataSource, ResultSetMapper<List<Computer>> resultSetMapper,
-					   ResultSetToCountMapper resultSetToCountMapper) {
+    public ComputerDAO(JdbcTemplate jdbcTemplate, RowMapper<Computer> computeRowMapper) {
 	super();
-		this.dataSource = dataSource;
-	this.resultSetMapper = resultSetMapper;
-	this.resultSetToCountMapper = resultSetToCountMapper;
+	this.jdbcTemplate = jdbcTemplate;
+	this.computeRowMapper = computeRowMapper;
     }
-
-    private final ResultSetToCountMapper resultSetToCountMapper;
 
     public long count() {
 	try {
-		return JDBCUtils.find(resultSetToCountMapper, dataSource, SQL_COUNT);
-	} catch (SQLException e) {
+	    return jdbcTemplate.queryForObject(SQL_COUNT, Long.class);
+	} catch (DataAccessException e) {
 	    logger.warn("count()", e);
 	    throw new ComputerDAOException(e);
 	}
     }
 
+    private PreparedStatementCreator preparedStatementCreatorForCreate(SQLComputer computer) {
+	Object[] args = { computer.getName(), computer.getIntroduced(), computer.getDiscontinued(),
+		computer.getManufacturerId() };
+	return con -> {
+	    final PreparedStatement prepareStatement = con.prepareStatement(SQL_CREATE,
+		    Statement.RETURN_GENERATED_KEYS);
+	    for (int i = 0; i < args.length; i++) {
+		prepareStatement.setObject(i + 1, args[i]);
+	    }
+	    return prepareStatement;
+	};
+    }
+
+    @Transactional
     public long create(Computer computer) {
 	final SQLComputer sqlComputer = SQLComputer.from(computer);
 	try {
-		return JDBCUtils.insert(dataSource, SQL_CREATE, sqlComputer.getName(), sqlComputer.getIntroduced(),
-		    sqlComputer.getDiscontinued(), sqlComputer.getManufacturerId());
-	} catch (SQLException e) {
+	    final GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+	    jdbcTemplate.update(preparedStatementCreatorForCreate(sqlComputer), keyHolder);
+	    return (long) keyHolder.getKey();
+	} catch (DataAccessException e) {
 	    logger.warn("create(" + computer + ")", e);
 	    throw new ComputerDAOException(e);
 	}
 
     }
 
+    @Transactional
     public void deleteById(long id) {
 	try {
-		JDBCUtils.delete(dataSource, SQL_DELETE, id);
-	} catch (SQLException e) {
+	    jdbcTemplate.update(SQL_DELETE, id);
+	} catch (DataAccessException e) {
 	    logger.warn("deleteById(" + id + ")", e);
+	    throw new ComputerDAOException(e);
+	}
+    }
+
+    @Transactional
+    public void deleteByMannufacturerId(long id) {
+	try {
+	    jdbcTemplate.update(SQL_DELETE_ALL_BY_COMPANY_ID, id);
+	} catch (DataAccessException e) {
+	    logger.warn("deleteByMannufacturerId(" + id + ")", e);
 	    throw new ComputerDAOException(e);
 	}
     }
@@ -111,11 +141,11 @@ public class ComputerDAO {
 
     public List<Computer> findAll(Pageable pageable) {
 	try {
-	    final long offset = pageable.getPage().getOffset();
-	    final long limit = pageable.getPage().getLimit();
 	    final String query = insertOrderByInQuery(SQL_FIND_ALL_PAGED, pageable.getOrderBy());
-		return JDBCUtils.find(resultSetMapper, dataSource, query, limit, offset);
-	} catch (SQLException e) {
+	    final Page page = pageable.getPage();
+	    final Object[] args = { page.getLimit(), page.getOffset() };
+	    return jdbcTemplate.query(query, args, computeRowMapper);
+	} catch (DataAccessException e) {
 	    logger.warn("findAll(" + pageable + ")", e);
 	    throw new ComputerDAOException(e);
 	}
@@ -123,20 +153,24 @@ public class ComputerDAO {
 
     public Optional<Computer> findById(long id) {
 	try {
-		List<Computer> computers = JDBCUtils.find(resultSetMapper, dataSource, SQL_FIND_BY_ID, id);
-	    return DAOUtils.haveOneOrEmpty(computers);
-	} catch (SQLException e) {
+	    final Object[] args = { id };
+	    return Optional.ofNullable(jdbcTemplate.queryForObject(SQL_FIND_BY_ID, args, computeRowMapper));
+	} catch (EmptyResultDataAccessException e) {
+	    return Optional.empty();
+	} catch (DataAccessException e) {
 	    logger.warn("findById(" + id + ")", e);
 	    throw new ComputerDAOException(e);
 	}
     }
 
+    @Transactional
     public void update(Computer computer) {
 	final SQLComputer sqlComputer = SQLComputer.from(computer);
 	try {
-		JDBCUtils.update(dataSource, SQL_UPDATE, sqlComputer.getName(), sqlComputer.getIntroduced(),
-		    sqlComputer.getDiscontinued(), sqlComputer.getManufacturerId(), sqlComputer.getId());
-	} catch (SQLException e) {
+	    final Object[] args = { sqlComputer.getName(), sqlComputer.getIntroduced(), sqlComputer.getDiscontinued(),
+		    sqlComputer.getManufacturerId(), sqlComputer.getId() };
+	    jdbcTemplate.update(SQL_UPDATE, args);
+	} catch (DataAccessException e) {
 	    logger.warn("update(" + computer + ")", e);
 	    throw new ComputerDAOException(e);
 	}
@@ -147,8 +181,9 @@ public class ComputerDAO {
 	Objects.requireNonNull(search);
 	try {
 	    final String like = ("%" + search + "%").toUpperCase();
-		return JDBCUtils.find(resultSetToCountMapper, dataSource, SQL_COUNT_SEARCH, like, like);
-	} catch (SQLException e) {
+	    final Object[] args = { like, like };
+	    return jdbcTemplate.queryForObject(SQL_COUNT_SEARCH, args, Long.class);
+	} catch (DataAccessException e) {
 	    logger.warn("count()", e);
 	    throw new ComputerDAOException(e);
 	}
@@ -157,14 +192,15 @@ public class ComputerDAO {
     public List<Computer> search(Pageable pageable, String search) {
 	Objects.requireNonNull(search);
 	try {
-	    final long offset = pageable.getPage().getOffset();
-	    final long limit = pageable.getPage().getLimit();
+	    final Page page = pageable.getPage();
 	    final String like = ("%" + search + "%").toUpperCase();
 	    final String query = insertOrderByInQuery(SQL_SEARCH, pageable.getOrderBy());
-		return JDBCUtils.find(resultSetMapper, dataSource, query, like, like, limit, offset);
-	} catch (SQLException e) {
+	    final Object[] args = { like, like, page.getLimit(), page.getOffset() };
+	    return jdbcTemplate.query(query, args, computeRowMapper);
+	} catch (DataAccessException e) {
 	    logger.warn("search(" + pageable + "," + search + ")", e);
 	    throw new ComputerDAOException(e);
 	}
     }
+
 }
