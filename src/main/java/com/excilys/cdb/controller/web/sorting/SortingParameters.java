@@ -1,4 +1,4 @@
-package com.excilys.cdb.servlet.sorting;
+package com.excilys.cdb.controller.web.sorting;
 
 import java.util.Objects;
 
