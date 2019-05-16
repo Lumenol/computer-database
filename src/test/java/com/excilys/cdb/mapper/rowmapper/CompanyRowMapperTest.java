@@ -1,9 +1,10 @@
-package com.excilys.cdb.mapper.resultset;
+package com.excilys.cdb.mapper.rowmapper;
 
-import com.excilys.cdb.config.AppConfig;
-import com.excilys.cdb.model.Company;
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
+import static org.junit.Assert.assertEquals;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -15,14 +16,15 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.rules.SpringClassRule;
 import org.springframework.test.context.junit4.rules.SpringMethodRule;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import com.excilys.cdb.config.AppConfig;
+import com.excilys.cdb.model.Company;
 
-import static org.junit.Assert.assertEquals;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 
 @RunWith(JUnitParamsRunner.class)
 @ContextConfiguration(classes = AppConfig.class)
-public class ResultSetToCompanyMapperTest {
+public class CompanyRowMapperTest {
 
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_NAME = "name";
@@ -33,7 +35,7 @@ public class ResultSetToCompanyMapperTest {
     public final SpringMethodRule springMethodRule = new SpringMethodRule();
 
     @Autowired
-    private ResultSetToCompanyMapper resultSetToCompanyMapper;
+    private CompanyRowMapper companyRowMapper;
 
     private ResultSet mockResultSet;
 
@@ -52,7 +54,7 @@ public class ResultSetToCompanyMapperTest {
 	Mockito.when(mockResultSet.getLong(COLUMN_ID)).thenReturn(id);
 	Mockito.when(mockResultSet.getString(COLUMN_NAME)).thenReturn(name);
 
-	Company company = resultSetToCompanyMapper.map(mockResultSet);
+	Company company = companyRowMapper.mapRow(mockResultSet, 0);
 	Company expectedCompany = Company.builder().id(id).name(name).build();
 
 	assertEquals(expectedCompany, company);
