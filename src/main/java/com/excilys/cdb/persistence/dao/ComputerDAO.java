@@ -9,7 +9,6 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -41,13 +40,13 @@ public class ComputerDAO {
     private static final String SQL_UPDATE = "UPDATE computer SET name = ?, introduced = ?,discontinued = ?,company_id = ? WHERE id = ?";
 
     private final JdbcTemplate jdbcTemplate;
-    private final RowMapper<Computer> computeRowMapper;
+    private final RowMapper<Computer> computerRowMapper;
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public ComputerDAO(JdbcTemplate jdbcTemplate, RowMapper<Computer> computeRowMapper) {
 	super();
 	this.jdbcTemplate = jdbcTemplate;
-	this.computeRowMapper = computeRowMapper;
+	this.computerRowMapper = computeRowMapper;
     }
 
     public long count() {
@@ -144,7 +143,7 @@ public class ComputerDAO {
 	    final String query = insertOrderByInQuery(SQL_FIND_ALL_PAGED, pageable.getOrderBy());
 	    final Page page = pageable.getPage();
 	    final Object[] args = { page.getLimit(), page.getOffset() };
-	    return jdbcTemplate.query(query, args, computeRowMapper);
+	    return jdbcTemplate.query(query, args, computerRowMapper);
 	} catch (DataAccessException e) {
 	    logger.warn("findAll(" + pageable + ")", e);
 	    throw new ComputerDAOException(e);
@@ -154,9 +153,8 @@ public class ComputerDAO {
     public Optional<Computer> findById(long id) {
 	try {
 	    final Object[] args = { id };
-	    return Optional.ofNullable(jdbcTemplate.queryForObject(SQL_FIND_BY_ID, args, computeRowMapper));
-	} catch (EmptyResultDataAccessException e) {
-	    return Optional.empty();
+	    return Optional.ofNullable(jdbcTemplate.query(SQL_FIND_BY_ID, args, computerRowMapper))
+		    .filter(list -> !list.isEmpty()).map(list -> list.get(0));
 	} catch (DataAccessException e) {
 	    logger.warn("findById(" + id + ")", e);
 	    throw new ComputerDAOException(e);
@@ -196,7 +194,7 @@ public class ComputerDAO {
 	    final String like = ("%" + search + "%").toUpperCase();
 	    final String query = insertOrderByInQuery(SQL_SEARCH, pageable.getOrderBy());
 	    final Object[] args = { like, like, page.getLimit(), page.getOffset() };
-	    return jdbcTemplate.query(query, args, computeRowMapper);
+	    return jdbcTemplate.query(query, args, computerRowMapper);
 	} catch (DataAccessException e) {
 	    logger.warn("search(" + pageable + "," + search + ")", e);
 	    throw new ComputerDAOException(e);

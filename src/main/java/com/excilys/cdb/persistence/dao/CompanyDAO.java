@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -58,9 +57,8 @@ public class CompanyDAO {
     public Optional<Company> findById(long id) {
 	try {
 	    final Object[] args = { id };
-	    return Optional.ofNullable(jdbcTemplate.queryForObject(SQL_FIND_BY_ID, args, companyRowMapper));
-	} catch (EmptyResultDataAccessException e) {
-	    return Optional.empty();
+	    return Optional.ofNullable(jdbcTemplate.query(SQL_FIND_BY_ID, args, companyRowMapper))
+		    .filter(list -> !list.isEmpty()).map(list -> list.get(0));
 	} catch (DataAccessException e) {
 	    logger.warn("findById(" + id + ")", e);
 	    throw new CompanyDAOException(e);
