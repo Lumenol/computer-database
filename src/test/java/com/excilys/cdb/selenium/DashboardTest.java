@@ -1,10 +1,14 @@
 package com.excilys.cdb.selenium;
 
-import com.excilys.cdb.config.AppConfig;
-import com.excilys.cdb.database.ITDatabase;
-import com.excilys.cdb.dto.ComputerDTO;
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -14,13 +18,17 @@ import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
+import com.excilys.cdb.config.AppConfig;
+import com.excilys.cdb.database.ITDatabase;
+import com.excilys.cdb.dto.ComputerDTO;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = AppConfig.class)
+@WebAppConfiguration
 public class DashboardTest {
 
     public static final String NEXT = "»";
@@ -57,8 +65,8 @@ public class DashboardTest {
 
     private WebDriver driver;
 
-	@Autowired
-	private ITDatabase database;
+    @Autowired
+    private ITDatabase database;
 
     @BeforeClass
     public static void setUpClass() {
