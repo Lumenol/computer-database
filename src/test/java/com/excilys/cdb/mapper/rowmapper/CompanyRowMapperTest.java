@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.rules.SpringClassRule;
 import org.springframework.test.context.junit4.rules.SpringMethodRule;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.excilys.cdb.config.AppConfig;
 import com.excilys.cdb.model.Company;
@@ -24,6 +25,7 @@ import junitparams.Parameters;
 
 @RunWith(JUnitParamsRunner.class)
 @ContextConfiguration(classes = AppConfig.class)
+@WebAppConfiguration
 public class CompanyRowMapperTest {
 
     private static final String COLUMN_ID = "id";
