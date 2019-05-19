@@ -56,26 +56,21 @@ public class Pagination {
         }
     }
 
-    /**
-     * si la valeur est positive elle donne la page qui doit etre affichée
-     *
-     * @param page
-     * @param numberOfEntities
-     * @return
-     */
-    public long redirectIfPageOutOfRange(Page page, double numberOfEntities) {
+    public Optional<Page> redirectIfPageOutOfRange(Page page, double numberOfEntities) {
         long pageIndex = page.getPage();
         long pageSize = page.getLimit();
         long indexLastPage = indexLastPage(numberOfEntities, pageSize);
+        final Page.PageBuilder builder = Page.builder().limit(page.getLimit());
         if (pageIndex < 1) {
-            return 1;
+            return Optional.of(builder.page(1).build());
         }
         if (pageIndex > 1) {
             if (pageIndex > indexLastPage) {
-                return Math.max(indexLastPage, 1);
+                final long max = Math.max(indexLastPage, 1);
+                return Optional.of(builder.page(max).build());
             }
         }
-        return -1;
+        return Optional.empty();
     }
 
     private void setPageSize(ModelAndView modelAndView, long pageSize) {
