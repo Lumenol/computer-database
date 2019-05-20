@@ -1,16 +1,22 @@
 package com.excilys.cdb.ui;
 
-import com.excilys.cdb.controller.cli.Controller;
-import com.excilys.cdb.dto.ComputerDTO;
-import com.excilys.cdb.exception.ControllerException;
-import com.excilys.cdb.exception.ValidationException;
-
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Scanner;
 import java.util.function.LongConsumer;
 import java.util.function.LongSupplier;
 import java.util.stream.Collectors;
+
+import org.springframework.validation.BindException;
+
+import com.excilys.cdb.controller.cli.Controller;
+import com.excilys.cdb.dto.ComputerDTO;
+import com.excilys.cdb.exception.ControllerException;
 
 public class Cli {
 
@@ -43,7 +49,7 @@ public class Cli {
 	    final String mannufacturerId = tokens.get(3);
 	    try {
 		controller.createComputer(name, introduced, discontinued, mannufacturerId);
-	    } catch (ValidationException e) {
+	    } catch (BindException e) {
 		out.println(e.getMessage());
 	    }
 	} else {
@@ -266,7 +272,7 @@ public class Cli {
 	    final String mannufacturerId = tokens.get(4);
 	    try {
 		controller.updateComputer(id, name, introduced, discontinued, mannufacturerId);
-	    } catch (ValidationException e) {
+	    } catch (BindException e) {
 		out.println(e.getMessage());
 	    }
 	} else {

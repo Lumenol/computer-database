@@ -1,21 +1,10 @@
 package com.excilys.cdb.mapper;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.Objects;
-
-import com.excilys.cdb.exception.ValidationException;
 
 public final class MapperUtils {
     private MapperUtils() {
-    }
-
-    public static LocalDate parseDate(String field, String date) {
-	try {
-	    return parseDate(date);
-	} catch (DateTimeParseException e) {
-	    throw new ValidationException(field, "La date est mal écrit.");
-	}
     }
 
     public static LocalDate parseDate(String date) {
@@ -26,19 +15,11 @@ public final class MapperUtils {
 	}
     }
 
-    public static Long parseId(String field, String l) {
-	try {
-	    return parseLong(l);
-	} catch (DateTimeParseException e) {
-	    throw new ValidationException(field, "L'id est mal écrit.");
-	}
-    }
-
-    public static Long parseLong(String l) {
-	if (isBlank(l)) {
+    public static Long parseId(String id) {
+	if (isBlank(id)) {
 	    return null;
 	} else {
-	    return Long.valueOf(l);
+	    return Long.valueOf(id);
 	}
     }
 
