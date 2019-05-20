@@ -18,7 +18,6 @@ import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.excilys.cdb.config.AppConfig;
 import com.excilys.cdb.database.ITDatabase;
@@ -28,7 +27,6 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = AppConfig.class)
-@WebAppConfiguration
 public class DashboardTest {
 
     public static final String NEXT = "»";

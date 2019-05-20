@@ -1,5 +1,6 @@
 package com.excilys.cdb.config;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -12,6 +13,7 @@ import com.excilys.cdb.converter.StringToOrderByMeaningConverter;
 
 @Configuration
 @EnableWebMvc
+@ComponentScan("com.excilys.cdb.controller.web")
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Override
