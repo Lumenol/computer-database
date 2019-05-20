@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.excilys.cdb.controller.cli.Controller;
 import com.excilys.cdb.controller.web.pagination.Pagination;
@@ -22,7 +23,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@ComponentScan(basePackages = "com.excilys.cdb")
+@ComponentScan(basePackages = "com.excilys.cdb", excludeFilters = @ComponentScan.Filter(classes = EnableWebMvc.class))
 @EnableTransactionManagement
 public class AppConfig {
 
