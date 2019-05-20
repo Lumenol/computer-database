@@ -77,7 +77,7 @@ public class ComputerDAO {
 	try {
 	    final GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 	    jdbcTemplate.update(preparedStatementCreatorForCreate(sqlComputer), keyHolder);
-	    return (long) keyHolder.getKey();
+	    return keyHolder.getKey().longValue();
 	} catch (DataAccessException e) {
 	    logger.warn("create(" + computer + ")", e);
 	    throw new ComputerDAOException(e);
