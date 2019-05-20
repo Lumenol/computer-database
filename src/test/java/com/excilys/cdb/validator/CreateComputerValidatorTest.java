@@ -1,6 +1,6 @@
 package com.excilys.cdb.validator;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
@@ -13,11 +13,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.validation.BindException;
 
 import com.excilys.cdb.config.AppConfig;
 import com.excilys.cdb.database.UTDatabase;
 import com.excilys.cdb.dto.CreateComputerDTO;
-import com.excilys.cdb.exception.ValidationException;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = AppConfig.class)
@@ -37,7 +37,9 @@ public class CreateComputerValidatorTest {
     public void validWithoutDateAndMannufacturerId() {
 	final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
 	createComputerDTO.setName("Un nom correct");
-	createComputerValidator.check(createComputerDTO);
+	final BindException errors = new BindException(createComputerDTO, "dto");
+	createComputerValidator.validate(createComputerDTO, errors);
+	assertFalse(errors.hasErrors());
     }
 
     @Test
@@ -45,7 +47,9 @@ public class CreateComputerValidatorTest {
 	final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
 	createComputerDTO.setName("Un nom correct");
 	createComputerDTO.setMannufacturerId(5L);
-	createComputerValidator.check(createComputerDTO);
+	final BindException errors = new BindException(createComputerDTO, "dto");
+	createComputerValidator.validate(createComputerDTO, errors);
+	assertFalse(errors.hasErrors());
     }
 
     @Test
@@ -55,7 +59,9 @@ public class CreateComputerValidatorTest {
 	createComputerDTO.setMannufacturerId(5L);
 	createComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4));
 	createComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20));
-	createComputerValidator.check(createComputerDTO);
+	final BindException errors = new BindException(createComputerDTO, "dto");
+	createComputerValidator.validate(createComputerDTO, errors);
+	assertFalse(errors.hasErrors());
     }
 
     @Test
@@ -65,11 +71,10 @@ public class CreateComputerValidatorTest {
 	createComputerDTO.setMannufacturerId(5L);
 	createComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4));
 	createComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20));
-	try {
-	    createComputerValidator.check(createComputerDTO);
+	final BindException errors = new BindException(createComputerDTO, "dto");
+	createComputerValidator.validate(createComputerDTO, errors);
+	if (!errors.hasFieldErrors("name")) {
 	    fail("La validation a échoué");
-	} catch (ValidationException e) {
-	    assertEquals("name", e.getField());
 	}
     }
 
@@ -80,11 +85,10 @@ public class CreateComputerValidatorTest {
 	createComputerDTO.setMannufacturerId(5300L);
 	createComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4));
 	createComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20));
-	try {
-	    createComputerValidator.check(createComputerDTO);
+	final BindException errors = new BindException(createComputerDTO, "dto");
+	createComputerValidator.validate(createComputerDTO, errors);
+	if (!errors.hasFieldErrors("mannufacturerId")) {
 	    fail("La validation a échoué");
-	} catch (ValidationException e) {
-	    assertEquals("mannufacturerId", e.getField());
 	}
     }
 
@@ -95,11 +99,10 @@ public class CreateComputerValidatorTest {
 	createComputerDTO.setMannufacturerId(5L);
 	createComputerDTO.setIntroduced(LocalDate.of(2016, 2, 4));
 	createComputerDTO.setDiscontinued(LocalDate.of(2012, 10, 20));
-	try {
-	    createComputerValidator.check(createComputerDTO);
+	final BindException errors = new BindException(createComputerDTO, "dto");
+	createComputerValidator.validate(createComputerDTO, errors);
+	if (!errors.hasFieldErrors("discontinued")) {
 	    fail("La validation a échoué");
-	} catch (ValidationException e) {
-	    assertEquals("discontinued", e.getField());
 	}
     }
 

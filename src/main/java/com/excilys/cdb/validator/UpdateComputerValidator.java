@@ -3,13 +3,14 @@ package com.excilys.cdb.validator;
 import java.util.Objects;
 
 import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
 import com.excilys.cdb.dto.UpdateComputerDTO;
-import com.excilys.cdb.exception.ValidationException;
 import com.excilys.cdb.service.ComputerService;
 
 @Component
-public class UpdateComputerValidator implements Validator<UpdateComputerDTO> {
+public class UpdateComputerValidator implements Validator {
     private final ComputerValidatorUtils computerValidatorUtils;
     private final ComputerService computerService;
 
@@ -19,23 +20,29 @@ public class UpdateComputerValidator implements Validator<UpdateComputerDTO> {
 	this.computerService = computerService;
     }
 
-    private void checkId(Long id) {
+    private void checkId(Long id, Errors errors) {
 	if (Objects.isNull(id)) {
-	    throw new ValidationException("id", "L'id ne peut pas être nul.");
+	    errors.rejectValue("id", "validator.id.null", "L'id ne peut pas être nul.");
 	} else if (!computerService.exist(id)) {
-	    throw new ValidationException("id", "L'id n'exist pas.");
+	    errors.rejectValue("id", "validator.id.notFound", "L'id n'exist pas.");
 	}
     }
 
     @Override
-    public void check(UpdateComputerDTO toValidate) {
-	Objects.requireNonNull(toValidate);
-	computerValidatorUtils.checkName(toValidate.getName());
-	computerValidatorUtils.checkIntroduced(toValidate.getIntroduced());
-	computerValidatorUtils.checkDiscontinued(toValidate.getDiscontinued());
+    public boolean supports(Class<?> clazz) {
+	return UpdateComputerDTO.class.equals(clazz);
+    }
+
+    @Override
+    public void validate(Object target, Errors errors) {
+	Objects.requireNonNull(target);
+	UpdateComputerDTO toValidate = (UpdateComputerDTO) target;
+	computerValidatorUtils.checkName(toValidate.getName(), errors);
+	computerValidatorUtils.checkIntroduced(toValidate.getIntroduced(), errors);
+	computerValidatorUtils.checkDiscontinued(toValidate.getDiscontinued(), errors);
 	computerValidatorUtils.checkIntroducedIsBeforeDiscontinued(toValidate.getIntroduced(),
-		toValidate.getDiscontinued());
-	computerValidatorUtils.checkMannufacturerId(toValidate.getMannufacturerId());
-	checkId(toValidate.getId());
+		toValidate.getDiscontinued(), errors);
+	computerValidatorUtils.checkMannufacturerId(toValidate.getMannufacturerId(), errors);
+	checkId(toValidate.getId(), errors);
     }
 }

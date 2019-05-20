@@ -8,6 +8,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.excilys.cdb.converter.StringToLocalDateConverter;
 import com.excilys.cdb.converter.StringToOrderByFieldConverter;
 import com.excilys.cdb.converter.StringToOrderByMeaningConverter;
 
@@ -20,6 +21,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public void addFormatters(FormatterRegistry registry) {
 	registry.addConverter(new StringToOrderByFieldConverter());
 	registry.addConverter(new StringToOrderByMeaningConverter());
+	registry.addConverter(new StringToLocalDateConverter());
     }
 
     @Override

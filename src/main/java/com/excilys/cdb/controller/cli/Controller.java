@@ -1,12 +1,21 @@
 package com.excilys.cdb.controller.cli;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.BindException;
+import org.springframework.validation.ValidationUtils;
+
 import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.dto.CreateComputerDTO;
 import com.excilys.cdb.dto.CreateComputerDTO.CreateComputerDTOBuilder;
 import com.excilys.cdb.dto.UpdateComputerDTO;
 import com.excilys.cdb.exception.ControllerException;
-import com.excilys.cdb.exception.ValidationException;
 import com.excilys.cdb.mapper.MapperUtils;
 import com.excilys.cdb.mapper.dto.CreateComputerDTOToComputerMapper;
 import com.excilys.cdb.mapper.dto.Mapper;
@@ -20,13 +29,6 @@ import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.validator.CreateComputerValidator;
 import com.excilys.cdb.validator.UpdateComputerValidator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Component
 public class Controller {
@@ -128,20 +130,20 @@ public class Controller {
 	}
     }
 
-    public void createComputer(String name, String introduced, String discontinued, String mannufacturerId) {
+    public void createComputer(String name, String introduced, String discontinued, String mannufacturerId)
+	    throws BindException {
 	try {
 	    final CreateComputerDTOBuilder builder = CreateComputerDTO.builder().name(name);
-	    builder.introduced(MapperUtils.parseDate("introduced", introduced));
-	    builder.discontinued(MapperUtils.parseDate("discontinued", discontinued));
-	    builder.mannufacturerId(MapperUtils.parseId("mannufacturerId", mannufacturerId));
+	    builder.introduced(MapperUtils.parseDate(introduced));
+	    builder.discontinued(MapperUtils.parseDate(discontinued));
+	    builder.mannufacturerId(MapperUtils.parseId(mannufacturerId));
 	    final CreateComputerDTO dto = builder.build();
-	    createComputerValidator.check(dto);
+	    final BindException errors = new BindException(dto, "CreateComputerDTO");
+	    ValidationUtils.invokeValidator(createComputerValidator, dto, errors);
+	    if (errors.hasErrors()) {
+		throw errors;
+	    }
 	    computerService.create(createComputerDTOToComputerMapper.map(dto));
-	} catch (ValidationException e) {
-	    logger.warn(
-		    "createComputer(" + name + ", " + introduced + ", " + discontinued + ", " + mannufacturerId + ")",
-		    e);
-	    throw e;
 	} catch (RuntimeException e) {
 	    logger.warn(
 		    "createComputer(" + name + ", " + introduced + ", " + discontinued + ", " + mannufacturerId + ")",
@@ -150,20 +152,21 @@ public class Controller {
 	}
     }
 
-    public void updateComputer(String id, String name, String introduced, String discontinued, String mannufacturerId) {
+    public void updateComputer(String id, String name, String introduced, String discontinued, String mannufacturerId)
+	    throws BindException {
 	try {
 	    final UpdateComputerDTO.UpdateComputerDTOBuilder builder = UpdateComputerDTO.builder().name(name);
-	    builder.introduced(MapperUtils.parseDate("introduced", introduced));
-	    builder.discontinued(MapperUtils.parseDate("discontinued", discontinued));
-	    builder.mannufacturerId(MapperUtils.parseId("mannufacturerId", mannufacturerId));
-	    builder.id(MapperUtils.parseId("id", id));
+	    builder.introduced(MapperUtils.parseDate(introduced));
+	    builder.discontinued(MapperUtils.parseDate(discontinued));
+	    builder.mannufacturerId(MapperUtils.parseId(mannufacturerId));
+	    builder.id(MapperUtils.parseId(id));
 	    final UpdateComputerDTO dto = builder.build();
-	    updateComputerValidator.check(dto);
+	    final BindException errors = new BindException(dto, "UpdateComputerDTO");
+	    ValidationUtils.invokeValidator(updateComputerValidator, dto, errors);
+	    if (errors.hasErrors()) {
+		throw errors;
+	    }
 	    computerService.update(updateComputerDTOToComputerMapper.map(dto));
-	} catch (ValidationException e) {
-	    logger.warn("updateComputer(" + id + ", " + name + ", " + introduced + ", " + discontinued + ", "
-		    + mannufacturerId + ")", e);
-	    throw e;
 	} catch (RuntimeException e) {
 	    logger.warn("updateComputer(" + id + ", " + name + ", " + introduced + ", " + discontinued + ", "
 		    + mannufacturerId + ")", e);

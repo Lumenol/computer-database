@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
 
-import com.excilys.cdb.exception.ValidationException;
 import com.excilys.cdb.service.CompanyService;
 
 @Component
@@ -22,40 +22,40 @@ final class ComputerValidatorUtils {
 	return Objects.isNull(s) || s.trim().isEmpty();
     }
 
-    void checkName(String name) {
+    void checkName(String name, Errors errors) {
 	if (isBlank(name)) {
-	    throw new ValidationException("name", "Le nom ne peux pas être vide.");
+	    errors.rejectValue("name", "validation.name.blank", "Le nom ne peux pas être vide.");
 	}
     }
 
-    void checkIntroducedIsBeforeDiscontinued(LocalDate introduced, LocalDate discontinued) {
+    void checkIntroducedIsBeforeDiscontinued(LocalDate introduced, LocalDate discontinued, Errors errors) {
 	if (Objects.nonNull(introduced) && Objects.nonNull(discontinued) && discontinued.isBefore(introduced)) {
-	    throw new ValidationException("discontinued",
+	    errors.rejectValue("discontinued", "validator.discontinued.preceding",
 		    "La date de retrait ne peux pas être avant la date d'introduction.");
 	}
     }
 
-    void checkIntroduced(LocalDate date) {
-	checkDate("introduced", date);
+    void checkIntroduced(LocalDate date, Errors errors) {
+	checkDate("introduced", date, errors);
     }
 
-    void checkDiscontinued(LocalDate date) {
-	checkDate("discontinued", date);
+    void checkDiscontinued(LocalDate date, Errors errors) {
+	checkDate("discontinued", date, errors);
     }
 
-    private void checkDate(String field, LocalDate date) {
+    private void checkDate(String field, LocalDate date, Errors errors) {
 	if (Objects.nonNull(date)) {
 	    if (date.isBefore(_1970_01_01)) {
-		throw new ValidationException(field, "La date ne peux pas être avant le 01-01-1970.");
+		errors.rejectValue(field, "validator.date.before1970", "La date ne peux pas être avant le 01-01-1970.");
 	    } else if (date.isAfter(_2038_01_19)) {
-		throw new ValidationException(field, "La date ne peux pas être après le 19-01-2038.");
+		errors.rejectValue(field, "validator.date.after2038", "La date ne peux pas être après le 19-01-2038.");
 	    }
 	}
     }
 
-    void checkMannufacturerId(Long id) {
+    void checkMannufacturerId(Long id, Errors errors) {
 	if (Objects.nonNull(id) && !companyService.exist(id)) {
-	    throw new ValidationException("mannufacturerId", "L'id du fabriquant n'existe pas.");
+	    errors.rejectValue("mannufacturerId", "validator.mannufacturerId", "L'id du fabriquant n'existe pas.");
 	}
     }
 }
