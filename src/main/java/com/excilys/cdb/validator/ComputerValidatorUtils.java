@@ -24,14 +24,13 @@ final class ComputerValidatorUtils {
 
     void checkName(String name, Errors errors) {
 	if (isBlank(name)) {
-	    errors.rejectValue("name", "validation.name.blank", "Le nom ne peux pas être vide.");
+	    errors.rejectValue("name", "validation.name.blank");
 	}
     }
 
     void checkIntroducedIsBeforeDiscontinued(LocalDate introduced, LocalDate discontinued, Errors errors) {
 	if (Objects.nonNull(introduced) && Objects.nonNull(discontinued) && discontinued.isBefore(introduced)) {
-	    errors.rejectValue("discontinued", "validator.discontinued.preceding",
-		    "La date de retrait ne peux pas être avant la date d'introduction.");
+	    errors.rejectValue("discontinued", "validator.discontinued.preceding");
 	}
     }
 
@@ -46,16 +45,16 @@ final class ComputerValidatorUtils {
     private void checkDate(String field, LocalDate date, Errors errors) {
 	if (Objects.nonNull(date)) {
 	    if (date.isBefore(_1970_01_01)) {
-		errors.rejectValue(field, "validator.date.before1970", "La date ne peux pas être avant le 01-01-1970.");
+		errors.rejectValue(field, "validator.date.before1970");
 	    } else if (date.isAfter(_2038_01_19)) {
-		errors.rejectValue(field, "validator.date.after2038", "La date ne peux pas être après le 19-01-2038.");
+		errors.rejectValue(field, "validator.date.after2038");
 	    }
 	}
     }
 
     void checkMannufacturerId(Long id, Errors errors) {
 	if (Objects.nonNull(id) && !companyService.exist(id)) {
-	    errors.rejectValue("mannufacturerId", "validator.mannufacturerId", "L'id du fabriquant n'existe pas.");
+	    errors.rejectValue("mannufacturerId", "validator.mannufacturerId.notFound");
 	}
     }
 }
