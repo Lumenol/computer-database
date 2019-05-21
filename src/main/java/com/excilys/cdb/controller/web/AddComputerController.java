@@ -69,7 +69,7 @@ public class AddComputerController {
     }
 
     @PostMapping
-    public ModelAndView addComputer(@Validated @ModelAttribute(PARAMETER_COMPUTER) CreateComputerDTO computerDTO,
+    public ModelAndView add(@Validated @ModelAttribute(PARAMETER_COMPUTER) CreateComputerDTO computerDTO,
 	    BindingResult result) {
 	final ModelAndView modelAndView = new ModelAndView(ADD_COMPUTER_JSP);
 	if (!result.hasErrors()) {

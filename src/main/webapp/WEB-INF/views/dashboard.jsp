@@ -106,13 +106,11 @@
 				<!-- Browse attribute computers -->
 				<tbody id="results">
 					<c:forEach var="computer" items="${computers}">
-						<c:url var="edit" value="/computers/edit">
-							<c:param name="id" value="${computer.id}" />
-						</c:url>
+						<c:url var="edit" value="/computers/edit/${computer.id}"/>
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${computer.id}"></td>
-							<td><a href="${edit}" onclick="">${computer.name}</a></td>
+							<td><a href="${edit}">${computer.name}</a></td>
 							<td>${computer.introduced}</td>
 							<td>${computer.discontinued}</td>
 							<td>${computer.mannufacturer}</td>
