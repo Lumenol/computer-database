@@ -4,14 +4,15 @@ import java.util.TimeZone;
 
 import javax.sql.DataSource;
 
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.excilys.cdb.controller.cli.Controller;
 import com.excilys.cdb.controller.web.pagination.Pagination;
@@ -23,7 +24,8 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@ComponentScan(basePackages = "com.excilys.cdb", excludeFilters = @ComponentScan.Filter(classes = EnableWebMvc.class))
+@ComponentScan(basePackages = { "com.excilys.cdb.controller.cli", "com.excilys.cdb.mapper",
+	"com.excilys.cdb.persistence.dao", "com.excilys.cdb.service", "com.excilys.cdb.validator" })
 @EnableTransactionManagement
 public class AppConfig {
 
@@ -85,6 +87,13 @@ public class AppConfig {
     @Bean
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
 	return new DataSourceTransactionManager(dataSource);
+    }
+
+    @Bean
+    public MessageSource messageSource() {
+	final ResourceBundleMessageSource bundleMessage = new ResourceBundleMessageSource();
+	bundleMessage.addBasenames("i18n/messages");
+	return bundleMessage;
     }
 
 }

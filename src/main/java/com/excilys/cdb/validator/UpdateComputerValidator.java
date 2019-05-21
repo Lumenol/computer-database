@@ -22,9 +22,9 @@ public class UpdateComputerValidator implements Validator {
 
     private void checkId(Long id, Errors errors) {
 	if (Objects.isNull(id)) {
-	    errors.rejectValue("id", "validator.id.null", "L'id ne peut pas être nul.");
+	    errors.rejectValue("id", "validator.id.null");
 	} else if (!computerService.exist(id)) {
-	    errors.rejectValue("id", "validator.id.notFound", "L'id n'exist pas.");
+	    errors.rejectValue("id", "validator.id.notFound");
 	}
     }
 

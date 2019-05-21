@@ -33,7 +33,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
+			<artifactId>spring-webmvc</artifactId>
 			<version>${spring-framework.version}</version>
 		</dependency>
 		<dependency>
@@ -41,7 +41,6 @@
 			<artifactId>spring-jdbc</artifactId>
 			<version>${spring-framework.version}</version>
 		</dependency>
-
 
 		<dependency>
 			<groupId>mysql</groupId>
