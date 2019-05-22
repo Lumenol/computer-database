@@ -10,6 +10,7 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
@@ -17,11 +18,11 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.theme.ThemeChangeInterceptor;
 
 import com.excilys.cdb.converter.LocalDateToStringConverter;
-import com.excilys.cdb.converter.OrderByFieldToStringConverter;
 import com.excilys.cdb.converter.OrderByDirectionToStringConverter;
+import com.excilys.cdb.converter.OrderByFieldToStringConverter;
 import com.excilys.cdb.converter.StringToLocalDateConverter;
-import com.excilys.cdb.converter.StringToOrderByFieldConverter;
 import com.excilys.cdb.converter.StringToOrderByDirectionConverter;
+import com.excilys.cdb.converter.StringToOrderByFieldConverter;
 
 @Configuration
 @EnableWebMvc
@@ -57,6 +58,11 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+	registry.addViewController("/").setViewName("redirect:/dashboard");
+    }
+
+    @Override
     public void addInterceptors(InterceptorRegistry registry) {
 	ThemeChangeInterceptor themeChangeInterceptor = new ThemeChangeInterceptor();
 	themeChangeInterceptor.setParamName("theme");
@@ -66,5 +72,4 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 	localeChangeInterceptor.setParamName("lang");
 	registry.addInterceptor(localeChangeInterceptor);
     }
-
 }

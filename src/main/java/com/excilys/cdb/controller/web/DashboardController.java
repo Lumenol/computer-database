@@ -28,7 +28,7 @@ import com.excilys.cdb.persistence.page.Pageable;
 import com.excilys.cdb.service.ComputerService;
 
 @Controller
-@RequestMapping({ "/dashboard", "/" })
+@RequestMapping({ "/dashboard" })
 public class DashboardController {
 
     private static final String PARAMETER_SEARCH = "search";
