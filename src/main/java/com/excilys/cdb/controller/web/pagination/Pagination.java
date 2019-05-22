@@ -58,9 +58,9 @@ public class Pagination {
 
     public Optional<Page> redirectIfPageOutOfRange(Page page, double numberOfEntities) {
         long pageIndex = page.getPage();
-        long pageSize = page.getLimit();
+        long pageSize = page.getSize();
         long indexLastPage = indexLastPage(numberOfEntities, pageSize);
-        final Page.PageBuilder builder = Page.builder().limit(page.getLimit());
+        final Page.PageBuilder builder = Page.builder().size(page.getSize());
         if (pageIndex < 1) {
             return Optional.of(builder.page(1).build());
         }
@@ -84,9 +84,9 @@ public class Pagination {
 
     public void setPageParameters(ModelAndView modelAndView, Page page, long numberOfEntities) {
         setPreviousPage(modelAndView, page.getPage());
-        setNextPage(modelAndView, page.getPage(), numberOfEntities, page.getLimit());
-        setPagesNumbers(modelAndView, page.getPage(), numberOfEntities, page.getLimit());
-        setPageSize(modelAndView, page.getLimit());
+        setNextPage(modelAndView, page.getPage(), numberOfEntities, page.getSize());
+        setPagesNumbers(modelAndView, page.getPage(), numberOfEntities, page.getSize());
+        setPageSize(modelAndView, page.getSize());
         setCurrentPageIndex(modelAndView, page.getPage());
     }
 

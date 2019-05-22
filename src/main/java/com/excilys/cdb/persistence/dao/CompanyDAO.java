@@ -46,7 +46,7 @@ public class CompanyDAO {
 
     public List<Company> findAll(Page page) {
 	try {
-	    final Object[] args = { page.getLimit(), page.getOffset() };
+	    final Object[] args = { page.getSize(), page.getOffset() };
 	    return jdbcTemplate.query(SQL_FIND_ALL_PAGED, args, companyRowMapper);
 	} catch (DataAccessException e) {
 	    logger.warn("findAll(" + page + ")", e);

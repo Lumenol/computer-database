@@ -56,7 +56,7 @@
 			<input type="hidden" name=page value="${page}" /> <input
 				type="hidden" name="size" value="${size}" /> <input type="hidden"
 				name="search" value="${search}" /> <input type="hidden"
-				name="order-by" value="${order_by}" /> <input type="hidden"
+				name="field" value="${order_by}" /> <input type="hidden"
 				name="meaning" value="${meaning}" />
 		</form>
 
@@ -166,7 +166,7 @@
 	<form id="parameters" hidden>
 		<input name="index" value="${page}"> <input name="size"
 			value="${size}"> <input name="search" value="${search}">
-		<input name="order-by" value="${order_by}"> <input
+		<input name="field" value="${order_by}"> <input
 			name="meaning" value="${meaning}">
 	</form>
 </body>

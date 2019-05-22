@@ -63,7 +63,7 @@ public class ComputerDAOTest {
 	    for (OrderBy.Meaning meaning : OrderBy.Meaning.values()) {
 		for (long[] indices : limits) {
 		    final OrderBy orderBy = OrderBy.builder().field(field).meaning(meaning).build();
-		    Page page = Page.builder().page(indices[0]).limit(indices[1]).build();
+		    Page page = Page.builder().page(indices[0]).size(indices[1]).build();
 		    final Pageable pageable = Pageable.builder().page(page).orderBy(orderBy).build();
 		    params.add(new Object[] { pageable });
 		}
@@ -81,7 +81,7 @@ public class ComputerDAOTest {
 	    for (OrderBy.Meaning meaning : OrderBy.Meaning.values()) {
 		for (long[] indices : limits) {
 		    final OrderBy orderBy = OrderBy.builder().field(field).meaning(meaning).build();
-		    Page page = Page.builder().page(indices[0]).limit(indices[1]).build();
+		    Page page = Page.builder().page(indices[0]).size(indices[1]).build();
 		    final Pageable pageable = Pageable.builder().page(page).orderBy(orderBy).build();
 		    for (String s : search) {
 			params.add(new Object[] { pageable, s });

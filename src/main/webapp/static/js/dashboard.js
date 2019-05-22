@@ -119,7 +119,7 @@ function setParameter(name, val) {
 }
 
 function orderBy(field, meaning) {
-    setParameter('order-by', field);
+    setParameter('field', field);
     setParameter('meaning', meaning);
     goPage(1);
     return false;
@@ -129,7 +129,7 @@ function load() {
     var index = getParameter('index');
     var size = getParameter('size');
     var search = getParameter('search');
-    var orderBy = getParameter('order-by');
+    var orderBy = getParameter('field');
     var meaning = getParameter('meaning');
 
     var url = "dashboard?page=" + index + "&size=" + size;
@@ -137,7 +137,7 @@ function load() {
         url += "&search=" + search;
     }
     if (orderBy) {
-        url += "&order-by=" + orderBy;
+        url += "&field=" + orderBy;
         if (meaning) {
             url += "&meaning=" + meaning;
         }

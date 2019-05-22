@@ -156,7 +156,7 @@ public class UTDatabase {
         }
 
         return computers.stream().sorted(comparator).skip(pageable.getPage().getOffset())
-                .limit(pageable.getPage().getLimit()).collect(Collectors.toList());
+                .limit(pageable.getPage().getSize()).collect(Collectors.toList());
     }
 
     private <T> Comparator<Computer> comparatorComputer(Function<Computer, T> keyExtractor, Comparator<T> comparator) {

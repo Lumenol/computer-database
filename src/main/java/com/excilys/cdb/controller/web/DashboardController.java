@@ -8,8 +8,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,46 +48,34 @@ public class DashboardController {
 	this.computerToComputerDTOMapper = computerToComputerDTOMapper;
     }
 
-    @ExceptionHandler
     @PostMapping
     public String deleteComputer(@RequestParam("selection") List<Long> removeComputersId,
-	    @RequestParam(required = false) String search,
-	    @RequestParam(name = "order-by", defaultValue = "name") OrderBy.Field field,
-	    @RequestParam(defaultValue = "asc") OrderBy.Meaning meaning,
-	    @RequestParam(name = "page", defaultValue = "1") long index, @RequestParam(defaultValue = "50") long size)
-	    throws UnsupportedEncodingException {
+	    @RequestParam(required = false) String search, @ModelAttribute("page") Page page,
+	    @ModelAttribute("orderBy") OrderBy orderBy) throws UnsupportedEncodingException {
 	removeComputersId.forEach(computerService::delete);
-	final OrderBy orderBy = OrderBy.builder().field(field).meaning(meaning).build();
-	final Page page = Page.builder().page(index).limit(size).build();
 	final Pageable pageable = Pageable.builder().orderBy(orderBy).page(page).build();
 	return redirectToPageNumber(pageable, search);
     }
 
     @GetMapping
-    public ModelAndView computers(@RequestParam(required = false) String search,
-	    @RequestParam(name = "order-by", defaultValue = "name") OrderBy.Field field,
-	    @RequestParam(defaultValue = "asc") OrderBy.Meaning meaning,
-	    @RequestParam(name = "page", defaultValue = "1") long index, @RequestParam(defaultValue = "50") long size)
-	    throws UnsupportedEncodingException {
+    public ModelAndView computers(@RequestParam(required = false) String search, @ModelAttribute("page") Page page,
+	    @ModelAttribute("orderBy") OrderBy orderBy) throws UnsupportedEncodingException {
 	final long numberOfComputers = getComputerCount(search);
-	final OrderBy orderBy = OrderBy.builder().field(field).meaning(meaning).build();
-	final Page page = Page.builder().page(index).limit(size).build();
-	final Optional<Page> newPage = pagination.redirectIfPageOutOfRange(page, numberOfComputers);
+	final Pageable pageable = Pageable.builder().page(page).orderBy(orderBy).build();
+	final Optional<Page> newPage = pagination.redirectIfPageOutOfRange(pageable.getPage(), numberOfComputers);
 	if (newPage.isPresent()) {
-	    final Pageable pageable = Pageable.builder().page(newPage.get()).orderBy(orderBy).build();
+	    pageable.setPage(newPage.get());
 	    return new ModelAndView(redirectToPageNumber(pageable, search));
 	}
 
-	final Pageable pageable = Pageable.builder().page(page).orderBy(orderBy).build();
 	final List<ComputerDTO> computers = getComputers(pageable, search);
 
 	final ModelAndView modelAndView = new ModelAndView(DASHBOARD);
 	modelAndView.addObject(PARAMETER_NUMBER_OF_COMPUTERS, numberOfComputers);
 	modelAndView.addObject(PARAMETER_COMPUTERS, computers);
 	modelAndView.addObject(PARAMETER_SEARCH, search);
-	pagination.setPageParameters(modelAndView, page, numberOfComputers);
-
-	sorting.setOrderBy(modelAndView, orderBy);
+	pagination.setPageParameters(modelAndView, pageable.getPage(), numberOfComputers);
+	sorting.setOrderBy(modelAndView, pageable.getOrderBy());
 
 	return modelAndView;
     }
@@ -119,7 +107,7 @@ public class DashboardController {
 	final Page page = pageable.getPage();
 	stringBuilder.append(paggingParameters.getPage()).append("=").append(page.getPage());
 	stringBuilder.append("&");
-	stringBuilder.append(paggingParameters.getSize()).append("=").append(page.getLimit());
+	stringBuilder.append(paggingParameters.getSize()).append("=").append(page.getSize());
 
 	if (Objects.nonNull(search)) {
 	    stringBuilder.append("&");
