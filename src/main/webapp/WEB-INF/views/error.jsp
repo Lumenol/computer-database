@@ -15,11 +15,9 @@
 <section id="main">
     <div class="container">
         <div class="alert alert-danger">
-            <p>URL: ${url}</p>
-            <p>Status: ${code}</p>
-            <p>Message: ${message}</p>
-            <c:if test="${e}">            
-            <p>Exception: ${e}</p>
+            <p>Status: ${status}</p>
+            <c:if test="${not empty reason}">
+                <p>Reason: ${reason}</p>
             </c:if>
         </div>
     </div>
