@@ -13,51 +13,51 @@ public class PaginationParameters {
     private final String direction;
 
     public PaginationParameters(String size, String page, String previous, String next, String pages, String orderBy,
-	    String direction) {
-	super();
-	Objects.requireNonNull(size);
-	Objects.requireNonNull(page);
-	Objects.requireNonNull(previous);
-	Objects.requireNonNull(next);
-	Objects.requireNonNull(pages);
-	Objects.requireNonNull(orderBy);
-	Objects.requireNonNull(direction);
+                                String direction) {
+        super();
+        Objects.requireNonNull(size);
+        Objects.requireNonNull(page);
+        Objects.requireNonNull(previous);
+        Objects.requireNonNull(next);
+        Objects.requireNonNull(pages);
+        Objects.requireNonNull(orderBy);
+        Objects.requireNonNull(direction);
 
-	this.size = size;
-	this.page = page;
-	this.previous = previous;
-	this.next = next;
-	this.pages = pages;
-	this.orderBy = orderBy;
-	this.direction = direction;
+        this.size = size;
+        this.page = page;
+        this.previous = previous;
+        this.next = next;
+        this.pages = pages;
+        this.orderBy = orderBy;
+        this.direction = direction;
     }
 
     public String getNext() {
-	return next;
+        return next;
     }
 
     public String getPage() {
-	return page;
+        return page;
     }
 
     public String getPages() {
-	return pages;
+        return pages;
     }
 
     public String getPrevious() {
-	return previous;
+        return previous;
     }
 
     public String getSize() {
-	return size;
+        return size;
     }
 
     public String getOrderBy() {
-	return orderBy;
+        return orderBy;
     }
 
     public String getDirection() {
-	return direction;
+        return direction;
     }
 
 }
