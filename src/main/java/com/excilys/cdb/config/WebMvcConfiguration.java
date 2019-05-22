@@ -18,10 +18,10 @@ import org.springframework.web.servlet.theme.ThemeChangeInterceptor;
 
 import com.excilys.cdb.converter.LocalDateToStringConverter;
 import com.excilys.cdb.converter.OrderByFieldToStringConverter;
-import com.excilys.cdb.converter.OrderByMeaningToStringConverter;
+import com.excilys.cdb.converter.OrderByDirectionToStringConverter;
 import com.excilys.cdb.converter.StringToLocalDateConverter;
 import com.excilys.cdb.converter.StringToOrderByFieldConverter;
-import com.excilys.cdb.converter.StringToOrderByMeaningConverter;
+import com.excilys.cdb.converter.StringToOrderByDirectionConverter;
 
 @Configuration
 @EnableWebMvc
@@ -32,8 +32,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public void addFormatters(FormatterRegistry registry) {
 	registry.addConverter(new StringToOrderByFieldConverter());
 	registry.addConverter(new OrderByFieldToStringConverter());
-	registry.addConverter(new StringToOrderByMeaningConverter());
-	registry.addConverter(new OrderByMeaningToStringConverter());
+	registry.addConverter(new StringToOrderByDirectionConverter());
+	registry.addConverter(new OrderByDirectionToStringConverter());
 
 	registry.addConverter(new StringToLocalDateConverter());
 	registry.addConverter(new LocalDateToStringConverter());

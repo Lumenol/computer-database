@@ -60,9 +60,9 @@ public class ComputerDAOTest {
 	final ArrayList<Object[]> params = new ArrayList<>();
 	final long[][] limits = { { 1L, 10L }, { 5L, 2L }, { 2L, 3L }, { 2L, 7L } };
 	for (OrderBy.Field field : OrderBy.Field.values()) {
-	    for (OrderBy.Meaning meaning : OrderBy.Meaning.values()) {
+	    for (OrderBy.Direction direction : OrderBy.Direction.values()) {
 		for (long[] indices : limits) {
-		    final OrderBy orderBy = OrderBy.builder().field(field).meaning(meaning).build();
+		    final OrderBy orderBy = OrderBy.builder().field(field).direction(direction).build();
 		    Page page = Page.builder().page(indices[0]).size(indices[1]).build();
 		    final Pageable pageable = Pageable.builder().page(page).orderBy(orderBy).build();
 		    params.add(new Object[] { pageable });
@@ -78,9 +78,9 @@ public class ComputerDAOTest {
 	final long[][] limits = { { 1L, 30L }, { 1L, 5L }, { 4L, 5L }, { 2L, 3L }, { 13L, 25L } };
 	final String[] search = { "Apple", "pLe", "ApPl", "bAn", "Bo", "Je existe pas" };
 	for (OrderBy.Field field : OrderBy.Field.values()) {
-	    for (OrderBy.Meaning meaning : OrderBy.Meaning.values()) {
+	    for (OrderBy.Direction direction : OrderBy.Direction.values()) {
 		for (long[] indices : limits) {
-		    final OrderBy orderBy = OrderBy.builder().field(field).meaning(meaning).build();
+		    final OrderBy orderBy = OrderBy.builder().field(field).direction(direction).build();
 		    Page page = Page.builder().page(indices[0]).size(indices[1]).build();
 		    final Pageable pageable = Pageable.builder().page(page).orderBy(orderBy).build();
 		    for (String s : search) {
