@@ -1,42 +1,45 @@
 package com.excilys.cdb.controller.web;
 
-import java.util.Objects;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
-@ControllerAdvice
-class GlobalDefaultExceptionHandler {
-    public static final String DEFAULT_ERROR_VIEW = "error";
+import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
-    @ExceptionHandler(value = Exception.class)
-    public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception e) {
-	String message = HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase();
-	int code = HttpStatus.INTERNAL_SERVER_ERROR.value();
-	final ResponseStatus response = AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class);
-	if (Objects.nonNull(response)) {
-	    code = response.code().value();
-	    message = response.reason();
-	    if (message.isEmpty()) {
-		message = response.code().getReasonPhrase();
-	    }
-	} else if (e instanceof NoHandlerFoundException) {
-	    code = HttpStatus.NOT_FOUND.value();
-	    message = HttpStatus.NOT_FOUND.getReasonPhrase();
-	}
+@Controller
+public class ErrorController {
 
-	ModelAndView mav = new ModelAndView(DEFAULT_ERROR_VIEW);
-	mav.addObject("exception", e);
-	mav.addObject("url", req.getRequestURL());
-	mav.addObject("code", code);
-	mav.addObject("message", message);
-	return mav;
+    private static final String VIEW_NAME = "error";
+    private static final String REASON = "reason";
+    private static final String STATUS = "status";
+
+    @RequestMapping(value = "/error")
+    public ModelAndView handle(HttpServletRequest request) {
+
+        final ModelAndView modelAndView = new ModelAndView(VIEW_NAME);
+        final int code = (int) request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+        modelAndView.addObject(STATUS, code);
+        final Exception exception = (Exception) request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
+        if (Objects.nonNull(exception)) {
+            final ResponseStatus annotation = AnnotationUtils.findAnnotation(exception.getClass(), ResponseStatus.class);
+            if (Objects.nonNull(annotation) && !annotation.reason().isEmpty()) {
+                modelAndView.addObject(REASON, annotation.reason());
+                return modelAndView;
+            }
+        } else {
+            final HttpStatus httpStatus = HttpStatus.resolve(code);
+            if (Objects.nonNull(httpStatus)) {
+                modelAndView.addObject(REASON, httpStatus.getReasonPhrase());
+                return modelAndView;
+            }
+        }
+
+        return modelAndView;
     }
+
 }
