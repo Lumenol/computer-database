@@ -19,7 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.rules.SpringClassRule;
 import org.springframework.test.context.junit4.rules.SpringMethodRule;
 
-import com.excilys.cdb.config.AppConfig;
+import com.excilys.cdb.config.TestConfig;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Computer.ComputerBuilder;
@@ -28,7 +28,7 @@ import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 
 @RunWith(JUnitParamsRunner.class)
-@ContextConfiguration(classes = AppConfig.class)
+@ContextConfiguration(classes = TestConfig.class)
 public class ComputerRowMapperTest {
 
     private static final String COLUMN_COMPANY_ID = "company_id";

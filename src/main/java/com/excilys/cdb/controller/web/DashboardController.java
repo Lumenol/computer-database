@@ -50,16 +50,16 @@ public class DashboardController {
 
     @PostMapping
     public String deleteComputer(@RequestParam("selection") List<Long> removeComputersId,
-	    @RequestParam(required = false) String search, @ModelAttribute("page") Page page,
-	    @ModelAttribute("orderBy") OrderBy orderBy) throws UnsupportedEncodingException {
+	    @RequestParam(required = false) String search, @ModelAttribute Page page, @ModelAttribute OrderBy orderBy)
+	    throws UnsupportedEncodingException {
 	removeComputersId.forEach(computerService::delete);
 	final Pageable pageable = Pageable.builder().orderBy(orderBy).page(page).build();
 	return redirectToPageNumber(pageable, search);
     }
 
     @GetMapping
-    public ModelAndView computers(@RequestParam(required = false) String search, @ModelAttribute("page") Page page,
-	    @ModelAttribute("orderBy") OrderBy orderBy) throws UnsupportedEncodingException {
+    public ModelAndView computers(@RequestParam(required = false) String search, @ModelAttribute Page page,
+	    @ModelAttribute OrderBy orderBy) throws UnsupportedEncodingException {
 	final long numberOfComputers = getComputerCount(search);
 	final Pageable pageable = Pageable.builder().page(page).orderBy(orderBy).build();
 	final Optional<Page> newPage = pagination.redirectIfPageOutOfRange(pageable.getPage(), numberOfComputers);

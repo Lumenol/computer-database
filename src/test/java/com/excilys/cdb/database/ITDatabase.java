@@ -6,12 +6,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
 
-import org.springframework.stereotype.Component;
-
 import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.dto.ComputerDTO;
 
-@Component
 public class ITDatabase {
     private Map<Long, CompanyDTO> companies = new TreeMap<>();
     private Map<Long, ComputerDTO> computers = new TreeMap<>();

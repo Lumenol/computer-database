@@ -9,24 +9,17 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import com.excilys.cdb.config.AppConfig;
 import com.excilys.cdb.database.ITDatabase;
 import com.excilys.cdb.dto.ComputerDTO;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = AppConfig.class)
 public class DashboardTest {
 
     public static final String NEXT = "»";
@@ -63,8 +56,7 @@ public class DashboardTest {
 
     private WebDriver driver;
 
-    @Autowired
-    private ITDatabase database;
+    private ITDatabase database = new ITDatabase();
 
     @BeforeClass
     public static void setUpClass() {
@@ -144,7 +136,7 @@ public class DashboardTest {
 
     private void assertCount(long count) {
 	final String homeTitle = driver.findElement(By.id("homeTitle")).getText();
-	Assert.assertEquals(count + " Computers found", homeTitle);
+	Assert.assertTrue("Le nombre d'ordinateur est faux", homeTitle.startsWith(Long.toString(count)));
     }
 
     @Test

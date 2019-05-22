@@ -22,7 +22,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.rules.SpringClassRule;
 import org.springframework.test.context.junit4.rules.SpringMethodRule;
 
-import com.excilys.cdb.config.AppConfig;
+import com.excilys.cdb.config.TestConfig;
 import com.excilys.cdb.database.UTDatabase;
 import com.excilys.cdb.exception.ComputerDAOException;
 import com.excilys.cdb.model.Company;
@@ -36,7 +36,7 @@ import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 
 @RunWith(JUnitParamsRunner.class)
-@ContextConfiguration(classes = AppConfig.class)
+@ContextConfiguration(classes = TestConfig.class)
 public class ComputerDAOTest {
     @ClassRule
     public static final SpringClassRule springClassRule = new SpringClassRule();

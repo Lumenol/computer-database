@@ -47,7 +47,6 @@ public class AppConfig {
 
     @Bean
     public PaginationParameters paginationParameters() {
-	final int MIN_PAGE_SIZE = 10;
 	final String PARAMETER_NEXT = "next";
 	final String PARAMETER_PAGE = "page";
 	final String PARAMETER_PAGES = "pages";
@@ -56,8 +55,8 @@ public class AppConfig {
 	final String PARAMETER_ORDER_BY = "order-by";
 	final String PARAMETER_MEANING = "meaning";
 
-	return new PaginationParameters(MIN_PAGE_SIZE, PARAMETER_SIZE, PARAMETER_PAGE, PARAMETER_PREVIOUS,
-		PARAMETER_NEXT, PARAMETER_PAGES, PARAMETER_ORDER_BY, PARAMETER_MEANING);
+	return new PaginationParameters(PARAMETER_SIZE, PARAMETER_PAGE, PARAMETER_PREVIOUS, PARAMETER_NEXT,
+		PARAMETER_PAGES, PARAMETER_ORDER_BY, PARAMETER_MEANING);
     }
 
     @Bean
