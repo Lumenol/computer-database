@@ -15,12 +15,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.validation.BindException;
 
-import com.excilys.cdb.config.AppConfig;
+import com.excilys.cdb.config.TestConfig;
 import com.excilys.cdb.database.UTDatabase;
 import com.excilys.cdb.dto.CreateComputerDTO;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = AppConfig.class)
+@ContextConfiguration(classes = TestConfig.class)
 public class CreateComputerValidatorTest {
 
     @Autowired
