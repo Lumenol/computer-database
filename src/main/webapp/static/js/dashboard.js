@@ -74,8 +74,8 @@ $(function () {
 
 // Function delete selected: Asks for confirmation to delete selected computers, then submits it to the deleteForm
 (function ($) {
-    $.fn.deleteSelected = function () {
-        if (confirm("Are you sure you want to delete the selected computers?")) {
+    $.fn.deleteSelected = function (msg) {
+        if (confirm(msg)) {
             $('#deleteForm').setCheckboxValues('selection', 'cb');
             $('#deleteForm').submit();
         }
