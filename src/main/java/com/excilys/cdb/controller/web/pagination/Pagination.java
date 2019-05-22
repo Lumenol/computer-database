@@ -60,17 +60,19 @@ public class Pagination {
         long pageIndex = page.getPage();
         long pageSize = page.getSize();
         long indexLastPage = indexLastPage(numberOfEntities, pageSize);
-        final Page.PageBuilder builder = Page.builder().size(page.getSize());
+        final Page newPage = new Page();
         if (pageIndex < 1) {
-            return Optional.of(builder.page(1).build());
-        }
-        if (pageIndex > 1) {
+            newPage.setPage(1);
+        } else if (pageIndex > 1) {
             if (pageIndex > indexLastPage) {
                 final long max = Math.max(indexLastPage, 1);
-                return Optional.of(builder.page(max).build());
+                newPage.setPage(max);
             }
         }
-        return Optional.empty();
+        if (page.getSize() > 0) {
+            newPage.setSize(page.getSize());
+        }
+        return Optional.of(newPage).filter(p -> !p.equals(page));
     }
 
     private void setPageSize(ModelAndView modelAndView, long pageSize) {
