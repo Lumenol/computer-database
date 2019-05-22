@@ -15,9 +15,12 @@
 <section id="main">
     <div class="container">
         <div class="alert alert-danger">
-            Error 403: Access denied!
-            <br/>
-            <!-- stacktrace -->
+            <p>URL: ${url}</p>
+            <p>Status: ${code}</p>
+            <p>Message: ${message}</p>
+            <c:if test="${e}">            
+            <p>Exception: ${e}</p>
+            </c:if>
         </div>
     </div>
 </section>

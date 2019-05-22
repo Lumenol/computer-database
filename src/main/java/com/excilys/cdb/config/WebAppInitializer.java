@@ -23,8 +23,9 @@ public class WebAppInitializer implements WebApplicationInitializer {
 	dispatcherContext.register(WebMvcConfiguration.class);
 
 	// Register and map the dispatcher servlet
-	ServletRegistration.Dynamic dispatcher = container.addServlet("dispatcher",
-		new DispatcherServlet(dispatcherContext));
+	final DispatcherServlet servletDispatcher = new DispatcherServlet(dispatcherContext);
+	servletDispatcher.setThrowExceptionIfNoHandlerFound(true);
+	ServletRegistration.Dynamic dispatcher = container.addServlet("dispatcher", servletDispatcher);
 	dispatcher.setLoadOnStartup(1);
 	dispatcher.addMapping("/");
     }
