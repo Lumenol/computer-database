@@ -20,16 +20,16 @@ public class Sorting {
     }
 
     public void setOrderBy(ModelAndView modelAndView, OrderBy orderBy) {
-        final UnaryOperator<String> meaningOfFieldName = name -> {
-            if (!orderBy.getField().name().equalsIgnoreCase(name) || orderBy.getMeaning() == OrderBy.Meaning.DESC) {
-                return OrderBy.Meaning.ASC.getIdentifier();
+        final UnaryOperator<String> directionOfFieldName = name -> {
+            if (!orderBy.getField().name().equalsIgnoreCase(name) || orderBy.getDirection() == OrderBy.Direction.DESC) {
+                return OrderBy.Direction.ASC.getIdentifier();
             } else {
-                return OrderBy.Meaning.DESC.getIdentifier();
+                return OrderBy.Direction.DESC.getIdentifier();
             }
         };
-        modelAndView.addObject(replaceDashByUnderscore(parameters.getOrderByUtils()), meaningOfFieldName);
+        modelAndView.addObject(replaceDashByUnderscore(parameters.getOrderByUtils()), directionOfFieldName);
         modelAndView.addObject(replaceDashByUnderscore(parameters.getOrderBy()), orderBy.getField().getIdentifier());
-        modelAndView.addObject(replaceDashByUnderscore(parameters.getMeaning()), orderBy.getMeaning().getIdentifier());
+        modelAndView.addObject(replaceDashByUnderscore(parameters.getDirection()), orderBy.getDirection().getIdentifier());
     }
 
     private String replaceDashByUnderscore(String s) {

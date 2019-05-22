@@ -53,10 +53,10 @@ public class AppConfig {
 	final String PARAMETER_PREVIOUS = "previous";
 	final String PARAMETER_SIZE = "size";
 	final String PARAMETER_ORDER_BY = "order-by";
-	final String PARAMETER_MEANING = "meaning";
+	final String PARAMETER_DIRECTION = "direction";
 
 	return new PaginationParameters(PARAMETER_SIZE, PARAMETER_PAGE, PARAMETER_PREVIOUS, PARAMETER_NEXT,
-		PARAMETER_PAGES, PARAMETER_ORDER_BY, PARAMETER_MEANING);
+		PARAMETER_PAGES, PARAMETER_ORDER_BY, PARAMETER_DIRECTION);
     }
 
     @Bean
@@ -67,10 +67,10 @@ public class AppConfig {
     @Bean
     public SortingParameters sortingParameters() {
 	final String PARAMETER_ORDER_BY = "order-by";
-	final String PARAMETER_MEANING = "meaning";
+	final String PARAMETER_DIRECTION = "direction";
 	final String PARAMETER_ORDER_BY_UTILS = "order-utils";
 
-	return new SortingParameters(PARAMETER_ORDER_BY, PARAMETER_MEANING, PARAMETER_ORDER_BY_UTILS);
+	return new SortingParameters(PARAMETER_ORDER_BY, PARAMETER_DIRECTION, PARAMETER_ORDER_BY_UTILS);
     }
 
     @Bean

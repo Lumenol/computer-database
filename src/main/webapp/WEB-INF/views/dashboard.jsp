@@ -57,7 +57,7 @@
 				type="hidden" name="size" value="${size}" /> <input type="hidden"
 				name="search" value="${search}" /> <input type="hidden"
 				name="field" value="${order_by}" /> <input type="hidden"
-				name="meaning" value="${meaning}" />
+				name="direction" value="${direction}" />
 		</form>
 
 		<div class="container" style="margin-top: 10px;">
@@ -77,34 +77,34 @@
 						</span></th>
 						<th><spring:message code="computer.name"/>
 						<c:set var="name" value="name" /> <c:set
-								var="meaning" value="${order_utils.apply(name)}" /> <c:set
+								var="direction" value="${order_utils.apply(name)}" /> <c:set
 								var="arrow"
-								value="${meaning.equalsIgnoreCase('desc')?'down':'up'}" />
+								value="${direction.equalsIgnoreCase('desc')?'down':'up'}" />
 							<button class="float-right fa fa-arrow-${arrow}"
-								onclick="orderBy('${name}','${meaning}')"></button>
+								onclick="orderBy('${name}','${direction}')"></button>
 						</th>
 						<th><spring:message code="computer.introduced"/><c:set var="name" value="introduced" />
-							<c:set var="meaning" value="${order_utils.apply(name)}" /> <c:set
+							<c:set var="direction" value="${order_utils.apply(name)}" /> <c:set
 								var="arrow"
-								value="${meaning.equalsIgnoreCase('desc')?'down':'up'}" />
+								value="${direction.equalsIgnoreCase('desc')?'down':'up'}" />
 							<button class="float-right fa fa-arrow-${arrow}"
-								onclick="orderBy('${name}','${meaning}')"></button>
+								onclick="orderBy('${name}','${direction}')"></button>
 						</th>
 						<!-- Table header for Discontinued Date -->
 						<th><spring:message code="computer.discontinued"/><c:set var="name" value="discontinued" />
-							<c:set var="meaning" value="${order_utils.apply(name)}" /> <c:set
+							<c:set var="direction" value="${order_utils.apply(name)}" /> <c:set
 								var="arrow"
-								value="${meaning.equalsIgnoreCase('desc')?'down':'up'}" />
+								value="${direction.equalsIgnoreCase('desc')?'down':'up'}" />
 							<button class="float-right fa fa-arrow-${arrow}"
-								onclick="orderBy('${name}','${meaning}')"></button>
+								onclick="orderBy('${name}','${direction}')"></button>
 						</th>
 						<!-- Table header for Company -->
 						<th><spring:message code="computer.mannufacturer"/><c:set var="name" value="company" /> <c:set
-								var="meaning" value="${order_utils.apply(name)}" /> <c:set
+								var="direction" value="${order_utils.apply(name)}" /> <c:set
 								var="arrow"
-								value="${meaning.equalsIgnoreCase('desc')?'down':'up'}" />
+								value="${direction.equalsIgnoreCase('desc')?'down':'up'}" />
 							<button class="float-right fa fa-arrow-${arrow}"
-								onclick="orderBy('${name}','${meaning}')"></button>
+								onclick="orderBy('${name}','${direction}')"></button>
 						</th>
 
 					</tr>
@@ -167,7 +167,7 @@
 		<input name="index" value="${page}"> <input name="size"
 			value="${size}"> <input name="search" value="${search}">
 		<input name="field" value="${order_by}"> <input
-			name="meaning" value="${meaning}">
+			name="direction" value="${direction}">
 	</form>
 </body>
 </html>

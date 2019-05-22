@@ -118,9 +118,9 @@ function setParameter(name, val) {
     $("#parameters input[name|='" + name + "']").val(val);
 }
 
-function orderBy(field, meaning) {
+function orderBy(field, direction) {
     setParameter('field', field);
-    setParameter('meaning', meaning);
+    setParameter('direction', direction);
     goPage(1);
     return false;
 }
@@ -130,7 +130,7 @@ function load() {
     var size = getParameter('size');
     var search = getParameter('search');
     var orderBy = getParameter('field');
-    var meaning = getParameter('meaning');
+    var direction = getParameter('direction');
 
     var url = "dashboard?page=" + index + "&size=" + size;
     if (search) {
@@ -138,8 +138,8 @@ function load() {
     }
     if (orderBy) {
         url += "&field=" + orderBy;
-        if (meaning) {
-            url += "&meaning=" + meaning;
+        if (direction) {
+            url += "&direction=" + direction;
         }
     }
 

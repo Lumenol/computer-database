@@ -10,10 +10,10 @@ public class PaginationParameters {
     private final String previous;
     private final String size;
     private final String orderBy;
-    private final String meaning;
+    private final String direction;
 
     public PaginationParameters(String size, String page, String previous, String next, String pages, String orderBy,
-	    String meaning) {
+	    String direction) {
 	super();
 	Objects.requireNonNull(size);
 	Objects.requireNonNull(page);
@@ -21,7 +21,7 @@ public class PaginationParameters {
 	Objects.requireNonNull(next);
 	Objects.requireNonNull(pages);
 	Objects.requireNonNull(orderBy);
-	Objects.requireNonNull(meaning);
+	Objects.requireNonNull(direction);
 
 	this.size = size;
 	this.page = page;
@@ -29,7 +29,7 @@ public class PaginationParameters {
 	this.next = next;
 	this.pages = pages;
 	this.orderBy = orderBy;
-	this.meaning = meaning;
+	this.direction = direction;
     }
 
     public String getNext() {
@@ -56,8 +56,8 @@ public class PaginationParameters {
 	return orderBy;
     }
 
-    public String getMeaning() {
-	return meaning;
+    public String getDirection() {
+	return direction;
     }
 
 }

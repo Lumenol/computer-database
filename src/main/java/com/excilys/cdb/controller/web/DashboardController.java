@@ -121,10 +121,10 @@ public class DashboardController {
 		    .append(encode(orderBy.getField().getIdentifier()));
 	}
 
-	if (Objects.nonNull(orderBy.getMeaning())) {
+	if (Objects.nonNull(orderBy.getDirection())) {
 	    stringBuilder.append("&");
-	    stringBuilder.append(encode(sortingParameters.getMeaning())).append("=")
-		    .append(encode(orderBy.getMeaning().getIdentifier()));
+	    stringBuilder.append(encode(sortingParameters.getDirection())).append("=")
+		    .append(encode(orderBy.getDirection().getIdentifier()));
 	}
 
 	return "redirect:" + stringBuilder.toString();

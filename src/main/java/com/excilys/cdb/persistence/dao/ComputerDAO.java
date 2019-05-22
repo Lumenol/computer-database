@@ -108,7 +108,7 @@ public class ComputerDAO {
     private String insertOrderByInQuery(String request, OrderBy orderBy) {
 	String sql;
 	String field;
-	String meaning;
+	String direction;
 	switch (orderBy.getField()) {
 	default:
 	case ID:
@@ -127,13 +127,13 @@ public class ComputerDAO {
 	    field = "B.name";
 	    break;
 	}
-	if (orderBy.getMeaning() == OrderBy.Meaning.DESC) {
-	    meaning = " DESC";
+	if (orderBy.getDirection() == OrderBy.Direction.DESC) {
+	    direction = " DESC";
 	} else {
-	    meaning = " ASC";
+	    direction = " ASC";
 	}
 
-	sql = field + " IS NULL, " + field + " " + meaning + " ,A.name " + meaning;
+	sql = field + " IS NULL, " + field + " " + direction + " ,A.name " + direction;
 
 	return String.format(request, sql);
     }

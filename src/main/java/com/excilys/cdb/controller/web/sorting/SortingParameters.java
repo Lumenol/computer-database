@@ -5,16 +5,16 @@ import java.util.Objects;
 public class SortingParameters {
 
     private final String orderBy;
-    private final String meaning;
+    private final String direction;
     private final String orderByUtils;
 
-    public SortingParameters(String orderBy, String meaning, String orderByUtils) {
+    public SortingParameters(String orderBy, String direction, String orderByUtils) {
 	Objects.requireNonNull(orderBy);
-	Objects.requireNonNull(meaning);
+	Objects.requireNonNull(direction);
 	Objects.requireNonNull(orderByUtils);
 
 	this.orderBy = orderBy;
-	this.meaning = meaning;
+	this.direction = direction;
 	this.orderByUtils = orderByUtils;
     }
 
@@ -26,19 +26,19 @@ public class SortingParameters {
 	return orderBy;
     }
 
-    public String getMeaning() {
-	return meaning;
+    public String getDirection() {
+	return direction;
     }
 
     @Override
     public String toString() {
-	return "SortingParameters [orderBy=" + orderBy + ", meaning=" + meaning + ", orderByUtils=" + orderByUtils
+	return "SortingParameters [orderBy=" + orderBy + ", direction=" + direction + ", orderByUtils=" + orderByUtils
 		+ "]";
     }
 
     @Override
     public int hashCode() {
-	return Objects.hash(meaning, orderBy, orderByUtils);
+	return Objects.hash(direction, orderBy, orderByUtils);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class SortingParameters {
 	if (getClass() != obj.getClass())
 	    return false;
 	SortingParameters other = (SortingParameters) obj;
-	return Objects.equals(meaning, other.meaning) && Objects.equals(orderBy, other.orderBy)
+	return Objects.equals(direction, other.direction) && Objects.equals(orderBy, other.orderBy)
 		&& Objects.equals(orderByUtils, other.orderByUtils);
     }
 
