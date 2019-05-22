@@ -8,23 +8,23 @@ public final class MapperUtils {
     }
 
     public static LocalDate parseDate(String date) {
-	if (isBlank(date)) {
-	    return null;
-	} else {
-	    return LocalDate.parse(date);
-	}
+        if (isBlank(date)) {
+            return null;
+        } else {
+            return LocalDate.parse(date);
+        }
     }
 
     public static Long parseId(String id) {
-	if (isBlank(id)) {
-	    return null;
-	} else {
-	    return Long.valueOf(id);
-	}
+        if (isBlank(id)) {
+            return null;
+        } else {
+            return Long.valueOf(id);
+        }
     }
 
     private static boolean isBlank(String s) {
-	return Objects.isNull(s) || s.trim().isEmpty();
+        return Objects.isNull(s) || s.trim().isEmpty();
     }
 
 }

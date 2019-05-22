@@ -9,49 +9,49 @@ public class SortingParameters {
     private final String orderByUtils;
 
     public SortingParameters(String orderBy, String direction, String orderByUtils) {
-	Objects.requireNonNull(orderBy);
-	Objects.requireNonNull(direction);
-	Objects.requireNonNull(orderByUtils);
+        Objects.requireNonNull(orderBy);
+        Objects.requireNonNull(direction);
+        Objects.requireNonNull(orderByUtils);
 
-	this.orderBy = orderBy;
-	this.direction = direction;
-	this.orderByUtils = orderByUtils;
+        this.orderBy = orderBy;
+        this.direction = direction;
+        this.orderByUtils = orderByUtils;
     }
 
     public String getOrderByUtils() {
-	return orderByUtils;
+        return orderByUtils;
     }
 
     public String getOrderBy() {
-	return orderBy;
+        return orderBy;
     }
 
     public String getDirection() {
-	return direction;
+        return direction;
     }
 
     @Override
     public String toString() {
-	return "SortingParameters [orderBy=" + orderBy + ", direction=" + direction + ", orderByUtils=" + orderByUtils
-		+ "]";
+        return "SortingParameters [orderBy=" + orderBy + ", direction=" + direction + ", orderByUtils=" + orderByUtils
+                + "]";
     }
 
     @Override
     public int hashCode() {
-	return Objects.hash(direction, orderBy, orderByUtils);
+        return Objects.hash(direction, orderBy, orderByUtils);
     }
 
     @Override
     public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	SortingParameters other = (SortingParameters) obj;
-	return Objects.equals(direction, other.direction) && Objects.equals(orderBy, other.orderBy)
-		&& Objects.equals(orderByUtils, other.orderByUtils);
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        SortingParameters other = (SortingParameters) obj;
+        return Objects.equals(direction, other.direction) && Objects.equals(orderBy, other.orderBy)
+                && Objects.equals(orderByUtils, other.orderByUtils);
     }
 
 }
