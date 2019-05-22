@@ -69,7 +69,7 @@ public class Controller {
 
     public List<CompanyDTO> getCompanies(long offset, long limit) {
 	try {
-	    final Page page = Page.builder().page(offset / limit + 1).limit(limit).build();
+	    final Page page = Page.builder().page(offset / limit + 1).size(limit).build();
 	    return companyService.findAll(page).stream().map(companyToCompanyDTO::map).collect(Collectors.toList());
 	} catch (RuntimeException e) {
 	    logger.warn("getCompanies(" + offset + "," + limit + ")", e);
@@ -88,7 +88,7 @@ public class Controller {
 
     public List<ComputerDTO> getComputers(long offset, long limit) {
 	try {
-	    final Page page = Page.builder().page(offset / limit + 1).limit(limit).build();
+	    final Page page = Page.builder().page(offset / limit + 1).size(limit).build();
 	    final OrderBy orderBy = OrderBy.builder().build();
 	    final Pageable pageable = Pageable.builder().page(page).orderBy(orderBy).build();
 	    return computerService.findAll(pageable).stream().map(computerToComputerDTO::map)

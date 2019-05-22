@@ -142,7 +142,7 @@ public class ComputerDAO {
 	try {
 	    final String query = insertOrderByInQuery(SQL_FIND_ALL_PAGED, pageable.getOrderBy());
 	    final Page page = pageable.getPage();
-	    final Object[] args = { page.getLimit(), page.getOffset() };
+	    final Object[] args = { page.getSize(), page.getOffset() };
 	    return jdbcTemplate.query(query, args, computerRowMapper);
 	} catch (DataAccessException e) {
 	    logger.warn("findAll(" + pageable + ")", e);
@@ -193,7 +193,7 @@ public class ComputerDAO {
 	    final Page page = pageable.getPage();
 	    final String like = ("%" + search + "%").toUpperCase();
 	    final String query = insertOrderByInQuery(SQL_SEARCH, pageable.getOrderBy());
-	    final Object[] args = { like, like, page.getLimit(), page.getOffset() };
+	    final Object[] args = { like, like, page.getSize(), page.getOffset() };
 	    return jdbcTemplate.query(query, args, computerRowMapper);
 	} catch (DataAccessException e) {
 	    logger.warn("search(" + pageable + "," + search + ")", e);

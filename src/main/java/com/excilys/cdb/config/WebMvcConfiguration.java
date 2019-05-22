@@ -17,6 +17,8 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.theme.ThemeChangeInterceptor;
 
 import com.excilys.cdb.converter.LocalDateToStringConverter;
+import com.excilys.cdb.converter.OrderByFieldToStringConverter;
+import com.excilys.cdb.converter.OrderByMeaningToStringConverter;
 import com.excilys.cdb.converter.StringToLocalDateConverter;
 import com.excilys.cdb.converter.StringToOrderByFieldConverter;
 import com.excilys.cdb.converter.StringToOrderByMeaningConverter;
@@ -29,7 +31,10 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
 	registry.addConverter(new StringToOrderByFieldConverter());
+	registry.addConverter(new OrderByFieldToStringConverter());
 	registry.addConverter(new StringToOrderByMeaningConverter());
+	registry.addConverter(new OrderByMeaningToStringConverter());
+
 	registry.addConverter(new StringToLocalDateConverter());
 	registry.addConverter(new LocalDateToStringConverter());
     }

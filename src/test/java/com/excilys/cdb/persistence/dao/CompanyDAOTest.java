@@ -68,7 +68,7 @@ public class CompanyDAOTest {
     @Test
     @Parameters(method = "providePageLimit")
     public void findAll(long index, long limit) {
-	final Page page = Page.builder().page(index).limit(limit).build();
+	final Page page = Page.builder().page(index).size(limit).build();
 	final List<Company> actual = companyDAO.findAll(page);
 	final List<Company> expected = database.findAllCompanies(index, limit);
 	assertEquals(expected, actual);
