@@ -38,7 +38,7 @@
                     </div>
                 </c:if>
                 <form:form action="" method="POST" modelAttribute="computer">
-                    <form:input type="hidden" path="id" value="${computer.id}" id="id"/>
+                    <form:input type="hidden" path="id" id="id"/>
                     <fieldset>
                         <spring:bind path="name">
                             <div class='form-group ${status.error?"has-error":""}'>
