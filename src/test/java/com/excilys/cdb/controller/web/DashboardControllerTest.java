@@ -5,6 +5,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,16 +31,16 @@ import com.excilys.cdb.service.ComputerService;
 @WebAppConfiguration
 public class DashboardControllerTest {
     private final static String PARAMETER_PAGE = "page";
+    final String PARAMETER_PAGES = "pages";
+    private static final String PARAMETER_NUMBER_OF_COMPUTERS = "numberOfComputers";
 
     @Configuration
     public static class Config {
-
 	@Bean
 	@Primary
 	public ComputerService computerService() {
 	    return Mockito.mock(ComputerService.class);
 	}
-
     }
 
     private WebApplicationContext wac;
@@ -64,8 +66,12 @@ public class DashboardControllerTest {
 
     @Test
     public void testComputers() throws Exception {
+	final long count = 10_000L;
+	Mockito.when(mockComputerService.count()).thenReturn(count);
 	mockMvc.perform(get("/dashboard")).andExpect(status().isOk())
-		.andExpect(model().attribute(PARAMETER_PAGE, is(1L)));
+		.andExpect(model().attribute(PARAMETER_PAGE, is(1L)))
+		.andExpect(model().attribute(PARAMETER_PAGES, is(Arrays.asList(1L, 2L, 3L, 4L, 5L))))
+		.andExpect(model().attribute(PARAMETER_NUMBER_OF_COMPUTERS, count));
     }
 
 }
