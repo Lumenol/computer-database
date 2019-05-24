@@ -29,7 +29,7 @@ public class UpdateComputerValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return UpdateComputerDTO.class.equals(clazz);
+        return UpdateComputerDTO.class.isAssignableFrom(clazz);
     }
 
     @Override

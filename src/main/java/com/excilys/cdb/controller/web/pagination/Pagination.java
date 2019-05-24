@@ -60,7 +60,7 @@ public class Pagination {
         long pageIndex = page.getPage();
         long pageSize = page.getSize();
         long indexLastPage = indexLastPage(numberOfEntities, pageSize);
-        final Page newPage = new Page();
+        final Page newPage = Page.builder().page(page.getPage()).build();
         if (pageIndex < 1) {
             newPage.setPage(1);
         } else if (pageIndex > 1) {
