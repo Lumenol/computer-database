@@ -2,7 +2,8 @@ package com.excilys.cdb.persistence.dao;
 
 import com.excilys.cdb.exception.CompanyDAOException;
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.persistence.page.Page;
+import com.excilys.cdb.pagination.Page;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;

@@ -1,7 +1,8 @@
 package com.excilys.cdb.controller.web.pagination;
 
-import com.excilys.cdb.persistence.page.Page;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.excilys.cdb.pagination.Page;
 
 import java.util.*;
 

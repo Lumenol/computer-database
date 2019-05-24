@@ -3,8 +3,9 @@ package com.excilys.cdb.service;
 import com.excilys.cdb.exception.ComputerDAOException;
 import com.excilys.cdb.exception.ComputerServiceException;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.pagination.Pageable;
 import com.excilys.cdb.persistence.dao.ComputerDAO;
-import com.excilys.cdb.persistence.page.Pageable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,8 @@
 package com.excilys.cdb.converter;
 
-import com.excilys.cdb.persistence.page.OrderBy.Direction;
 import org.springframework.core.convert.converter.Converter;
+
+import com.excilys.cdb.pagination.OrderBy.Direction;
 
 import java.util.Objects;
 

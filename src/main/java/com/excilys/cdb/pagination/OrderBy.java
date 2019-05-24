@@ -1,4 +1,4 @@
-package com.excilys.cdb.persistence.page;
+package com.excilys.cdb.pagination;
 
 import java.util.Arrays;
 import java.util.Objects;

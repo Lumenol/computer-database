@@ -3,7 +3,8 @@ package com.excilys.cdb.persistence.dao;
 import com.excilys.cdb.config.TestConfig;
 import com.excilys.cdb.database.UTDatabase;
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.persistence.page.Page;
+import com.excilys.cdb.pagination.Page;
+
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Before;

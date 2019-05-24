@@ -1,7 +1,8 @@
 package com.excilys.cdb.controller.web.sorting;
 
-import com.excilys.cdb.persistence.page.OrderBy;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.excilys.cdb.pagination.OrderBy;
 
 import java.util.Objects;
 import java.util.function.UnaryOperator;

@@ -2,8 +2,9 @@ package com.excilys.cdb.database;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.persistence.page.OrderBy;
-import com.excilys.cdb.persistence.page.Pageable;
+import com.excilys.cdb.pagination.OrderBy;
+import com.excilys.cdb.pagination.Pageable;
+
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
