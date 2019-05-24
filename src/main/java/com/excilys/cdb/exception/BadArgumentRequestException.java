@@ -1,5 +1,9 @@
 package com.excilys.cdb.exception;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 public class BadArgumentRequestException extends RuntimeException {
     public BadArgumentRequestException() {
     }

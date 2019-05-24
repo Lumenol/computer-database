@@ -3,8 +3,12 @@ package com.excilys.cdb.persistence.page;
 import java.util.Objects;
 
 public class Pageable {
-    private final Page page;
-    private final OrderBy orderBy;
+    private Page page;
+    private OrderBy orderBy;
+
+    public Pageable() {
+        this(new Page(), new OrderBy());
+    }
 
     Pageable(Page page, OrderBy orderBy) {
         Objects.requireNonNull(page);
@@ -19,19 +23,17 @@ public class Pageable {
 
     @Override
     public String toString() {
-        return "Pageable{" +
-                "page=" + page +
-                ", orderBy=" + orderBy +
-                '}';
+        return "Pageable{" + "page=" + page + ", orderBy=" + orderBy + '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Pageable pageable = (Pageable) o;
-        return Objects.equals(page, pageable.page) &&
-                Objects.equals(orderBy, pageable.orderBy);
+        return Objects.equals(page, pageable.page) && Objects.equals(orderBy, pageable.orderBy);
     }
 
     @Override
@@ -43,8 +45,16 @@ public class Pageable {
         return page;
     }
 
+    public void setPage(Page page) {
+        this.page = page;
+    }
+
     public OrderBy getOrderBy() {
         return orderBy;
+    }
+
+    public void setOrderBy(OrderBy orderBy) {
+        this.orderBy = orderBy;
     }
 
     public static class PageableBuilder {
@@ -68,6 +78,7 @@ public class Pageable {
             return new Pageable(page, orderBy);
         }
 
+        @Override
         public String toString() {
             return "Pageable.PageableBuilder(page=" + this.page + ", orderBy=" + this.orderBy + ")";
         }

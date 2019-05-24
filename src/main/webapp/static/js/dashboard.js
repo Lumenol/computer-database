@@ -74,8 +74,8 @@ $(function () {
 
 // Function delete selected: Asks for confirmation to delete selected computers, then submits it to the deleteForm
 (function ($) {
-    $.fn.deleteSelected = function () {
-        if (confirm("Are you sure you want to delete the selected computers?")) {
+    $.fn.deleteSelected = function (msg) {
+        if (confirm(msg)) {
             $('#deleteForm').setCheckboxValues('selection', 'cb');
             $('#deleteForm').submit();
         }
@@ -118,9 +118,9 @@ function setParameter(name, val) {
     $("#parameters input[name|='" + name + "']").val(val);
 }
 
-function orderBy(field, meaning) {
-    setParameter('order-by', field);
-    setParameter('meaning', meaning);
+function orderBy(field, direction) {
+    setParameter('field', field);
+    setParameter('direction', direction);
     goPage(1);
     return false;
 }
@@ -129,17 +129,17 @@ function load() {
     var index = getParameter('index');
     var size = getParameter('size');
     var search = getParameter('search');
-    var orderBy = getParameter('order-by');
-    var meaning = getParameter('meaning');
+    var orderBy = getParameter('field');
+    var direction = getParameter('direction');
 
     var url = "dashboard?page=" + index + "&size=" + size;
     if (search) {
         url += "&search=" + search;
     }
     if (orderBy) {
-        url += "&order-by=" + orderBy;
-        if (meaning) {
-            url += "&meaning=" + meaning;
+        url += "&field=" + orderBy;
+        if (direction) {
+            url += "&direction=" + direction;
         }
     }
 

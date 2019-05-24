@@ -6,11 +6,15 @@ import java.util.Optional;
 
 public class OrderBy {
     private Field field;
-    private Meaning meaning;
+    private Direction direction;
 
-    OrderBy(Field field, Meaning meaning) {
+    public OrderBy() {
+        this(Field.NAME, Direction.ASC);
+    }
+
+    OrderBy(Field field, Direction direction) {
         this.field = field;
-        this.meaning = meaning;
+        this.direction = direction;
     }
 
     public static OrderByBuilder builder() {
@@ -19,32 +23,38 @@ public class OrderBy {
 
     @Override
     public String toString() {
-        return "OrderBy{" +
-                "field=" + field +
-                ", meaning=" + meaning +
-                '}';
+        return "OrderBy{" + "field=" + field + ", direction=" + direction + '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         OrderBy orderBy = (OrderBy) o;
-        return field == orderBy.field &&
-                meaning == orderBy.meaning;
+        return field == orderBy.field && direction == orderBy.direction;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(field, meaning);
+        return Objects.hash(field, direction);
     }
 
     public Field getField() {
         return field;
     }
 
-    public Meaning getMeaning() {
-        return meaning;
+    public void setField(Field field) {
+        this.field = field;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
     public enum Field {
@@ -57,14 +67,13 @@ public class OrderBy {
         }
 
         public static Optional<Field> byIdentifier(String identifier) {
-            return Arrays.stream(Field.values()).filter(field -> field.identifier.equalsIgnoreCase(identifier)).findFirst();
+            return Arrays.stream(Field.values()).filter(field -> field.identifier.equalsIgnoreCase(identifier))
+                    .findFirst();
         }
 
         @Override
         public String toString() {
-            return "Field{" +
-                    "identifier='" + identifier + '\'' +
-                    '}';
+            return "Field{" + "identifier='" + identifier + '\'' + '}';
         }
 
         public String getIdentifier() {
@@ -72,24 +81,23 @@ public class OrderBy {
         }
     }
 
-    public enum Meaning {
+    public enum Direction {
         ASC("asc"), DESC("desc");
 
         private final String identifier;
 
-        Meaning(String identifier) {
+        Direction(String identifier) {
             this.identifier = identifier;
         }
 
-        public static Optional<Meaning> byIdentifier(String identifier) {
-            return Arrays.stream(Meaning.values()).filter(meaning -> meaning.identifier.equalsIgnoreCase(identifier)).findFirst();
+        public static Optional<Direction> byIdentifier(String identifier) {
+            return Arrays.stream(Direction.values()).filter(direction -> direction.identifier.equalsIgnoreCase(identifier))
+                    .findFirst();
         }
 
         @Override
         public String toString() {
-            return "Meaning{" +
-                    "identifier='" + identifier + '\'' +
-                    '}';
+            return "Direction{" + "identifier='" + identifier + '\'' + '}';
         }
 
         public String getIdentifier() {
@@ -99,7 +107,7 @@ public class OrderBy {
 
     public static class OrderByBuilder {
         private Field field = Field.ID;
-        private Meaning meaning = Meaning.ASC;
+        private Direction direction = Direction.ASC;
 
         OrderByBuilder() {
         }
@@ -109,17 +117,18 @@ public class OrderBy {
             return this;
         }
 
-        public OrderByBuilder meaning(Meaning meaning) {
-            this.meaning = meaning;
+        public OrderByBuilder direction(Direction direction) {
+            this.direction = direction;
             return this;
         }
 
         public OrderBy build() {
-            return new OrderBy(field, meaning);
+            return new OrderBy(field, direction);
         }
 
+        @Override
         public String toString() {
-            return "OrderBy.OrderByBuilder(field=" + this.field + ", meaning=" + this.meaning + ")";
+            return "OrderBy.OrderByBuilder(field=" + this.field + ", direction=" + this.direction + ")";
         }
     }
 }

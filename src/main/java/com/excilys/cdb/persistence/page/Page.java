@@ -3,74 +3,85 @@ package com.excilys.cdb.persistence.page;
 import java.util.Objects;
 
 public class Page {
-    private final long page;
-    private final long limit;
+    private long page;
+    private long size;
 
-    Page(long page, long limit) {
-	this.page = page;
-	this.limit = limit;
+    public Page() {
+        this(1, 50);
+    }
+
+    Page(long page, long size) {
+        this.page = page;
+        this.size = size;
     }
 
     public static PageBuilder builder() {
-	return new PageBuilder();
-    }
-
-    @Override
-    public String toString() {
-	return "Page{" + "page=" + page + ", offset=" + getOffset() + ", limit=" + limit + '}';
+        return new PageBuilder();
     }
 
     @Override
     public boolean equals(Object o) {
-	if (this == o)
-	    return true;
-	if (o == null || getClass() != o.getClass())
-	    return false;
-	Page page = (Page) o;
-	return this.page == page.page && limit == page.limit;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Page page1 = (Page) o;
+        return page == page1.page &&
+                size == page1.size;
     }
 
     @Override
     public int hashCode() {
-	return Objects.hash(page, limit);
+        return Objects.hash(page, size);
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
     }
 
     public long getOffset() {
-	return (page - 1) * limit;
+        return (page - 1) * size;
     }
 
     public long getPage() {
-	return page;
+        return page;
     }
 
-    public long getLimit() {
-	return limit;
+    public void setPage(long page) {
+        this.page = page;
+    }
+
+    @Override
+    public String toString() {
+        return "Page{" + "page=" + page + ", offset=" + getOffset() + ", size=" + size + '}';
     }
 
     public static class PageBuilder {
-	private long page;
-	private long limit;
+        private long page;
+        private long size;
 
-	PageBuilder() {
-	}
+        PageBuilder() {
+        }
 
-	public PageBuilder page(long page) {
-	    this.page = page;
-	    return this;
-	}
+        public Page build() {
+            return new Page(page, size);
+        }
 
-	public PageBuilder limit(long limit) {
-	    this.limit = limit;
-	    return this;
-	}
+        public PageBuilder size(long size) {
+            this.size = size;
+            return this;
+        }
 
-	public Page build() {
-	    return new Page(page, limit);
-	}
+        public PageBuilder page(long page) {
+            this.page = page;
+            return this;
+        }
 
-	@Override
-	public String toString() {
-	    return "Page.PageBuilder(offset=" + this.page + ", limit=" + this.limit + ")";
-	}
+        @Override
+        public String toString() {
+            return "Page.PageBuilder(offset=" + this.page + ", size=" + this.size + ")";
+        }
     }
 }

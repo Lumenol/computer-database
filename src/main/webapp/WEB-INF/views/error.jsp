@@ -11,19 +11,14 @@
     <link href="${pageContext.request.contextPath}/static/css/main.css" media="screen" rel="stylesheet">
 </head>
 <body>
-<header class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <c:url var="dashboard" value="/"/>
-        <a class="navbar-brand" href="${dashboard}"> Application - Computer Database </a>
-    </div>
-</header>
-
+<%@include file="header.jsp" %>
 <section id="main">
     <div class="container">
         <div class="alert alert-danger">
-            Error 500: An error has occured!
-            <br/>
-            <!-- stacktrace -->
+            <p>Status: ${status}</p>
+            <c:if test="${not empty reason}">
+                <p>Reason: ${reason}</p>
+            </c:if>
         </div>
     </div>
 </section>

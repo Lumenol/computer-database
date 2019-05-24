@@ -125,9 +125,9 @@ public class UTDatabase {
     private List<Computer> pagging(List<Computer> computers, Pageable pageable) {
         Comparator<Computer> comparator;
         final OrderBy.Field field = pageable.getOrderBy().getField();
-        final OrderBy.Meaning meaning = pageable.getOrderBy().getMeaning();
-        final Comparator<Computer> byId = reverse(Comparator.comparingLong(Computer::getId), meaning);
-        final Comparator<Computer> byName = reverse(Comparator.comparing(Computer::getName), meaning).thenComparing(byId);
+        final OrderBy.Direction direction = pageable.getOrderBy().getDirection();
+        final Comparator<Computer> byId = reverse(Comparator.comparingLong(Computer::getId), direction);
+        final Comparator<Computer> byName = reverse(Comparator.comparing(Computer::getName), direction).thenComparing(byId);
 
         switch (field) {
             case ID:
@@ -138,17 +138,17 @@ public class UTDatabase {
                 break;
             case INTRODUCED: {
                 final Function<Computer, LocalDate> keyExtractor = Computer::getIntroduced;
-                comparator = comparatorComputer(keyExtractor, reverse(LocalDate::compareTo, meaning)).thenComparing(byName);
+                comparator = comparatorComputer(keyExtractor, reverse(LocalDate::compareTo, direction)).thenComparing(byName);
             }
             break;
             case DISCONTINUED: {
                 final Function<Computer, LocalDate> keyExtractor = Computer::getDiscontinued;
-                comparator = comparatorComputer(keyExtractor, reverse(LocalDate::compareTo, meaning)).thenComparing(byName);
+                comparator = comparatorComputer(keyExtractor, reverse(LocalDate::compareTo, direction)).thenComparing(byName);
             }
             break;
             case COMPANY: {
                 final Function<Computer, Company> keyExtractor = Computer::getManufacturer;
-                comparator = comparatorComputer(keyExtractor, reverse(Comparator.comparing(Company::getName), meaning)).thenComparing(byName);
+                comparator = comparatorComputer(keyExtractor, reverse(Comparator.comparing(Company::getName), direction)).thenComparing(byName);
             }
             break;
             default:
@@ -156,7 +156,7 @@ public class UTDatabase {
         }
 
         return computers.stream().sorted(comparator).skip(pageable.getPage().getOffset())
-                .limit(pageable.getPage().getLimit()).collect(Collectors.toList());
+                .limit(pageable.getPage().getSize()).collect(Collectors.toList());
     }
 
     private <T> Comparator<Computer> comparatorComputer(Function<Computer, T> keyExtractor, Comparator<T> comparator) {
@@ -175,8 +175,8 @@ public class UTDatabase {
         };
     }
 
-    private <T> Comparator<T> reverse(Comparator<T> comparator, OrderBy.Meaning meaning) {
-        if (meaning == OrderBy.Meaning.DESC) {
+    private <T> Comparator<T> reverse(Comparator<T> comparator, OrderBy.Direction direction) {
+        if (direction == OrderBy.Direction.DESC) {
             return comparator.reversed();
         } else {
             return comparator;
