@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/computers/edit/{id}")
-public class EditComputerServlet {
+public class EditComputerController {
     private static final String PARAMETER_COMPUTER = "computer";
     private static final String PARAMETER_SUCCESS = "success";
     private static final String PARAMETER_COMPANIES = "companies";
@@ -34,10 +34,10 @@ public class EditComputerServlet {
     private final ComputerService computerService;
     private final ComputerToUpdateComputerDTOMapper computerToUpdateComputerDTOMapper;
 
-    public EditComputerServlet(CompanyService companyService,
-                               UpdateComputerDTOToComputerMapper updateComputerDTOToComputerMapper,
-                               UpdateComputerValidator updateComputerValidator, CompanyToCompanyDTOMapper companyToCompanyDTOMapper,
-                               ComputerService computerService, ComputerToUpdateComputerDTOMapper computerToUpdateComputerDTOMapper) {
+    public EditComputerController(CompanyService companyService,
+                                  UpdateComputerDTOToComputerMapper updateComputerDTOToComputerMapper,
+                                  UpdateComputerValidator updateComputerValidator, CompanyToCompanyDTOMapper companyToCompanyDTOMapper,
+                                  ComputerService computerService, ComputerToUpdateComputerDTOMapper computerToUpdateComputerDTOMapper) {
         super();
         this.companyService = companyService;
         this.updateComputerDTOToComputerMapper = updateComputerDTOToComputerMapper;

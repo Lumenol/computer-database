@@ -18,7 +18,7 @@ public class CreateComputerValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return CreateComputerDTO.class.equals(clazz);
+        return CreateComputerDTO.class.isAssignableFrom(clazz);
     }
 
     @Override
