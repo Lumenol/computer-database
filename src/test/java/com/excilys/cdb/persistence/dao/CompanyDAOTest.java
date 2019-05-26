@@ -1,10 +1,9 @@
 package com.excilys.cdb.persistence.dao;
 
-import com.excilys.cdb.config.TestConfig;
-import com.excilys.cdb.database.UTDatabase;
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.pagination.Page;
-
+import com.excilys.cdb.persistence.config.PersistenceConfigTest;
+import com.excilys.cdb.persistence.database.UTDatabase;
+import com.excilys.cdb.shared.pagination.Page;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Before;
@@ -26,18 +25,25 @@ import java.util.stream.Stream;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnitParamsRunner.class)
-@ContextConfiguration(classes = TestConfig.class)
+@ContextConfiguration(classes = PersistenceConfigTest.class)
 public class CompanyDAOTest {
 
     @ClassRule
     public static final SpringClassRule springClassRule = new SpringClassRule();
     @Rule
     public final SpringMethodRule springMethodRule = new SpringMethodRule();
+    private UTDatabase database;
+    private CompanyDAO companyDAO;
 
     @Autowired
-    private UTDatabase database;
+    public void setDatabase(UTDatabase database) {
+        this.database = database;
+    }
+
     @Autowired
-    private CompanyDAO companyDAO;
+    public void setCompanyDAO(CompanyDAO companyDAO) {
+        this.companyDAO = companyDAO;
+    }
 
     public Object[] provideCompanyId() {
         final Stream.Builder<Long> builder = Stream.builder();

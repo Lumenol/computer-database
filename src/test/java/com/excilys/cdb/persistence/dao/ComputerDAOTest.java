@@ -1,15 +1,14 @@
 package com.excilys.cdb.persistence.dao;
 
-import com.excilys.cdb.config.TestConfig;
-import com.excilys.cdb.database.UTDatabase;
-import com.excilys.cdb.exception.ComputerDAOException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Computer.ComputerBuilder;
-import com.excilys.cdb.pagination.OrderBy;
-import com.excilys.cdb.pagination.Page;
-import com.excilys.cdb.pagination.Pageable;
-
+import com.excilys.cdb.persistence.config.PersistenceConfigTest;
+import com.excilys.cdb.persistence.database.UTDatabase;
+import com.excilys.cdb.shared.exception.ComputerDAOException;
+import com.excilys.cdb.shared.pagination.OrderBy;
+import com.excilys.cdb.shared.pagination.Page;
+import com.excilys.cdb.shared.pagination.Pageable;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Before;
@@ -33,17 +32,25 @@ import java.util.stream.Stream;
 import static org.junit.Assert.*;
 
 @RunWith(JUnitParamsRunner.class)
-@ContextConfiguration(classes = TestConfig.class)
+@ContextConfiguration(classes = PersistenceConfigTest.class)
 public class ComputerDAOTest {
     @ClassRule
     public static final SpringClassRule springClassRule = new SpringClassRule();
     @Rule
     public final SpringMethodRule springMethodRule = new SpringMethodRule();
 
-    @Autowired
     private ComputerDAO computerDAO;
-    @Autowired
     private UTDatabase database;
+
+    @Autowired
+    public void setComputerDAO(ComputerDAO computerDAO) {
+        this.computerDAO = computerDAO;
+    }
+
+    @Autowired
+    public void setDatabase(UTDatabase database) {
+        this.database = database;
+    }
 
     public Object[] provideComputerId() {
         final Stream.Builder<Long> builder = Stream.builder();
@@ -161,14 +168,14 @@ public class ComputerDAOTest {
     @Test
     @Parameters(value = {"Apple | 11", "App | 11", "aPp | 11"})
     public void countSearch(String search, long expected) {
-        final long actual = computerDAO.countSearch(search);
+        final long actual = computerDAO.countByNameOrCompanyName(search);
         assertEquals(expected, actual);
     }
 
     @Test
     @Parameters(method = "providePageableAndSearch")
     public void search(Pageable pageable, String search) {
-        final List<Computer> actual = computerDAO.search(pageable, search);
+        final List<Computer> actual = computerDAO.searchByNameOrCompanyName(pageable, search);
         final List<Computer> expected = database.searchComputer(pageable, search);
         assertEquals(expected, actual);
     }

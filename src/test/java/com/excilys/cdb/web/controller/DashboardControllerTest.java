@@ -1,0 +1,75 @@
+package com.excilys.cdb.web.controller;
+
+import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.service.ComputerServiceImpl;
+import com.excilys.cdb.web.config.WebConfig;
+import com.excilys.cdb.web.config.WebMvcConfiguration;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import java.util.Arrays;
+
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = {DashboardControllerTest.Config.class, WebConfig.class, WebMvcConfiguration.class})
+@WebAppConfiguration
+public class DashboardControllerTest {
+    private static final String PARAMETER_PAGE = "page";
+    private static final String PARAMETER_NUMBER_OF_COMPUTERS = "numberOfComputers";
+    final String PARAMETER_PAGES = "pages";
+    private WebApplicationContext wac;
+    private MockMvc mockMvc;
+    private ComputerService mockComputerService;
+
+    @Before
+    public void setUp() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+        Mockito.reset(mockComputerService);
+    }
+
+    @Autowired
+    public void setMockComputerService(ComputerService mockComputerService) {
+        this.mockComputerService = mockComputerService;
+    }
+
+    @Autowired
+    public void setWac(WebApplicationContext wac) {
+        this.wac = wac;
+    }
+
+    @Test
+    public void testComputers() throws Exception {
+        final long count = 10_000L;
+        Mockito.when(mockComputerService.count()).thenReturn(count);
+        mockMvc.perform(get("/dashboard")).andExpect(status().isOk())
+                .andExpect(model().attribute(PARAMETER_PAGE, is(1L)))
+                .andExpect(model().attribute(PARAMETER_PAGES, is(Arrays.asList(1L, 2L, 3L, 4L, 5L))))
+                .andExpect(model().attribute(PARAMETER_NUMBER_OF_COMPUTERS, count));
+    }
+
+    @Configuration
+    public static class Config {
+        @Bean
+        @Primary
+        public ComputerService computerService() {
+            return Mockito.mock(ComputerServiceImpl.class);
+        }
+    }
+
+}
