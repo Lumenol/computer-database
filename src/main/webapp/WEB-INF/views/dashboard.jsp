@@ -46,8 +46,9 @@
                 <a class="btn btn-success" id="addComputer"
                    href="${addComputerUrl}">${addButton}</a>
                 <spring:message code="dashboard.edit.button" var="editButton"/>
+                <spring:message code="dashboard.view.button" var="viewButton"/>
                 <a class="btn btn-default" id="editComputer" href="#"
-                   onclick="$.fn.toggleEditMode();">${editButton}</a>
+                   onclick="$.fn.toggleEditMode('${editButton}','${viewButton}');">${editButton}</a>
             </div>
         </div>
     </div>
