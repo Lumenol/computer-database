@@ -1,17 +1,13 @@
 package com.excilys.cdb.web.controller;
 
 import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.service.ComputerServiceImpl;
-import com.excilys.cdb.web.config.WebConfig;
+import com.excilys.cdb.web.config.WebConfigTest;
 import com.excilys.cdb.web.config.WebMvcConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -27,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {DashboardControllerTest.Config.class, WebConfig.class, WebMvcConfiguration.class})
+@ContextConfiguration(classes = {WebConfigTest.class, WebMvcConfiguration.class})
 @WebAppConfiguration
 public class DashboardControllerTest {
     private static final String PARAMETER_PAGE = "page";
@@ -62,14 +58,4 @@ public class DashboardControllerTest {
                 .andExpect(model().attribute(PARAMETER_PAGES, is(Arrays.asList(1L, 2L, 3L, 4L, 5L))))
                 .andExpect(model().attribute(PARAMETER_NUMBER_OF_COMPUTERS, count));
     }
-
-    @Configuration
-    public static class Config {
-        @Bean
-        @Primary
-        public ComputerService computerService() {
-            return Mockito.mock(ComputerServiceImpl.class);
-        }
-    }
-
 }

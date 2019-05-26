@@ -5,7 +5,6 @@ import com.excilys.cdb.persistence.exception.ComputerDAOException;
 import com.excilys.cdb.shared.pagination.OrderBy;
 import com.excilys.cdb.shared.pagination.Page;
 import com.excilys.cdb.shared.pagination.Pageable;
-import com.excilys.cdb.shared.validator.ComputerExistById;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -24,7 +23,7 @@ import java.util.Optional;
 
 @Repository
 @Transactional(readOnly = true)
-public class ComputerDAOImpl implements ComputerExistById, ComputerDAO {
+public class ComputerDAOImpl implements ComputerDAO {
 
     private static final String SQL_COUNT = "SELECT COUNT(id) AS count FROM computer";
     private static final String SQL_COUNT_SEARCH = "SELECT COUNT(A.id) AS count FROM computer AS A LEFT JOIN company AS B ON A.company_id = B.id WHERE UPPER(A.name) LIKE ? OR UPPER(B.name) LIKE ?";

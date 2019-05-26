@@ -2,9 +2,7 @@ package com.excilys.cdb.persistence.dao;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.exception.CompanyDAOException;
-import com.excilys.cdb.shared.mapper.FindCompanyById;
 import com.excilys.cdb.shared.pagination.Page;
-import com.excilys.cdb.shared.validator.CompanyExistById;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -18,7 +16,7 @@ import java.util.Optional;
 
 @Repository
 @Transactional(readOnly = true)
-public class CompanyDAOImpl implements CompanyExistById, FindCompanyById, CompanyDAO {
+public class CompanyDAOImpl implements CompanyDAO {
 
     private static final String SQL_COUNT = "SELECT COUNT(id) AS count FROM company";
     private static final String SQL_FIND_ALL_PAGED = "SELECT id,name FROM company ORDER BY name LIMIT ? OFFSET ?";

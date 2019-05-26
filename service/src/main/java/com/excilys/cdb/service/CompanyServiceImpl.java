@@ -6,7 +6,9 @@ import com.excilys.cdb.persistence.dao.ComputerDAO;
 import com.excilys.cdb.persistence.exception.CompanyDAOException;
 import com.excilys.cdb.persistence.exception.ComputerDAOException;
 import com.excilys.cdb.service.exception.CompanyServiceException;
+import com.excilys.cdb.shared.mapper.FindCompanyById;
 import com.excilys.cdb.shared.pagination.Page;
+import com.excilys.cdb.shared.validator.CompanyExistById;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,7 @@ import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
-public class CompanyServiceImpl implements CompanyService {
+public class CompanyServiceImpl implements CompanyService, CompanyExistById, FindCompanyById {
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyService.class);
     private final CompanyDAO companyDAO;
     private final ComputerDAO computerDAO;
