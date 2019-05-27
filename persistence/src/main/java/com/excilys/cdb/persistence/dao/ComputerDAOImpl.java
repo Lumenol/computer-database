@@ -51,7 +51,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	try {
 	    return jdbcTemplate.queryForObject(SQL_COUNT, Long.class);
 	} catch (DataAccessException e) {
-	    LOGGER.warn("count()", e);
+	    LOGGER.error("count()", e);
 	    throw new ComputerDAOException(e);
 	}
     }
@@ -77,7 +77,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	    jdbcTemplate.update(preparedStatementCreatorForCreate(sqlComputer), keyHolder);
 	    return keyHolder.getKey().longValue();
 	} catch (DataAccessException e) {
-	    LOGGER.warn("create(" + computer + ")", e);
+	    LOGGER.error("create(" + computer + ")", e);
 	    throw new ComputerDAOException(e);
 	}
 
@@ -88,7 +88,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	try {
 	    jdbcTemplate.update(SQL_DELETE, id);
 	} catch (DataAccessException e) {
-	    LOGGER.warn("deleteById(" + id + ")", e);
+	    LOGGER.error("deleteById(" + id + ")", e);
 	    throw new ComputerDAOException(e);
 	}
     }
@@ -98,7 +98,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	try {
 	    jdbcTemplate.update(SQL_DELETE_ALL_BY_COMPANY_ID, id);
 	} catch (DataAccessException e) {
-	    LOGGER.warn("deleteByMannufacturerId(" + id + ")", e);
+	    LOGGER.error("deleteByMannufacturerId(" + id + ")", e);
 	    throw new ComputerDAOException(e);
 	}
     }
@@ -144,7 +144,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	    final Object[] args = { page.getSize(), page.getOffset() };
 	    return jdbcTemplate.query(query, args, computerRowMapper);
 	} catch (DataAccessException e) {
-	    LOGGER.warn("findAll(" + pageable + ")", e);
+	    LOGGER.error("findAll(" + pageable + ")", e);
 	    throw new ComputerDAOException(e);
 	}
     }
@@ -156,7 +156,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	    return Optional.ofNullable(jdbcTemplate.query(SQL_FIND_BY_ID, args, computerRowMapper))
 		    .filter(list -> !list.isEmpty()).map(list -> list.get(0));
 	} catch (DataAccessException e) {
-	    LOGGER.warn("findById(" + id + ")", e);
+	    LOGGER.error("findById(" + id + ")", e);
 	    throw new ComputerDAOException(e);
 	}
     }
@@ -169,7 +169,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 		    sqlComputer.getManufacturerId(), sqlComputer.getId() };
 	    jdbcTemplate.update(SQL_UPDATE, args);
 	} catch (DataAccessException e) {
-	    LOGGER.warn("update(" + computer + ")", e);
+	    LOGGER.error("update(" + computer + ")", e);
 	    throw new ComputerDAOException(e);
 	}
 
@@ -183,7 +183,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	    final Object[] args = { like, like };
 	    return jdbcTemplate.queryForObject(SQL_COUNT_SEARCH, args, Long.class);
 	} catch (DataAccessException e) {
-	    LOGGER.warn("countByNameOrCompanyName(" + name + ")", e);
+	    LOGGER.error("countByNameOrCompanyName(" + name + ")", e);
 	    throw new ComputerDAOException(e);
 	}
     }
@@ -198,7 +198,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	    final Object[] args = { like, like, page.getSize(), page.getOffset() };
 	    return jdbcTemplate.query(query, args, computerRowMapper);
 	} catch (DataAccessException e) {
-	    LOGGER.warn("searchByNameOrCompanyName(" + pageable + "," + name + ")", e);
+	    LOGGER.error("searchByNameOrCompanyName(" + pageable + "," + name + ")", e);
 	    throw new ComputerDAOException(e);
 	}
     }
@@ -208,7 +208,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	try {
 	    return findById(id).isPresent();
 	} catch (ComputerDAOException e) {
-	    LOGGER.warn("exist(" + id + ")", e);
+	    LOGGER.error("exist(" + id + ")", e);
 	    throw new ComputerDAOException(e);
 	}
     }

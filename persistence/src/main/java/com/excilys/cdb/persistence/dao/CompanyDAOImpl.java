@@ -38,7 +38,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	try {
 	    return jdbcTemplate.queryForObject(SQL_COUNT, Long.class);
 	} catch (DataAccessException e) {
-	    LOGGER.warn("count()", e);
+	    LOGGER.error("count()", e);
 	    throw new CompanyDAOException(e);
 	}
     }
@@ -49,7 +49,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	    final Object[] args = { page.getSize(), page.getOffset() };
 	    return jdbcTemplate.query(SQL_FIND_ALL_PAGED, args, companyRowMapper);
 	} catch (DataAccessException e) {
-	    LOGGER.warn("findAll(" + page + ")", e);
+	    LOGGER.error("findAll(" + page + ")", e);
 	    throw new CompanyDAOException(e);
 	}
     }
@@ -61,7 +61,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	    return Optional.ofNullable(jdbcTemplate.query(SQL_FIND_BY_ID, args, companyRowMapper))
 		    .filter(list -> !list.isEmpty()).map(list -> list.get(0));
 	} catch (DataAccessException e) {
-	    LOGGER.warn("findById(" + id + ")", e);
+	    LOGGER.error("findById(" + id + ")", e);
 	    throw new CompanyDAOException(e);
 	}
     }
@@ -71,7 +71,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	try {
 	    return jdbcTemplate.query(SQL_FIND_ALL, companyRowMapper);
 	} catch (DataAccessException e) {
-	    LOGGER.warn("findAll()", e);
+	    LOGGER.error("findAll()", e);
 	    throw new CompanyDAOException(e);
 	}
     }
@@ -82,7 +82,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	    final Object[] args = { id };
 	    jdbcTemplate.update(SQL_DELETE, args);
 	} catch (DataAccessException e) {
-	    LOGGER.warn("deleteById(" + id + ")", e);
+	    LOGGER.error("deleteById(" + id + ")", e);
 	    throw new CompanyDAOException(e);
 	}
     }
@@ -92,7 +92,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	try {
 	    return findById(id).isPresent();
 	} catch (CompanyDAOException e) {
-	    LOGGER.warn("exist(" + id + ")", e);
+	    LOGGER.error("exist(" + id + ")", e);
 	    throw new CompanyDAOException(e);
 	}
     }

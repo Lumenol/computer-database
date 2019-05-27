@@ -61,7 +61,7 @@ public class Controller {
         try {
             computerService.delete(id);
         } catch (RuntimeException e) {
-            LOGGER.warn("deleteComputer(" + id + ")", e);
+            LOGGER.error("deleteComputer(" + id + ")", e);
             throw new ControllerException();
         }
     }
@@ -71,7 +71,7 @@ public class Controller {
             final Page page = Page.builder().page(offset / limit + 1).size(limit).build();
             return companyService.findAll(page).stream().map(companyToCompanyDTO::map).collect(Collectors.toList());
         } catch (RuntimeException e) {
-            LOGGER.warn("getCompanies(" + offset + "," + limit + ")", e);
+            LOGGER.error("getCompanies(" + offset + "," + limit + ")", e);
             throw new ControllerException();
         }
     }
@@ -80,7 +80,7 @@ public class Controller {
         try {
             return computerService.findById(id).map(computerToComputerDTO::map);
         } catch (RuntimeException e) {
-            LOGGER.warn("getComputerById(" + id + ")", e);
+            LOGGER.error("getComputerById(" + id + ")", e);
             throw new ControllerException();
         }
     }
@@ -93,7 +93,7 @@ public class Controller {
             return computerService.findAll(pageable).stream().map(computerToComputerDTO::map)
                     .collect(Collectors.toList());
         } catch (RuntimeException e) {
-            LOGGER.warn("getComputers(" + offset + "," + limit + ")", e);
+            LOGGER.error("getComputers(" + offset + "," + limit + ")", e);
             throw new ControllerException();
         }
     }
@@ -102,7 +102,7 @@ public class Controller {
         try {
             return companyService.count();
         } catch (RuntimeException e) {
-            LOGGER.warn("numberOfCompanies()", e);
+            LOGGER.error("numberOfCompanies()", e);
             throw new ControllerException();
         }
     }
@@ -111,7 +111,7 @@ public class Controller {
         try {
             return computerService.count();
         } catch (RuntimeException e) {
-            LOGGER.warn("numberOfComputers()", e);
+            LOGGER.error("numberOfComputers()", e);
             throw new ControllerException();
         }
     }
@@ -124,7 +124,7 @@ public class Controller {
         try {
             companyService.delete(id);
         } catch (RuntimeException e) {
-            LOGGER.warn("deleteCompany(" + id + ")", e);
+            LOGGER.error("deleteCompany(" + id + ")", e);
             throw new ControllerException();
         }
     }
@@ -144,7 +144,7 @@ public class Controller {
             }
             computerService.create(createComputerDTOToComputerMapper.map(dto));
         } catch (RuntimeException e) {
-            LOGGER.warn(
+            LOGGER.error(
                     "createComputer(" + name + ", " + introduced + ", " + discontinued + ", " + mannufacturerId + ")",
                     e);
             throw new ControllerException();
@@ -167,7 +167,7 @@ public class Controller {
             }
             computerService.update(updateComputerDTOToComputerMapper.map(dto));
         } catch (RuntimeException e) {
-            LOGGER.warn("updateComputer(" + id + ", " + name + ", " + introduced + ", " + discontinued + ", "
+            LOGGER.error("updateComputer(" + id + ", " + name + ", " + introduced + ", " + discontinued + ", "
                     + mannufacturerId + ")", e);
             throw new ControllerException();
         }

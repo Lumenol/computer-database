@@ -31,7 +31,7 @@ public class ComputerServiceImpl implements ComputerExistById, ComputerService {
         try {
             return computerDAO.count();
         } catch (ComputerDAOException e) {
-            LOGGER.warn("count()", e);
+            LOGGER.error("count()", e);
             throw new ComputerServiceException(e);
         }
     }
@@ -42,7 +42,7 @@ public class ComputerServiceImpl implements ComputerExistById, ComputerService {
         try {
             computerDAO.create(computer);
         } catch (ComputerDAOException e) {
-            LOGGER.warn("create(" + computer + ")", e);
+            LOGGER.error("create(" + computer + ")", e);
             throw new ComputerServiceException(e);
         }
     }
@@ -53,7 +53,7 @@ public class ComputerServiceImpl implements ComputerExistById, ComputerService {
         try {
             computerDAO.deleteById(id);
         } catch (ComputerDAOException e) {
-            LOGGER.warn("delete(" + id + ")", e);
+            LOGGER.error("delete(" + id + ")", e);
             throw new ComputerServiceException(e);
         }
     }
@@ -63,7 +63,7 @@ public class ComputerServiceImpl implements ComputerExistById, ComputerService {
         try {
             return computerDAO.exist(id);
         } catch (ComputerDAOException e) {
-            LOGGER.warn("exist(" + id + ")", e);
+            LOGGER.error("exist(" + id + ")", e);
             throw new ComputerServiceException(e);
         }
     }
@@ -73,7 +73,7 @@ public class ComputerServiceImpl implements ComputerExistById, ComputerService {
         try {
             return computerDAO.findAll(pageable);
         } catch (ComputerDAOException e) {
-            LOGGER.warn("findAll(" + pageable + ")", e);
+            LOGGER.error("findAll(" + pageable + ")", e);
             throw new ComputerServiceException(e);
         }
     }
@@ -83,7 +83,7 @@ public class ComputerServiceImpl implements ComputerExistById, ComputerService {
         try {
             return computerDAO.findById(id);
         } catch (ComputerDAOException e) {
-            LOGGER.warn("findById(" + id + ")", e);
+            LOGGER.error("findById(" + id + ")", e);
             throw new ComputerServiceException(e);
         }
     }
@@ -94,7 +94,7 @@ public class ComputerServiceImpl implements ComputerExistById, ComputerService {
         try {
             computerDAO.update(computer);
         } catch (ComputerDAOException e) {
-            LOGGER.warn("update(" + computer + ")", e);
+            LOGGER.error("update(" + computer + ")", e);
             throw new ComputerServiceException(e);
         }
     }
@@ -104,7 +104,7 @@ public class ComputerServiceImpl implements ComputerExistById, ComputerService {
         try {
             return computerDAO.searchByNameOrCompanyName(pageable, name);
         } catch (ComputerDAOException e) {
-            LOGGER.warn("searchByNameOrCompanyName(" + pageable + "," + name + ")", e);
+            LOGGER.error("searchByNameOrCompanyName(" + pageable + "," + name + ")", e);
             throw new ComputerServiceException(e);
         }
     }
@@ -114,7 +114,7 @@ public class ComputerServiceImpl implements ComputerExistById, ComputerService {
         try {
             return computerDAO.countByNameOrCompanyName(name);
         } catch (ComputerDAOException e) {
-            LOGGER.warn("countByNameOrCompanyName(" + name + ")", e);
+            LOGGER.error("countByNameOrCompanyName(" + name + ")", e);
             throw new ComputerServiceException(e);
         }
     }

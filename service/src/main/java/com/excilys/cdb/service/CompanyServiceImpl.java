@@ -34,7 +34,7 @@ public class CompanyServiceImpl implements CompanyService, CompanyExistById, Fin
         try {
             return companyDAO.count();
         } catch (CompanyDAOException e) {
-            LOGGER.warn("count()", e);
+            LOGGER.error("count()", e);
             throw new CompanyServiceException(e);
         }
     }
@@ -44,7 +44,7 @@ public class CompanyServiceImpl implements CompanyService, CompanyExistById, Fin
         try {
             return companyDAO.exist(id);
         } catch (CompanyDAOException e) {
-            LOGGER.warn("exist(" + id + ")", e);
+            LOGGER.error("exist(" + id + ")", e);
             throw new CompanyServiceException(e);
         }
     }
@@ -54,7 +54,7 @@ public class CompanyServiceImpl implements CompanyService, CompanyExistById, Fin
         try {
             return companyDAO.findAll(page);
         } catch (CompanyDAOException e) {
-            LOGGER.warn("findAll(" + page + ")", e);
+            LOGGER.error("findAll(" + page + ")", e);
             throw new CompanyServiceException(e);
         }
     }
@@ -64,7 +64,7 @@ public class CompanyServiceImpl implements CompanyService, CompanyExistById, Fin
         try {
             return companyDAO.findById(id);
         } catch (CompanyServiceException e) {
-            LOGGER.warn("findById(" + id + ")", e);
+            LOGGER.error("findById(" + id + ")", e);
             throw new CompanyServiceException(e);
         }
     }
@@ -74,7 +74,7 @@ public class CompanyServiceImpl implements CompanyService, CompanyExistById, Fin
         try {
             return companyDAO.findAll();
         } catch (CompanyDAOException e) {
-            LOGGER.warn("findAll()", e);
+            LOGGER.error("findAll()", e);
             throw new CompanyServiceException(e);
         }
     }
@@ -86,7 +86,7 @@ public class CompanyServiceImpl implements CompanyService, CompanyExistById, Fin
             computerDAO.deleteByMannufacturerId(id);
             companyDAO.deleteById(id);
         } catch (ComputerDAOException | CompanyDAOException e) {
-            LOGGER.warn("delete(" + id + ")", e);
+            LOGGER.error("delete(" + id + ")", e);
             throw new CompanyServiceException(e);
         }
     }
