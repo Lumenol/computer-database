@@ -1,7 +1,9 @@
 package com.excilys.cdb.persistence.config;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import java.util.TimeZone;
+
+import javax.sql.DataSource;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -10,33 +12,34 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.sql.DataSource;
-import java.util.TimeZone;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@ComponentScan(basePackages = {"com.excilys.cdb.persistence.dao", "com.excilys.cdb.persistence.rowmapper"}, excludeFilters = @ComponentScan.Filter(Configuration.class))
+@ComponentScan(basePackages = { "com.excilys.cdb.persistence.dao", "com.excilys.cdb.persistence.rowmapper",
+	"com.excilys.cdb.persistence.mapper" }, excludeFilters = @ComponentScan.Filter(Configuration.class))
 @EnableTransactionManagement
 public class PersistenceConfig {
 
     @Bean(destroyMethod = "close")
     public HikariDataSource dataSource(HikariConfig configuration) {
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-        return new HikariDataSource(configuration);
+	TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+	return new HikariDataSource(configuration);
     }
 
     @Bean
     public HikariConfig hikariConfig() {
-        return new HikariConfig("/datasource.properties");
+	return new HikariConfig("/datasource.properties");
     }
 
     @Bean
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
-        return new JdbcTemplate(dataSource);
+	return new JdbcTemplate(dataSource);
     }
 
     @Bean
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
-        return new DataSourceTransactionManager(dataSource);
+	return new DataSourceTransactionManager(dataSource);
     }
 
 }
