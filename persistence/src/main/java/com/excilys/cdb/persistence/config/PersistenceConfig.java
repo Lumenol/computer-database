@@ -1,14 +1,18 @@
 package com.excilys.cdb.persistence.config;
 
+import java.util.Properties;
 import java.util.TimeZone;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -16,7 +20,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@ComponentScan(basePackages = { "com.excilys.cdb.persistence.dao", "com.excilys.cdb.persistence.rowmapper",
+@ComponentScan(basePackages = { "com.excilys.cdb.persistence.dao",
 	"com.excilys.cdb.persistence.mapper" }, excludeFilters = @ComponentScan.Filter(Configuration.class))
 @EnableTransactionManagement
 public class PersistenceConfig {
@@ -30,16 +34,39 @@ public class PersistenceConfig {
     @Bean
     public HikariConfig hikariConfig() {
 	return new HikariConfig("/datasource.properties");
+
     }
 
     @Bean
-    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
-	return new JdbcTemplate(dataSource);
+    public JpaVendorAdapter jpaVendorAdapter() {
+	return new HibernateJpaVendorAdapter();
     }
 
     @Bean
-    public PlatformTransactionManager transactionManager(DataSource dataSource) {
-	return new DataSourceTransactionManager(dataSource);
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource,
+	    JpaVendorAdapter vendorAdapter, Properties jpaProperties) {
+	LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+	em.setDataSource(dataSource);
+	em.setPackagesToScan("com.excilys.cdb.persistence.entity");
+
+	em.setJpaVendorAdapter(vendorAdapter);
+	em.setJpaProperties(jpaProperties);
+
+	return em;
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
+	JpaTransactionManager transactionManager = new JpaTransactionManager();
+	transactionManager.setEntityManagerFactory(emf);
+	return transactionManager;
+    }
+
+    @Bean
+    public Properties jpaProperties() {
+	Properties properties = new Properties();
+	properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+	return properties;
     }
 
 }

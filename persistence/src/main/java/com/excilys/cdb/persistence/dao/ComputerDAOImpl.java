@@ -9,9 +9,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
@@ -37,19 +35,11 @@ public class ComputerDAOImpl implements ComputerDAO {
 
     private static final String SQL_UPDATE = "UPDATE computer SET name = ?, introduced = ?,discontinued = ?,company_id = ? WHERE id = ?";
     private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
-    private final JdbcTemplate jdbcTemplate;
-    private final RowMapper<Computer> computerRowMapper;
-
-    public ComputerDAOImpl(JdbcTemplate jdbcTemplate, RowMapper<Computer> computeRowMapper) {
-	super();
-	this.jdbcTemplate = jdbcTemplate;
-	this.computerRowMapper = computeRowMapper;
-    }
 
     @Override
     public long count() {
 	try {
-	    return jdbcTemplate.queryForObject(SQL_COUNT, Long.class);
+	    return 0;// jdbcTemplate.queryForObject(SQL_COUNT, Long.class);
 	} catch (DataAccessException e) {
 	    LOGGER.error("count()", e);
 	    throw new ComputerDAOException(e);
@@ -74,7 +64,8 @@ public class ComputerDAOImpl implements ComputerDAO {
 	final SQLComputer sqlComputer = SQLComputer.from(computer);
 	try {
 	    final GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-	    jdbcTemplate.update(preparedStatementCreatorForCreate(sqlComputer), keyHolder);
+	    // jdbcTemplate.update(preparedStatementCreatorForCreate(sqlComputer),
+	    // keyHolder);
 	    return keyHolder.getKey().longValue();
 	} catch (DataAccessException e) {
 	    LOGGER.error("create(" + computer + ")", e);
@@ -86,7 +77,7 @@ public class ComputerDAOImpl implements ComputerDAO {
     @Override
     public void deleteById(long id) {
 	try {
-	    jdbcTemplate.update(SQL_DELETE, id);
+	    // jdbcTemplate.update(SQL_DELETE, id);
 	} catch (DataAccessException e) {
 	    LOGGER.error("deleteById(" + id + ")", e);
 	    throw new ComputerDAOException(e);
@@ -96,7 +87,7 @@ public class ComputerDAOImpl implements ComputerDAO {
     @Override
     public void deleteByMannufacturerId(long id) {
 	try {
-	    jdbcTemplate.update(SQL_DELETE_ALL_BY_COMPANY_ID, id);
+	    // jdbcTemplate.update(SQL_DELETE_ALL_BY_COMPANY_ID, id);
 	} catch (DataAccessException e) {
 	    LOGGER.error("deleteByMannufacturerId(" + id + ")", e);
 	    throw new ComputerDAOException(e);
@@ -142,7 +133,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	    final String query = insertOrderByInQuery(SQL_FIND_ALL_PAGED, pageable.getOrderBy());
 	    final Page page = pageable.getPage();
 	    final Object[] args = { page.getSize(), page.getOffset() };
-	    return jdbcTemplate.query(query, args, computerRowMapper);
+	    return null;// jdbcTemplate.query(query, args, computerRowMapper);
 	} catch (DataAccessException e) {
 	    LOGGER.error("findAll(" + pageable + ")", e);
 	    throw new ComputerDAOException(e);
@@ -153,8 +144,9 @@ public class ComputerDAOImpl implements ComputerDAO {
     public Optional<Computer> findById(long id) {
 	try {
 	    final Object[] args = { id };
-	    return Optional.ofNullable(jdbcTemplate.query(SQL_FIND_BY_ID, args, computerRowMapper))
-		    .filter(list -> !list.isEmpty()).map(list -> list.get(0));
+	    return null;// Optional.ofNullable(jdbcTemplate.query(SQL_FIND_BY_ID, args,
+			// computerRowMapper)) .filter(list -> !list.isEmpty()).map(list ->
+			// list.get(0));
 	} catch (DataAccessException e) {
 	    LOGGER.error("findById(" + id + ")", e);
 	    throw new ComputerDAOException(e);
@@ -167,7 +159,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	try {
 	    final Object[] args = { sqlComputer.getName(), sqlComputer.getIntroduced(), sqlComputer.getDiscontinued(),
 		    sqlComputer.getManufacturerId(), sqlComputer.getId() };
-	    jdbcTemplate.update(SQL_UPDATE, args);
+	    // jdbcTemplate.update(SQL_UPDATE, args);
 	} catch (DataAccessException e) {
 	    LOGGER.error("update(" + computer + ")", e);
 	    throw new ComputerDAOException(e);
@@ -181,7 +173,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	try {
 	    final String like = ("%" + name + "%").toUpperCase();
 	    final Object[] args = { like, like };
-	    return jdbcTemplate.queryForObject(SQL_COUNT_SEARCH, args, Long.class);
+	    return 0;// jdbcTemplate.queryForObject(SQL_COUNT_SEARCH, args, Long.class);
 	} catch (DataAccessException e) {
 	    LOGGER.error("countByNameOrCompanyName(" + name + ")", e);
 	    throw new ComputerDAOException(e);
@@ -196,7 +188,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	    final String like = ("%" + name + "%").toUpperCase();
 	    final String query = insertOrderByInQuery(SQL_SEARCH, pageable.getOrderBy());
 	    final Object[] args = { like, like, page.getSize(), page.getOffset() };
-	    return jdbcTemplate.query(query, args, computerRowMapper);
+	    return null;// jdbcTemplate.query(query, args, computerRowMapper);
 	} catch (DataAccessException e) {
 	    LOGGER.error("searchByNameOrCompanyName(" + pageable + "," + name + ")", e);
 	    throw new ComputerDAOException(e);

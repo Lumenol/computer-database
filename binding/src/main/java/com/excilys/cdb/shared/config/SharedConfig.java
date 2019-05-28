@@ -7,13 +7,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
 @Configuration
-@ComponentScan(basePackages = {"com.excilys.cdb.shared.mapper", "com.excilys.cdb.shared.validator"}, excludeFilters = @ComponentScan.Filter(Configuration.class))
+@ComponentScan(basePackages = { "com.excilys.cdb.shared.mapper",
+	"com.excilys.cdb.shared.validator" }, excludeFilters = @ComponentScan.Filter(Configuration.class))
 public class SharedConfig {
     @Bean
     public MessageSource messageSource() {
-        final ResourceBundleMessageSource bundleMessage = new ResourceBundleMessageSource();
-        bundleMessage.addBasenames("i18n/messages");
-        return bundleMessage;
+	final ResourceBundleMessageSource bundleMessage = new ResourceBundleMessageSource();
+	bundleMessage.addBasenames("i18n/messages");
+	return bundleMessage;
     }
 
 }
