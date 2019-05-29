@@ -16,7 +16,7 @@ public class ComputerToComputerDTOMapper implements Mapper<Computer, ComputerDTO
                 .name(computer.getName()).introduced(computer.getIntroduced()).discontinued(computer.getDiscontinued());
 
         if (Objects.nonNull(computer.getManufacturer())) {
-            builder.mannufacturer(computer.getManufacturer().getName());
+            builder.manufacturer(computer.getManufacturer().getName());
         }
         return builder.build();
     }

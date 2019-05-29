@@ -30,7 +30,7 @@ public class CreateComputerValidator implements Validator {
         computerValidatorUtils.checkDiscontinued(toValidate.getDiscontinued(), errors);
         computerValidatorUtils.checkIntroducedIsBeforeDiscontinued(toValidate.getIntroduced(),
                 toValidate.getDiscontinued(), errors);
-        computerValidatorUtils.checkMannufacturerId(toValidate.getMannufacturerId(), errors);
+        computerValidatorUtils.checkmanufacturerId(toValidate.getmanufacturerId(), errors);
     }
 
 }

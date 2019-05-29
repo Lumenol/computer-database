@@ -19,7 +19,7 @@ public class ComputerEntity {
     private LocalDate discontinued;
     private LocalDate introduced;
     @ManyToOne
-    @JoinColumn(name = "company")
+    @JoinColumn(name = "company_id")
     private CompanyEntity manufacturer;
     @Column(nullable = false)
     private String name;

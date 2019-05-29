@@ -10,14 +10,14 @@ import java.util.Optional;
 public interface CompanyDAO {
     long count();
 
-    List<Company> findAll(Page page);
-
-    Optional<Company> findById(long id);
-
-    List<Company> findAll();
-
     @Transactional
     void deleteById(long id);
 
     boolean exist(long id);
+
+    List<Company> findAll();
+
+    List<Company> findAll(Page page);
+
+    Optional<Company> findById(long id);
 }

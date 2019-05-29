@@ -83,7 +83,7 @@ public class CompanyServiceImpl implements CompanyService, CompanyExistById, Fin
     @Transactional
     public void delete(long id) {
         try {
-            computerDAO.deleteByMannufacturerId(id);
+            computerDAO.deleteBymanufacturerId(id);
             companyDAO.deleteById(id);
         } catch (ComputerDAOException | CompanyDAOException e) {
             LOGGER.error("delete(" + id + ")", e);

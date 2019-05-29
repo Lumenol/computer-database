@@ -1,73 +1,94 @@
 package com.excilys.cdb.persistence.dao;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.persistence.entity.ComputerEntity;
 import com.excilys.cdb.persistence.exception.ComputerDAOException;
+import com.excilys.cdb.shared.mapper.Mapper;
 import com.excilys.cdb.shared.pagination.OrderBy;
-import com.excilys.cdb.shared.pagination.Page;
 import com.excilys.cdb.shared.pagination.Pageable;
 
 @Repository
 public class ComputerDAOImpl implements ComputerDAO {
-
-    private static final String SQL_COUNT = "SELECT COUNT(id) AS count FROM computer";
-    private static final String SQL_COUNT_SEARCH = "SELECT COUNT(A.id) AS count FROM computer AS A LEFT JOIN company AS B ON A.company_id = B.id WHERE UPPER(A.name) LIKE ? OR UPPER(B.name) LIKE ?";
-
-    private static final String SQL_CREATE = "INSERT INTO computer (name, introduced,discontinued,company_id) VALUES (?,?,?,?)";
-
-    private static final String SQL_DELETE = "DELETE FROM computer WHERE id=?";
-    private static final String SQL_DELETE_ALL_BY_COMPANY_ID = "DELETE FROM computer WHERE company_id=?";
-    private static final String SQL_FIND_ALL_PAGED = "SELECT A.id AS id,A.name AS name ,A.introduced AS introduced ,A.discontinued AS discontinued ,B.id AS company_id,B.name AS company_name FROM computer AS A LEFT JOIN company AS B ON A.company_id = B.id ORDER BY %s LIMIT ? OFFSET ?";
-    private static final String SQL_SEARCH = "SELECT A.id AS id,A.name AS name ,A.introduced AS introduced ,A.discontinued AS discontinued ,B.id AS company_id,B.name AS company_name FROM computer AS A LEFT JOIN company AS B ON A.company_id = B.id WHERE UPPER(A.name) LIKE ? OR UPPER(B.name) LIKE ? ORDER BY %s LIMIT ? OFFSET ?";
-    private static final String SQL_FIND_BY_ID = "SELECT A.id AS id,A.name AS name ,A.introduced AS introduced ,A.discontinued AS discontinued ,B.id AS company_id,B.name AS company_name FROM computer AS A LEFT JOIN company AS B ON A.company_id = B.id WHERE A.id = ? LIMIT 1";
-
-    private static final String SQL_UPDATE = "UPDATE computer SET name = ?, introduced = ?,discontinued = ?,company_id = ? WHERE id = ?";
     private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
+
+    private EntityManager entityManager;
+    private final Mapper<ComputerEntity, Computer> computerEntityToComputerMapper;
+    private final Mapper<Computer, ComputerEntity> computerToComputerEntityMapper;
+
+    public ComputerDAOImpl(Mapper<ComputerEntity, Computer> computerEntityToComputerMapper,
+	    Mapper<Computer, ComputerEntity> computerToComputerEntityMapper) {
+	this.computerEntityToComputerMapper = computerEntityToComputerMapper;
+	this.computerToComputerEntityMapper = computerToComputerEntityMapper;
+    }
 
     @Override
     public long count() {
 	try {
-	    return 0;// jdbcTemplate.queryForObject(SQL_COUNT, Long.class);
-	} catch (DataAccessException e) {
+	    return countWithNameOrCompanyNameLike("");
+	} catch (PersistenceException e) {
 	    LOGGER.error("count()", e);
 	    throw new ComputerDAOException(e);
 	}
     }
 
-    private PreparedStatementCreator preparedStatementCreatorForCreate(SQLComputer computer) {
-	Object[] args = { computer.getName(), computer.getIntroduced(), computer.getDiscontinued(),
-		computer.getManufacturerId() };
-	return con -> {
-	    final PreparedStatement prepareStatement = con.prepareStatement(SQL_CREATE,
-		    Statement.RETURN_GENERATED_KEYS);
-	    for (int i = 0; i < args.length; i++) {
-		prepareStatement.setObject(i + 1, args[i]);
-	    }
-	    return prepareStatement;
-	};
+    @Override
+    public long countByNameOrCompanyName(String name) {
+	Objects.requireNonNull(name);
+	try {
+	    return countWithNameOrCompanyNameLike(name);
+	} catch (PersistenceException e) {
+	    LOGGER.error("countByNameOrCompanyName(" + name + ")", e);
+	    throw new ComputerDAOException(e);
+	}
+    }
+
+    private Long countWithNameOrCompanyNameLike(String name) {
+	final String pattern = "%" + name.toUpperCase() + "%";
+	final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
+	final CriteriaQuery<Long> cQuery = cBuilder.createQuery(Long.class);
+	final Root<ComputerEntity> c = cQuery.from(ComputerEntity.class);
+	c.join("manufacturer", JoinType.LEFT);
+	final Predicate namePredicate = cBuilder.like(cBuilder.upper(c.get("name")), pattern);
+	final Predicate companyNamePredicate = cBuilder.like(cBuilder.upper(c.get("manufacturer").get("name")),
+		pattern);
+
+	cQuery.select(cBuilder.count(c)).where(cBuilder.or(namePredicate, companyNamePredicate));
+
+	return entityManager.createQuery(cQuery).getSingleResult();
     }
 
     @Override
     public long create(Computer computer) {
-	final SQLComputer sqlComputer = SQLComputer.from(computer);
 	try {
-	    final GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-	    // jdbcTemplate.update(preparedStatementCreatorForCreate(sqlComputer),
-	    // keyHolder);
-	    return keyHolder.getKey().longValue();
-	} catch (DataAccessException e) {
+	    final ComputerEntity cEntity = computerToComputerEntityMapper.map(computer);
+	    entityManager.persist(cEntity);
+	    return cEntity.getId();
+	} catch (PersistenceException e) {
 	    LOGGER.error("create(" + computer + ")", e);
 	    throw new ComputerDAOException(e);
 	}
@@ -77,120 +98,27 @@ public class ComputerDAOImpl implements ComputerDAO {
     @Override
     public void deleteById(long id) {
 	try {
-	    // jdbcTemplate.update(SQL_DELETE, id);
-	} catch (DataAccessException e) {
+	    final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
+	    final CriteriaDelete<ComputerEntity> cQuery = cBuilder.createCriteriaDelete(ComputerEntity.class);
+	    final Root<ComputerEntity> c = cQuery.from(ComputerEntity.class);
+	    cQuery.where(cBuilder.equal(c.get("id"), id));
+	    entityManager.createQuery(cQuery).executeUpdate();
+	} catch (PersistenceException e) {
 	    LOGGER.error("deleteById(" + id + ")", e);
 	    throw new ComputerDAOException(e);
 	}
     }
 
     @Override
-    public void deleteByMannufacturerId(long id) {
+    public void deleteBymanufacturerId(long id) {
 	try {
-	    // jdbcTemplate.update(SQL_DELETE_ALL_BY_COMPANY_ID, id);
-	} catch (DataAccessException e) {
-	    LOGGER.error("deleteByMannufacturerId(" + id + ")", e);
-	    throw new ComputerDAOException(e);
-	}
-    }
-
-    private String insertOrderByInQuery(String request, OrderBy orderBy) {
-	String sql;
-	String field;
-	String direction;
-	switch (orderBy.getField()) {
-	default:
-	case ID:
-	    field = "A.id";
-	    break;
-	case NAME:
-	    field = "A.name";
-	    break;
-	case INTRODUCED:
-	    field = "A.introduced";
-	    break;
-	case DISCONTINUED:
-	    field = "A.discontinued";
-	    break;
-	case COMPANY:
-	    field = "B.name";
-	    break;
-	}
-	if (orderBy.getDirection() == OrderBy.Direction.DESC) {
-	    direction = " DESC";
-	} else {
-	    direction = " ASC";
-	}
-
-	sql = field + " IS NULL, " + field + " " + direction + " ,A.name " + direction;
-
-	return String.format(request, sql);
-    }
-
-    @Override
-    public List<Computer> findAll(Pageable pageable) {
-	try {
-	    final String query = insertOrderByInQuery(SQL_FIND_ALL_PAGED, pageable.getOrderBy());
-	    final Page page = pageable.getPage();
-	    final Object[] args = { page.getSize(), page.getOffset() };
-	    return null;// jdbcTemplate.query(query, args, computerRowMapper);
-	} catch (DataAccessException e) {
-	    LOGGER.error("findAll(" + pageable + ")", e);
-	    throw new ComputerDAOException(e);
-	}
-    }
-
-    @Override
-    public Optional<Computer> findById(long id) {
-	try {
-	    final Object[] args = { id };
-	    return null;// Optional.ofNullable(jdbcTemplate.query(SQL_FIND_BY_ID, args,
-			// computerRowMapper)) .filter(list -> !list.isEmpty()).map(list ->
-			// list.get(0));
-	} catch (DataAccessException e) {
-	    LOGGER.error("findById(" + id + ")", e);
-	    throw new ComputerDAOException(e);
-	}
-    }
-
-    @Override
-    public void update(Computer computer) {
-	final SQLComputer sqlComputer = SQLComputer.from(computer);
-	try {
-	    final Object[] args = { sqlComputer.getName(), sqlComputer.getIntroduced(), sqlComputer.getDiscontinued(),
-		    sqlComputer.getManufacturerId(), sqlComputer.getId() };
-	    // jdbcTemplate.update(SQL_UPDATE, args);
-	} catch (DataAccessException e) {
-	    LOGGER.error("update(" + computer + ")", e);
-	    throw new ComputerDAOException(e);
-	}
-
-    }
-
-    @Override
-    public long countByNameOrCompanyName(String name) {
-	Objects.requireNonNull(name);
-	try {
-	    final String like = ("%" + name + "%").toUpperCase();
-	    final Object[] args = { like, like };
-	    return 0;// jdbcTemplate.queryForObject(SQL_COUNT_SEARCH, args, Long.class);
-	} catch (DataAccessException e) {
-	    LOGGER.error("countByNameOrCompanyName(" + name + ")", e);
-	    throw new ComputerDAOException(e);
-	}
-    }
-
-    @Override
-    public List<Computer> searchByNameOrCompanyName(Pageable pageable, String name) {
-	Objects.requireNonNull(name);
-	try {
-	    final Page page = pageable.getPage();
-	    final String like = ("%" + name + "%").toUpperCase();
-	    final String query = insertOrderByInQuery(SQL_SEARCH, pageable.getOrderBy());
-	    final Object[] args = { like, like, page.getSize(), page.getOffset() };
-	    return null;// jdbcTemplate.query(query, args, computerRowMapper);
-	} catch (DataAccessException e) {
-	    LOGGER.error("searchByNameOrCompanyName(" + pageable + "," + name + ")", e);
+	    final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
+	    final CriteriaDelete<ComputerEntity> cQuery = cBuilder.createCriteriaDelete(ComputerEntity.class);
+	    final Root<ComputerEntity> c = cQuery.from(ComputerEntity.class);
+	    cQuery.where(cBuilder.equal(c.get("manufacturer").get("id"), id));
+	    entityManager.createQuery(cQuery).executeUpdate();
+	} catch (PersistenceException e) {
+	    LOGGER.error("deleteBymanufacturerId(" + id + ")", e);
 	    throw new ComputerDAOException(e);
 	}
     }
@@ -203,5 +131,104 @@ public class ComputerDAOImpl implements ComputerDAO {
 	    LOGGER.error("exist(" + id + ")", e);
 	    throw new ComputerDAOException(e);
 	}
+    }
+
+    @Override
+    public List<Computer> findAll(Pageable pageable) {
+	try {
+	    return findAllWithNameOrCompanyNameLike("", pageable);
+	} catch (PersistenceException e) {
+	    LOGGER.error("findAll(" + pageable + ")", e);
+	    throw new ComputerDAOException(e);
+	}
+    }
+
+    private List<Computer> findAllWithNameOrCompanyNameLike(String name, Pageable pageable) {
+	final String pattern = "%" + name.toUpperCase() + "%";
+	final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
+	final CriteriaQuery<ComputerEntity> cQuery = cBuilder.createQuery(ComputerEntity.class);
+	final Root<ComputerEntity> c = cQuery.from(ComputerEntity.class);
+
+	final Predicate namePredicate = cBuilder.like(cBuilder.upper(c.get("name")), pattern);
+	final Predicate companyNamePredicate = cBuilder.like(cBuilder.upper(c.get("manufacturer").get("name")),
+		pattern);
+
+	cQuery.select(c).where(cBuilder.or(namePredicate, companyNamePredicate))
+		.orderBy(orderByToOrder(cBuilder, c, pageable.getOrderBy()));
+	final TypedQuery<ComputerEntity> query = entityManager.createQuery(cQuery)
+		.setFirstResult((int) pageable.getPage().getOffset()).setMaxResults((int) pageable.getPage().getSize());
+
+	return query.getResultList().stream().map(computerEntityToComputerMapper::map).collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Computer> findById(long id) {
+	try {
+	    return Optional.ofNullable(entityManager.find(ComputerEntity.class, id))
+		    .map(computerEntityToComputerMapper::map);
+	} catch (PersistenceException e) {
+	    LOGGER.error("findById(" + id + ")", e);
+	    throw new ComputerDAOException(e);
+	}
+    }
+
+    private List<Order> orderByToOrder(CriteriaBuilder cBuilder, Root<ComputerEntity> c, OrderBy orderBy) {
+	final Path<Object> field;
+	final Function<Expression<?>, Order> direction;
+	final Path<Object> name = c.get("name");
+	final Path<Object> id = c.get("id");
+	switch (orderBy.getField()) {
+	default:
+	case ID:
+	    field = id;
+	    break;
+	case NAME:
+	    field = name;
+	    break;
+	case INTRODUCED:
+	    field = c.get("introduced");
+	    break;
+	case DISCONTINUED:
+	    field = c.get("discontinued");
+	    break;
+	case COMPANY:
+	    field = c.get("manufacturer").get("name");
+	    break;
+	}
+	if (orderBy.getDirection() == OrderBy.Direction.DESC) {
+	    direction = cBuilder::desc;
+	} else {
+	    direction = cBuilder::asc;
+	}
+
+	return Arrays.asList(direction.apply(field), direction.apply(name), direction.apply(id));
+    }
+
+    @Override
+    public List<Computer> searchByNameOrCompanyName(Pageable pageable, String name) {
+	Objects.requireNonNull(name);
+	try {
+	    return findAllWithNameOrCompanyNameLike(name, pageable);
+	} catch (PersistenceException e) {
+	    LOGGER.error("searchByNameOrCompanyName(" + pageable + "," + name + ")", e);
+	    throw new ComputerDAOException(e);
+	}
+    }
+
+    @PersistenceContext
+    public void setEntityManager(EntityManager entityManager) {
+	this.entityManager = entityManager;
+    }
+
+    @Override
+    public void update(Computer computer) {
+	try {
+	    final ComputerEntity entity = computerToComputerEntityMapper.map(computer);
+	    entityManager.merge(entity);
+	} catch (PersistenceException e) {
+	    LOGGER.error("update(" + computer + ")", e);
+	    throw new ComputerDAOException(e);
+	}
+
     }
 }

@@ -26,14 +26,9 @@ import com.excilys.cdb.shared.pagination.Page;
 @Repository
 public class CompanyDAOImpl implements CompanyDAO {
 
-    @PersistenceContext
-    public void setEntityManager(EntityManager entityManager) {
-	this.entityManager = entityManager;
-    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAO.class);
 
     private EntityManager entityManager;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAO.class);
 
     private final Mapper<CompanyEntity, Company> companyEntityToCompanyMapper;
 
@@ -51,51 +46,6 @@ public class CompanyDAOImpl implements CompanyDAO {
 	    return query.getSingleResult();
 	} catch (PersistenceException e) {
 	    LOGGER.error("count()", e);
-	    throw new CompanyDAOException(e);
-	}
-    }
-
-    private TypedQuery<CompanyEntity> queryFindAll() {
-	final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
-	final CriteriaQuery<CompanyEntity> cQuery = cBuilder.createQuery(CompanyEntity.class);
-	final Root<CompanyEntity> c = cQuery.from(CompanyEntity.class);
-	cQuery.select(c).orderBy(cBuilder.asc(c.get("name")));
-	return entityManager.createQuery(cQuery);
-    }
-
-    private List<Company> mapAll(List<CompanyEntity> list) {
-	return list.stream().map(companyEntityToCompanyMapper::map).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Company> findAll(Page page) {
-	try {
-	    final TypedQuery<CompanyEntity> query = queryFindAll().setFirstResult((int) page.getOffset())
-		    .setMaxResults((int) page.getSize());
-	    return mapAll(query.getResultList());
-	} catch (PersistenceException e) {
-	    LOGGER.error("findAll(" + page + ")", e);
-	    throw new CompanyDAOException(e);
-	}
-    }
-
-    @Override
-    public Optional<Company> findById(long id) {
-	try {
-	    return Optional.ofNullable(entityManager.find(CompanyEntity.class, id))
-		    .map(companyEntityToCompanyMapper::map);
-	} catch (PersistenceException e) {
-	    LOGGER.error("findById(" + id + ")", e);
-	    throw new CompanyDAOException(e);
-	}
-    }
-
-    @Override
-    public List<Company> findAll() {
-	try {
-	    return mapAll(queryFindAll().getResultList());
-	} catch (PersistenceException e) {
-	    LOGGER.error("findAll()", e);
 	    throw new CompanyDAOException(e);
 	}
     }
@@ -122,6 +72,56 @@ public class CompanyDAOImpl implements CompanyDAO {
 	    LOGGER.error("exist(" + id + ")", e);
 	    throw new CompanyDAOException(e);
 	}
+    }
+
+    @Override
+    public List<Company> findAll() {
+	try {
+	    return mapAll(queryFindAll().getResultList());
+	} catch (PersistenceException e) {
+	    LOGGER.error("findAll()", e);
+	    throw new CompanyDAOException(e);
+	}
+    }
+
+    @Override
+    public List<Company> findAll(Page page) {
+	try {
+	    final TypedQuery<CompanyEntity> query = queryFindAll().setFirstResult((int) page.getOffset())
+		    .setMaxResults((int) page.getSize());
+	    return mapAll(query.getResultList());
+	} catch (PersistenceException e) {
+	    LOGGER.error("findAll(" + page + ")", e);
+	    throw new CompanyDAOException(e);
+	}
+    }
+
+    @Override
+    public Optional<Company> findById(long id) {
+	try {
+	    return Optional.ofNullable(entityManager.find(CompanyEntity.class, id))
+		    .map(companyEntityToCompanyMapper::map);
+	} catch (PersistenceException e) {
+	    LOGGER.error("findById(" + id + ")", e);
+	    throw new CompanyDAOException(e);
+	}
+    }
+
+    private List<Company> mapAll(List<CompanyEntity> list) {
+	return list.stream().map(companyEntityToCompanyMapper::map).collect(Collectors.toList());
+    }
+
+    private TypedQuery<CompanyEntity> queryFindAll() {
+	final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
+	final CriteriaQuery<CompanyEntity> cQuery = cBuilder.createQuery(CompanyEntity.class);
+	final Root<CompanyEntity> c = cQuery.from(CompanyEntity.class);
+	cQuery.select(c).orderBy(cBuilder.asc(c.get("name")));
+	return entityManager.createQuery(cQuery);
+    }
+
+    @PersistenceContext
+    public void setEntityManager(EntityManager entityManager) {
+	this.entityManager = entityManager;
     }
 
 }

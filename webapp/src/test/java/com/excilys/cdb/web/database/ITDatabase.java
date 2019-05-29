@@ -69,7 +69,7 @@ public class ITDatabase {
 
         final CompanyDTO company = findCompanyById(companyId);
         if (Objects.nonNull(company)) {
-            builder.mannufacturer(company.getName());
+            builder.manufacturer(company.getName());
         }
 
         computers.put(id, builder.build());

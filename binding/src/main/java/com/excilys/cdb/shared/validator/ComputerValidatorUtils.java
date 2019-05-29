@@ -50,9 +50,9 @@ final class ComputerValidatorUtils {
         }
     }
 
-    void checkMannufacturerId(Long id, Errors errors) {
+    void checkmanufacturerId(Long id, Errors errors) {
         if (Objects.nonNull(id) && !companyExistById.exist(id)) {
-            errors.rejectValue("mannufacturerId", "validator.mannufacturerId.notFound");
+            errors.rejectValue("manufacturerId", "validator.manufacturerId.notFound");
         }
     }
 }

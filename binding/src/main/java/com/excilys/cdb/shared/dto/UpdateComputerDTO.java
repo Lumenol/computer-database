@@ -7,17 +7,17 @@ public class UpdateComputerDTO {
     private Long id;
     private LocalDate discontinued;
     private LocalDate introduced;
-    private Long mannufacturerId;
+    private Long manufacturerId;
     private String name;
 
     public UpdateComputerDTO() {
     }
 
-    UpdateComputerDTO(Long id, LocalDate discontinued, LocalDate introduced, Long mannufacturerId, String name) {
+    UpdateComputerDTO(Long id, LocalDate discontinued, LocalDate introduced, Long manufacturerId, String name) {
         this.id = id;
         this.discontinued = discontinued;
         this.introduced = introduced;
-        this.mannufacturerId = mannufacturerId;
+        this.manufacturerId = manufacturerId;
         this.name = name;
     }
 
@@ -28,7 +28,7 @@ public class UpdateComputerDTO {
     @Override
     public String toString() {
         return "UpdateComputerDTO{" + "id='" + id + '\'' + ", discontinued='" + discontinued + '\'' + ", introduced='"
-                + introduced + '\'' + ", mannufacturerId='" + mannufacturerId + '\'' + ", name='" + name + '\'' + '}';
+                + introduced + '\'' + ", manufacturerId='" + manufacturerId + '\'' + ", name='" + name + '\'' + '}';
     }
 
     @Override
@@ -39,13 +39,13 @@ public class UpdateComputerDTO {
             return false;
         UpdateComputerDTO that = (UpdateComputerDTO) o;
         return Objects.equals(id, that.id) && Objects.equals(discontinued, that.discontinued)
-                && Objects.equals(introduced, that.introduced) && Objects.equals(mannufacturerId, that.mannufacturerId)
+                && Objects.equals(introduced, that.introduced) && Objects.equals(manufacturerId, that.manufacturerId)
                 && Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, discontinued, introduced, mannufacturerId, name);
+        return Objects.hash(id, discontinued, introduced, manufacturerId, name);
     }
 
     public Long getId() {
@@ -72,12 +72,12 @@ public class UpdateComputerDTO {
         this.introduced = introduced;
     }
 
-    public Long getMannufacturerId() {
-        return mannufacturerId;
+    public Long getmanufacturerId() {
+        return manufacturerId;
     }
 
-    public void setMannufacturerId(Long mannufacturerId) {
-        this.mannufacturerId = mannufacturerId;
+    public void setmanufacturerId(Long manufacturerId) {
+        this.manufacturerId = manufacturerId;
     }
 
     public String getName() {
@@ -92,7 +92,7 @@ public class UpdateComputerDTO {
         private Long id;
         private LocalDate discontinued;
         private LocalDate introduced;
-        private Long mannufacturerId;
+        private Long manufacturerId;
         private String name;
 
         UpdateComputerDTOBuilder() {
@@ -105,7 +105,7 @@ public class UpdateComputerDTO {
 
         @Override
         public int hashCode() {
-            return Objects.hash(discontinued, id, introduced, mannufacturerId, name);
+            return Objects.hash(discontinued, id, introduced, manufacturerId, name);
         }
 
         @Override
@@ -119,7 +119,7 @@ public class UpdateComputerDTO {
             UpdateComputerDTOBuilder other = (UpdateComputerDTOBuilder) obj;
             return Objects.equals(discontinued, other.discontinued) && id == other.id
                     && Objects.equals(introduced, other.introduced)
-                    && Objects.equals(mannufacturerId, other.mannufacturerId) && Objects.equals(name, other.name);
+                    && Objects.equals(manufacturerId, other.manufacturerId) && Objects.equals(name, other.name);
         }
 
         public UpdateComputerDTOBuilder discontinued(LocalDate discontinued) {
@@ -132,8 +132,8 @@ public class UpdateComputerDTO {
             return this;
         }
 
-        public UpdateComputerDTOBuilder mannufacturerId(Long mannufacturerId) {
-            this.mannufacturerId = mannufacturerId;
+        public UpdateComputerDTOBuilder manufacturerId(Long manufacturerId) {
+            this.manufacturerId = manufacturerId;
             return this;
         }
 
@@ -143,13 +143,13 @@ public class UpdateComputerDTO {
         }
 
         public UpdateComputerDTO build() {
-            return new UpdateComputerDTO(id, discontinued, introduced, mannufacturerId, name);
+            return new UpdateComputerDTO(id, discontinued, introduced, manufacturerId, name);
         }
 
         @Override
         public String toString() {
             return "UpdateComputerDTO.UpdateComputerDTOBuilder(id=" + this.id + ", discontinued=" + this.discontinued
-                    + ", introduced=" + this.introduced + ", mannufacturerId=" + this.mannufacturerId + ", name="
+                    + ", introduced=" + this.introduced + ", manufacturerId=" + this.manufacturerId + ", name="
                     + this.name + ")";
         }
     }

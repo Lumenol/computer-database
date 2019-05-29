@@ -94,10 +94,10 @@ public class DashboardTest {
         final String discontinued = actualElement.findElement(By.xpath("td[4]")).getText();
         Assert.assertEquals("discontinued", Objects.toString(expectedComputerDTO.getDiscontinued(), ""), discontinued);
 
-        final String mannufacturerName = actualElement.findElement(By.xpath("td[5]")).getText();
+        final String manufacturerName = actualElement.findElement(By.xpath("td[5]")).getText();
 
-        Assert.assertEquals("nom fabriquant", Objects.toString(expectedComputerDTO.getMannufacturer(), ""),
-                mannufacturerName);
+        Assert.assertEquals("nom fabriquant", Objects.toString(expectedComputerDTO.getmanufacturer(), ""),
+                manufacturerName);
     }
 
     private void clickPaginationButton(String text) {

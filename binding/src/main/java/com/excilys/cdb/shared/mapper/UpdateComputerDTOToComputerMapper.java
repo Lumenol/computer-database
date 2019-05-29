@@ -21,7 +21,7 @@ public class UpdateComputerDTOToComputerMapper implements Mapper<UpdateComputerD
         Objects.requireNonNull(dto);
         final Computer.ComputerBuilder builder = Computer.builder().id(dto.getId()).name(dto.getName().trim())
                 .introduced(dto.getIntroduced()).discontinued(dto.getDiscontinued());
-        Optional.ofNullable(dto.getMannufacturerId()).flatMap(findCompanyById::findById)
+        Optional.ofNullable(dto.getmanufacturerId()).flatMap(findCompanyById::findById)
                 .ifPresent(builder::manufacturer);
         return builder.build();
     }

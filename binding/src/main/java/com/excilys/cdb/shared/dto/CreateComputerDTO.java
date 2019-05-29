@@ -6,13 +6,13 @@ import java.util.Objects;
 public class CreateComputerDTO {
     private LocalDate discontinued;
     private LocalDate introduced;
-    private Long mannufacturerId;
+    private Long manufacturerId;
     private String name;
 
-    CreateComputerDTO(LocalDate discontinued, LocalDate introduced, Long mannufacturerId, String name) {
+    CreateComputerDTO(LocalDate discontinued, LocalDate introduced, Long manufacturerId, String name) {
         this.discontinued = discontinued;
         this.introduced = introduced;
-        this.mannufacturerId = mannufacturerId;
+        this.manufacturerId = manufacturerId;
         this.name = name;
     }
 
@@ -26,7 +26,7 @@ public class CreateComputerDTO {
     @Override
     public String toString() {
         return "CreateComputerDTO{" + "discontinued='" + discontinued + '\'' + ", introduced='" + introduced + '\''
-                + ", mannufacturerId='" + mannufacturerId + '\'' + ", name='" + name + '\'' + '}';
+                + ", manufacturerId='" + manufacturerId + '\'' + ", name='" + name + '\'' + '}';
     }
 
     @Override
@@ -37,12 +37,12 @@ public class CreateComputerDTO {
             return false;
         CreateComputerDTO that = (CreateComputerDTO) o;
         return Objects.equals(discontinued, that.discontinued) && Objects.equals(introduced, that.introduced)
-                && Objects.equals(mannufacturerId, that.mannufacturerId) && Objects.equals(name, that.name);
+                && Objects.equals(manufacturerId, that.manufacturerId) && Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(discontinued, introduced, mannufacturerId, name);
+        return Objects.hash(discontinued, introduced, manufacturerId, name);
     }
 
     public LocalDate getDiscontinued() {
@@ -61,12 +61,12 @@ public class CreateComputerDTO {
         this.introduced = introduced;
     }
 
-    public Long getMannufacturerId() {
-        return mannufacturerId;
+    public Long getmanufacturerId() {
+        return manufacturerId;
     }
 
-    public void setMannufacturerId(Long mannufacturerId) {
-        this.mannufacturerId = mannufacturerId;
+    public void setmanufacturerId(Long manufacturerId) {
+        this.manufacturerId = manufacturerId;
     }
 
     public String getName() {
@@ -80,7 +80,7 @@ public class CreateComputerDTO {
     public static class CreateComputerDTOBuilder {
         private LocalDate discontinued;
         private LocalDate introduced;
-        private Long mannufacturerId;
+        private Long manufacturerId;
         private String name;
 
         CreateComputerDTOBuilder() {
@@ -96,8 +96,8 @@ public class CreateComputerDTO {
             return this;
         }
 
-        public CreateComputerDTOBuilder mannufacturerId(Long mannufacturerId) {
-            this.mannufacturerId = mannufacturerId;
+        public CreateComputerDTOBuilder manufacturerId(Long manufacturerId) {
+            this.manufacturerId = manufacturerId;
             return this;
         }
 
@@ -107,13 +107,13 @@ public class CreateComputerDTO {
         }
 
         public CreateComputerDTO build() {
-            return new CreateComputerDTO(discontinued, introduced, mannufacturerId, name);
+            return new CreateComputerDTO(discontinued, introduced, manufacturerId, name);
         }
 
         @Override
         public String toString() {
             return "CreateComputerDTO.CreateComputerDTOBuilder(discontinued=" + this.discontinued + ", introduced="
-                    + this.introduced + ", mannufacturerId=" + this.mannufacturerId + ", name=" + this.name + ")";
+                    + this.introduced + ", manufacturerId=" + this.manufacturerId + ", name=" + this.name + ")";
         }
     }
 }

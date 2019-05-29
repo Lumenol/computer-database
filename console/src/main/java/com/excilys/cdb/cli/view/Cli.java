@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class Cli {
 
     private static final String DATE_FORMAT_ALLOWED = "Les dates doivents être vide ou aaaa-mm-jj";
-    private static final String ID_MANNUFACTURER_FORMAT_ALLOWED = "L'id du fabricant peut être vide";
+    private static final String ID_manufacturer_FORMAT_ALLOWED = "L'id du fabricant peut être vide";
     private static final int PAGE_SIZE = 20;
     private final Controller controller;
     private final Scanner in;
@@ -31,7 +31,7 @@ public class Cli {
     private void createComputer() {
         out.println("nom | date debut | date fin | id fabriquant");
         out.println(DATE_FORMAT_ALLOWED);
-        out.println(ID_MANNUFACTURER_FORMAT_ALLOWED);
+        out.println(ID_manufacturer_FORMAT_ALLOWED);
 
         final String delim = "\\|";
         final List<String> tokens = readLine(delim);
@@ -40,9 +40,9 @@ public class Cli {
             final String name = tokens.get(0);
             final String introduced = tokens.get(1);
             final String discontinued = tokens.get(2);
-            final String mannufacturerId = tokens.get(3);
+            final String manufacturerId = tokens.get(3);
             try {
-                controller.createComputer(name, introduced, discontinued, mannufacturerId);
+                controller.createComputer(name, introduced, discontinued, manufacturerId);
             } catch (BindException e) {
                 out.println(e.getMessage());
             }
@@ -254,7 +254,7 @@ public class Cli {
     private void updateComputer() {
         out.println("id | nom | date debut | date fin | id fabriquant");
         out.println(DATE_FORMAT_ALLOWED);
-        out.println(ID_MANNUFACTURER_FORMAT_ALLOWED);
+        out.println(ID_manufacturer_FORMAT_ALLOWED);
         final String delim = "\\|";
         final List<String> tokens = readLine(delim);
         final int numberOfToken = 5;
@@ -263,9 +263,9 @@ public class Cli {
             final String name = tokens.get(1);
             final String introduced = tokens.get(2);
             final String discontinued = tokens.get(3);
-            final String mannufacturerId = tokens.get(4);
+            final String manufacturerId = tokens.get(4);
             try {
-                controller.updateComputer(id, name, introduced, discontinued, mannufacturerId);
+                controller.updateComputer(id, name, introduced, discontinued, manufacturerId);
             } catch (BindException e) {
                 out.println(e.getMessage());
             }

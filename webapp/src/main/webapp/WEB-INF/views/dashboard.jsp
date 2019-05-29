@@ -103,7 +103,7 @@
                             onclick="orderBy('${name}','${direction}')"></button>
                 </th>
                 <!-- Table header for Company -->
-                <th><spring:message code="computer.mannufacturer"/><c:set var="name" value="company"/> <c:set
+                <th><spring:message code="computer.manufacturer"/><c:set var="name" value="company"/> <c:set
                         var="direction" value="${order_utils.apply(name)}"/> <c:set
                         var="arrow"
                         value="${direction.equalsIgnoreCase('desc')?'down':'up'}"/>
@@ -123,7 +123,7 @@
                     <td><a href="${edit}">${computer.name}</a></td>
                     <td>${computer.introduced}</td>
                     <td>${computer.discontinued}</td>
-                    <td>${computer.mannufacturer}</td>
+                    <td>${computer.manufacturer}</td>
 
                 </tr>
             </c:forEach>

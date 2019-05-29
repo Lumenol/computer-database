@@ -40,7 +40,7 @@ public class CreateComputerValidatorTest {
     }
 
     @Test
-    public void validWithoutDateAndMannufacturerId() {
+    public void validWithoutDateAndmanufacturerId() {
         final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
         createComputerDTO.setName("Un nom correct");
         final BindException errors = new BindException(createComputerDTO, "dto");
@@ -49,12 +49,12 @@ public class CreateComputerValidatorTest {
     }
 
     @Test
-    public void validWithoutDateWithMannufacturerId() {
-        final long mannufacturerId = 5L;
-        when(companyExistByIdMock.exist(mannufacturerId)).thenReturn(true);
+    public void validWithoutDateWithmanufacturerId() {
+        final long manufacturerId = 5L;
+        when(companyExistByIdMock.exist(manufacturerId)).thenReturn(true);
         final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
         createComputerDTO.setName("Un nom correct");
-        createComputerDTO.setMannufacturerId(mannufacturerId);
+        createComputerDTO.setmanufacturerId(manufacturerId);
         final BindException errors = new BindException(createComputerDTO, "dto");
         createComputerValidator.validate(createComputerDTO, errors);
         assertFalse(errors.hasErrors());
@@ -62,11 +62,11 @@ public class CreateComputerValidatorTest {
 
     @Test
     public void valid() {
-        final long mannufacturerId = 5L;
-        when(companyExistByIdMock.exist(mannufacturerId)).thenReturn(true);
+        final long manufacturerId = 5L;
+        when(companyExistByIdMock.exist(manufacturerId)).thenReturn(true);
         final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
         createComputerDTO.setName("Un nom correct");
-        createComputerDTO.setMannufacturerId(mannufacturerId);
+        createComputerDTO.setmanufacturerId(manufacturerId);
         createComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4));
         createComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20));
         final BindException errors = new BindException(createComputerDTO, "dto");
@@ -76,11 +76,11 @@ public class CreateComputerValidatorTest {
 
     @Test
     public void unvalidBecauseNameIsEmpty() {
-        final long mannufacturerId = 5L;
-        when(companyExistByIdMock.exist(mannufacturerId)).thenReturn(true);
+        final long manufacturerId = 5L;
+        when(companyExistByIdMock.exist(manufacturerId)).thenReturn(true);
         final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
         createComputerDTO.setName("");
-        createComputerDTO.setMannufacturerId(mannufacturerId);
+        createComputerDTO.setmanufacturerId(manufacturerId);
         createComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4));
         createComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20));
         final BindException errors = new BindException(createComputerDTO, "dto");
@@ -91,28 +91,28 @@ public class CreateComputerValidatorTest {
     }
 
     @Test
-    public void unvalidBecauseMannufacturerDoesNotExist() {
-        final long mannufacturerId = 5300L;
-        when(companyExistByIdMock.exist(mannufacturerId)).thenReturn(false);
+    public void unvalidBecausemanufacturerDoesNotExist() {
+        final long manufacturerId = 5300L;
+        when(companyExistByIdMock.exist(manufacturerId)).thenReturn(false);
         final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
         createComputerDTO.setName("Un nom correct");
-        createComputerDTO.setMannufacturerId(mannufacturerId);
+        createComputerDTO.setmanufacturerId(manufacturerId);
         createComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4));
         createComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20));
         final BindException errors = new BindException(createComputerDTO, "dto");
         createComputerValidator.validate(createComputerDTO, errors);
-        if (!errors.hasFieldErrors("mannufacturerId")) {
+        if (!errors.hasFieldErrors("manufacturerId")) {
             fail("La validation a échoué");
         }
     }
 
     @Test
     public void unvalidBecauseDiscontinuedIsBeforeIntroduced() {
-        final long mannufacturerId = 5L;
-        when(companyExistByIdMock.exist(mannufacturerId)).thenReturn(true);
+        final long manufacturerId = 5L;
+        when(companyExistByIdMock.exist(manufacturerId)).thenReturn(true);
         final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
         createComputerDTO.setName("Un nom correct");
-        createComputerDTO.setMannufacturerId(mannufacturerId);
+        createComputerDTO.setmanufacturerId(manufacturerId);
         createComputerDTO.setIntroduced(LocalDate.of(2016, 2, 4));
         createComputerDTO.setDiscontinued(LocalDate.of(2012, 10, 20));
         final BindException errors = new BindException(createComputerDTO, "dto");
