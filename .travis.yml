@@ -13,5 +13,6 @@ addons:
 
 script:
   - mvn install
+  - mvn org.pitest:pitest-maven:mutationCoverage
   - bash <(curl -s https://codecov.io/bash)
   - mvn sonar:sonar
