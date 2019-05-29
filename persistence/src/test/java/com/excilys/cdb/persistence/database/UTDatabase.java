@@ -1,29 +1,21 @@
 package com.excilys.cdb.persistence.database;
 
+import com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.shared.pagination.OrderBy;
+import com.excilys.cdb.shared.pagination.Pageable;
+import org.springframework.stereotype.Component;
+
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Scanner;
-import java.util.StringTokenizer;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import javax.sql.DataSource;
-
-import org.springframework.stereotype.Component;
-
-import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.shared.pagination.OrderBy;
-import com.excilys.cdb.shared.pagination.Pageable;
 
 @Component
 public class UTDatabase {
@@ -147,19 +139,19 @@ public class UTDatabase {
 	    break;
 	case INTRODUCED: {
 	    final Function<Computer, LocalDate> keyExtractor = Computer::getIntroduced;
-	    comparator = comparatorComputer(keyExtractor, reverse(LocalDate::compareTo, direction))
+		comparator = reverse(comparatorComputer(keyExtractor, LocalDate::compareTo), direction)
 		    .thenComparing(byName);
 	}
 	    break;
 	case DISCONTINUED: {
 	    final Function<Computer, LocalDate> keyExtractor = Computer::getDiscontinued;
-	    comparator = comparatorComputer(keyExtractor, reverse(LocalDate::compareTo, direction))
+		comparator = reverse(comparatorComputer(keyExtractor, LocalDate::compareTo), direction)
 		    .thenComparing(byName);
 	}
 	    break;
 	case COMPANY: {
 	    final Function<Computer, Company> keyExtractor = Computer::getManufacturer;
-	    comparator = comparatorComputer(keyExtractor, reverse(Comparator.comparing(Company::getName), direction))
+		comparator = reverse(comparatorComputer(keyExtractor, Comparator.comparing(Company::getName)), direction)
 		    .thenComparing(byName);
 	}
 	    break;

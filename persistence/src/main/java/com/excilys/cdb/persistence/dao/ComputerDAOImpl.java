@@ -1,36 +1,26 @@
 package com.excilys.cdb.persistence.dao;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
-
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.entity.ComputerEntity;
 import com.excilys.cdb.persistence.exception.ComputerDAOException;
 import com.excilys.cdb.shared.mapper.Mapper;
 import com.excilys.cdb.shared.pagination.OrderBy;
 import com.excilys.cdb.shared.pagination.Pageable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Repository
 public class ComputerDAOImpl implements ComputerDAO {
@@ -148,7 +138,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
 	final CriteriaQuery<ComputerEntity> cQuery = cBuilder.createQuery(ComputerEntity.class);
 	final Root<ComputerEntity> c = cQuery.from(ComputerEntity.class);
-
+        c.join("manufacturer", JoinType.LEFT);
 	final Predicate namePredicate = cBuilder.like(cBuilder.upper(c.get("name")), pattern);
 	final Predicate companyNamePredicate = cBuilder.like(cBuilder.upper(c.get("manufacturer").get("name")),
 		pattern);
