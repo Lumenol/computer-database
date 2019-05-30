@@ -2,8 +2,8 @@ package com.excilys.cdb.service;
 
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.dao.ComputerDAO;
-import com.excilys.cdb.persistence.exception.ComputerDAOException;
 import com.excilys.cdb.service.exception.ComputerServiceException;
+import com.excilys.cdb.shared.logexception.LogAndWrapException;
 import com.excilys.cdb.shared.pagination.Pageable;
 import com.excilys.cdb.shared.validator.ComputerExistById;
 import org.slf4j.Logger;
@@ -27,95 +27,59 @@ public class ComputerServiceImpl implements ComputerExistById, ComputerService {
     }
 
     @Override
+    @LogAndWrapException(logger = ComputerService.class, exception = ComputerServiceException.class)
     public long count() {
-        try {
-            return computerDAO.count();
-        } catch (ComputerDAOException e) {
-            LOGGER.error("count()", e);
-            throw new ComputerServiceException(e);
-        }
+        return computerDAO.count();
     }
 
     @Override
     @Transactional
+    @LogAndWrapException(logger = ComputerService.class, exception = ComputerServiceException.class)
     public void create(Computer computer) {
-        try {
-            computerDAO.create(computer);
-        } catch (ComputerDAOException e) {
-            LOGGER.error("create(" + computer + ")", e);
-            throw new ComputerServiceException(e);
-        }
+        computerDAO.create(computer);
     }
 
     @Override
     @Transactional
+    @LogAndWrapException(logger = ComputerService.class, exception = ComputerServiceException.class)
     public void delete(long id) {
-        try {
-            computerDAO.deleteById(id);
-        } catch (ComputerDAOException e) {
-            LOGGER.error("delete(" + id + ")", e);
-            throw new ComputerServiceException(e);
-        }
+        computerDAO.deleteById(id);
     }
 
     @Override
+    @LogAndWrapException(logger = ComputerService.class, exception = ComputerServiceException.class)
     public boolean exist(long id) {
-        try {
-            return computerDAO.exist(id);
-        } catch (ComputerDAOException e) {
-            LOGGER.error("exist(" + id + ")", e);
-            throw new ComputerServiceException(e);
-        }
+        return computerDAO.exist(id);
     }
 
     @Override
+    @LogAndWrapException(logger = ComputerService.class, exception = ComputerServiceException.class)
     public List<Computer> findAll(Pageable pageable) {
-        try {
-            return computerDAO.findAll(pageable);
-        } catch (ComputerDAOException e) {
-            LOGGER.error("findAll(" + pageable + ")", e);
-            throw new ComputerServiceException(e);
-        }
+        return computerDAO.findAll(pageable);
     }
 
     @Override
+    @LogAndWrapException(logger = ComputerService.class, exception = ComputerServiceException.class)
     public Optional<Computer> findById(long id) {
-        try {
-            return computerDAO.findById(id);
-        } catch (ComputerDAOException e) {
-            LOGGER.error("findById(" + id + ")", e);
-            throw new ComputerServiceException(e);
-        }
+        return computerDAO.findById(id);
     }
 
     @Override
     @Transactional
+    @LogAndWrapException(logger = ComputerService.class, exception = ComputerServiceException.class)
     public void update(Computer computer) {
-        try {
-            computerDAO.update(computer);
-        } catch (ComputerDAOException e) {
-            LOGGER.error("update(" + computer + ")", e);
-            throw new ComputerServiceException(e);
-        }
+        computerDAO.update(computer);
     }
 
     @Override
+    @LogAndWrapException(logger = ComputerService.class, exception = ComputerServiceException.class)
     public List<Computer> searchByNameOrCompanyName(Pageable pageable, String name) {
-        try {
-            return computerDAO.searchByNameOrCompanyName(pageable, name);
-        } catch (ComputerDAOException e) {
-            LOGGER.error("searchByNameOrCompanyName(" + pageable + "," + name + ")", e);
-            throw new ComputerServiceException(e);
-        }
+        return computerDAO.searchByNameOrCompanyName(pageable, name);
     }
 
     @Override
+    @LogAndWrapException(logger = ComputerService.class, exception = ComputerServiceException.class)
     public long countByNameOrCompanyName(String name) {
-        try {
-            return computerDAO.countByNameOrCompanyName(name);
-        } catch (ComputerDAOException e) {
-            LOGGER.error("countByNameOrCompanyName(" + name + ")", e);
-            throw new ComputerServiceException(e);
-        }
+        return computerDAO.countByNameOrCompanyName(name);
     }
 }
