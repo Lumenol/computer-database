@@ -1,11 +1,7 @@
 package com.excilys.cdb.persistence.config;
 
-import java.util.Properties;
-import java.util.TimeZone;
-
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -16,8 +12,10 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
+import java.util.Properties;
+import java.util.TimeZone;
 
 @Configuration
 @ComponentScan(basePackages = { "com.excilys.cdb.persistence.dao",
@@ -65,6 +63,7 @@ public class PersistenceConfig {
     @Bean
     public Properties jpaProperties() {
 	Properties properties = new Properties();
+		properties.setProperty("hibernate.hbm2ddl.auto", "validate");
 	properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
 	return properties;
     }
