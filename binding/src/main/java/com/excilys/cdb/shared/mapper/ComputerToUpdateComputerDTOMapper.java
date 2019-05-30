@@ -16,7 +16,7 @@ public class ComputerToUpdateComputerDTOMapper implements Mapper<Computer, Updat
                 .name(computer.getName()).introduced(computer.getIntroduced()).discontinued(computer.getDiscontinued());
 
         if (Objects.nonNull(computer.getManufacturer())) {
-            builder.mannufacturerId(computer.getManufacturer().getId());
+            builder.manufacturerId(computer.getManufacturer().getId());
         }
         return builder.build();
     }

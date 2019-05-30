@@ -129,13 +129,13 @@ public class Controller {
         }
     }
 
-    public void createComputer(String name, String introduced, String discontinued, String mannufacturerId)
+    public void createComputer(String name, String introduced, String discontinued, String manufacturerId)
             throws BindException {
         try {
             final CreateComputerDTOBuilder builder = CreateComputerDTO.builder().name(name);
             builder.introduced(MapperUtils.parseDate(introduced));
             builder.discontinued(MapperUtils.parseDate(discontinued));
-            builder.mannufacturerId(MapperUtils.parseId(mannufacturerId));
+            builder.manufacturerId(MapperUtils.parseId(manufacturerId));
             final CreateComputerDTO dto = builder.build();
             final BindException errors = new BindException(dto, "CreateComputerDTO");
             ValidationUtils.invokeValidator(createComputerValidator, dto, errors);
@@ -145,19 +145,19 @@ public class Controller {
             computerService.create(createComputerDTOToComputerMapper.map(dto));
         } catch (RuntimeException e) {
             LOGGER.error(
-                    "createComputer(" + name + ", " + introduced + ", " + discontinued + ", " + mannufacturerId + ")",
+                    "createComputer(" + name + ", " + introduced + ", " + discontinued + ", " + manufacturerId + ")",
                     e);
             throw new ControllerException();
         }
     }
 
-    public void updateComputer(String id, String name, String introduced, String discontinued, String mannufacturerId)
+    public void updateComputer(String id, String name, String introduced, String discontinued, String manufacturerId)
             throws BindException {
         try {
             final UpdateComputerDTO.UpdateComputerDTOBuilder builder = UpdateComputerDTO.builder().name(name);
             builder.introduced(MapperUtils.parseDate(introduced));
             builder.discontinued(MapperUtils.parseDate(discontinued));
-            builder.mannufacturerId(MapperUtils.parseId(mannufacturerId));
+            builder.manufacturerId(MapperUtils.parseId(manufacturerId));
             builder.id(MapperUtils.parseId(id));
             final UpdateComputerDTO dto = builder.build();
             final BindException errors = new BindException(dto, "UpdateComputerDTO");
@@ -168,7 +168,7 @@ public class Controller {
             computerService.update(updateComputerDTOToComputerMapper.map(dto));
         } catch (RuntimeException e) {
             LOGGER.error("updateComputer(" + id + ", " + name + ", " + introduced + ", " + discontinued + ", "
-                    + mannufacturerId + ")", e);
+                    + manufacturerId + ")", e);
             throw new ControllerException();
         }
     }

@@ -1,9 +1,8 @@
 package com.excilys.cdb.web.selenium;
 
 import com.excilys.cdb.shared.dto.ComputerDTO;
-import com.excilys.cdb.web.database.ITDatabase;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
@@ -50,21 +49,21 @@ public class DashboardTest {
 
     private WebDriver driver;
 
-    private ITDatabase database = new ITDatabase();
+    private ITDatabase database = ITDatabase.getInstance();
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         WebDriverManager.phantomjs().setup();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         driver = new PhantomJSDriver();
         driver.manage().window().setSize(new Dimension(1366, 768));
         driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         driver.quit();
     }
@@ -83,21 +82,21 @@ public class DashboardTest {
 
     private void assertEquals(ComputerDTO expectedComputerDTO, WebElement actualElement) {
         final String id = actualElement.findElement(By.xpath("td[1]/input")).getAttribute("value");
-        Assert.assertEquals("id", Long.toString(expectedComputerDTO.getId()), id);
+        Assertions.assertEquals("id", Long.toString(expectedComputerDTO.getId()), id);
 
         final String name = actualElement.findElement(By.xpath("td[2]")).getText();
-        Assert.assertEquals("nom", expectedComputerDTO.getName(), name);
+        Assertions.assertEquals("nom", expectedComputerDTO.getName(), name);
 
         final String introduced = actualElement.findElement(By.xpath("td[3]")).getText();
-        Assert.assertEquals("introduced", Objects.toString(expectedComputerDTO.getIntroduced(), ""), introduced);
+        Assertions.assertEquals("introduced", Objects.toString(expectedComputerDTO.getIntroduced(), ""), introduced);
 
         final String discontinued = actualElement.findElement(By.xpath("td[4]")).getText();
-        Assert.assertEquals("discontinued", Objects.toString(expectedComputerDTO.getDiscontinued(), ""), discontinued);
+        Assertions.assertEquals("discontinued", Objects.toString(expectedComputerDTO.getDiscontinued(), ""), discontinued);
 
-        final String mannufacturerName = actualElement.findElement(By.xpath("td[5]")).getText();
+        final String manufacturerName = actualElement.findElement(By.xpath("td[5]")).getText();
 
-        Assert.assertEquals("nom fabriquant", Objects.toString(expectedComputerDTO.getMannufacturer(), ""),
-                mannufacturerName);
+        Assertions.assertEquals("nom fabriquant", Objects.toString(expectedComputerDTO.getmanufacturer(), ""),
+                manufacturerName);
     }
 
     private void clickPaginationButton(String text) {
@@ -107,14 +106,14 @@ public class DashboardTest {
     private void checkPagination(String... expectedPagination) {
         String[] actualTestPagination = getPaginationElements().stream().map(WebElement::getText)
                 .toArray(String[]::new);
-        Assert.assertArrayEquals("Pagination", expectedPagination, actualTestPagination);
+        Assertions.assertArrayEquals(expectedPagination, actualTestPagination, "Pagination");
     }
 
     private void checkComputers(int size, long firstID, long lastID) {
 
         List<WebElement> computersTableLines = getComputersTableLines();
 
-        Assert.assertTrue("Taille de page", computersTableLines.size() <= size);
+        Assertions.assertTrue(computersTableLines.size() <= size, "Taille de page");
         assertEquals(database.findComputerById(firstID), computersTableLines.get(0));
         assertEquals(database.findComputerById(lastID), computersTableLines.get(computersTableLines.size() - 1));
     }
@@ -130,7 +129,7 @@ public class DashboardTest {
 
     private void assertCount(long count) {
         final String homeTitle = driver.findElement(By.id("homeTitle")).getText();
-        Assert.assertTrue("Le nombre d'ordinateur est faux", homeTitle.startsWith(Long.toString(count)));
+        Assertions.assertTrue(homeTitle.startsWith(Long.toString(count)), "Le nombre d'ordinateur est faux");
     }
 
     @Test

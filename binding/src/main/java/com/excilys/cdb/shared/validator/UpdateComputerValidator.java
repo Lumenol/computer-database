@@ -40,7 +40,7 @@ public class UpdateComputerValidator implements Validator {
         computerValidatorUtils.checkDiscontinued(toValidate.getDiscontinued(), errors);
         computerValidatorUtils.checkIntroducedIsBeforeDiscontinued(toValidate.getIntroduced(),
                 toValidate.getDiscontinued(), errors);
-        computerValidatorUtils.checkMannufacturerId(toValidate.getMannufacturerId(), errors);
+        computerValidatorUtils.checkmanufacturerId(toValidate.getmanufacturerId(), errors);
         checkId(toValidate.getId(), errors);
     }
 }

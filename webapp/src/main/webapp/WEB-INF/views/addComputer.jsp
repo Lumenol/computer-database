@@ -67,17 +67,17 @@
                                 <form:errors path="discontinued" cssClass="help-block"/>
                             </div>
                         </spring:bind>
-                        <spring:bind path="mannufacturerId">
+                        <spring:bind path="manufacturerId">
                             <div class='form-group'>
-                                <form:label path="mannufacturerId"><spring:message
-                                        code="computer.mannufacturer"/></form:label>
-                                <form:select class="form-control" path="mannufacturerId"
-                                             id="mannufacturerId">
+                                <form:label path="manufacturerId"><spring:message
+                                        code="computer.manufacturer"/></form:label>
+                                <form:select class="form-control" path="manufacturerId"
+                                             id="manufacturerId">
                                     <form:option value="">--</form:option>
                                     <form:options items="${companies}" itemLabel="name"
                                                   itemValue="id"/>
                                 </form:select>
-                                <form:errors path="mannufacturerId" cssClass="help-block"/>
+                                <form:errors path="manufacturerId" cssClass="help-block"/>
                             </div>
                         </spring:bind>
                     </fieldset>

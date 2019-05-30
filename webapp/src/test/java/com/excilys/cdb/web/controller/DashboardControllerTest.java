@@ -1,15 +1,16 @@
 package com.excilys.cdb.web.controller;
 
 import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.shared.config.SharedConfig;
 import com.excilys.cdb.web.config.WebConfigTest;
 import com.excilys.cdb.web.config.WebMvcConfiguration;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -22,8 +23,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {WebConfigTest.class, WebMvcConfiguration.class})
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {WebConfigTest.class, WebMvcConfiguration.class, SharedConfig.class})
 @WebAppConfiguration
 public class DashboardControllerTest {
     private static final String PARAMETER_PAGE = "page";
@@ -33,7 +34,7 @@ public class DashboardControllerTest {
     private MockMvc mockMvc;
     private ComputerService mockComputerService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
         Mockito.reset(mockComputerService);

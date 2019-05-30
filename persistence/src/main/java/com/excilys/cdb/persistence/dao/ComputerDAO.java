@@ -10,6 +10,8 @@ import java.util.Optional;
 public interface ComputerDAO {
     long count();
 
+    long countByNameOrCompanyName(String name);
+
     @Transactional
     long create(Computer computer);
 
@@ -17,18 +19,16 @@ public interface ComputerDAO {
     void deleteById(long id);
 
     @Transactional
-    void deleteByMannufacturerId(long id);
+    void deleteBymanufacturerId(long id);
+
+    boolean exist(long id);
 
     List<Computer> findAll(Pageable pageable);
 
     Optional<Computer> findById(long id);
 
-    @Transactional
-    void update(Computer computer);
-
-    long countByNameOrCompanyName(String name);
-
     List<Computer> searchByNameOrCompanyName(Pageable pageable, String name);
 
-    boolean exist(long id);
+    @Transactional
+    void update(Computer computer);
 }

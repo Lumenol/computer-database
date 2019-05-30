@@ -2,3 +2,8 @@ coverage:
   range: 50..85
   round: down
   precision: 2
+
+ignore:
+  - "persistence/src/main/java/com/excilys/cdb/persistence/entity"
+  - "persistence/src/main/java/com/excilys/cdb/persistence/exception"
+  - "persistence/src/main/java/com/excilys/cdb/persistence/config"

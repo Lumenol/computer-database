@@ -1,7 +1,5 @@
 package com.excilys.cdb.web.config;
 
-import com.excilys.cdb.service.config.ServiceConfig;
-import com.excilys.cdb.shared.config.SharedConfig;
 import com.excilys.cdb.web.pagination.Paging;
 import com.excilys.cdb.web.pagination.PagingParameters;
 import com.excilys.cdb.web.sorting.Sorting;
@@ -9,11 +7,9 @@ import com.excilys.cdb.web.sorting.SortingParameters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 @Configuration
 @ComponentScan(basePackages = {"com.excilys.cdb.web.controller"}, excludeFilters = @ComponentScan.Filter(Configuration.class))
-@Import({SharedConfig.class, ServiceConfig.class})
 public class WebConfig {
 
     @Bean

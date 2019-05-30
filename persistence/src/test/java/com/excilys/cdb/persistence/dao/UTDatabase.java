@@ -1,61 +1,31 @@
-package com.excilys.cdb.persistence.database;
+package com.excilys.cdb.persistence.dao;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.shared.pagination.OrderBy;
 import com.excilys.cdb.shared.pagination.Pageable;
-import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Component
-public class UTDatabase {
+class UTDatabase {
 
-    private static final String ENTRIES_SQL = "entriesUT.sql";
-
-    private static final String SCHEMA_SQL = "schema.sql";
-
-    private final DataSource dataSource;
-
+    private static UTDatabase instance;
     private final Map<Long, Company> companies = new TreeMap<>();
     private final Map<Long, Computer> computers = new TreeMap<>();
 
-    public UTDatabase(DataSource dataSource) {
-        this.dataSource = dataSource;
+    private UTDatabase() {
         addCompanies();
         addComputers();
     }
 
-    /*
-     * Ne retire pas les lignes de commentaires risque de ne pas marcher avec
-     */
-    private void executeScript(String filename) throws SQLException, IOException {
-        try (final Connection connection = dataSource.getConnection();
-             final Statement statement = connection.createStatement();
-             final InputStream resourceAsStream = UTDatabase.class.getClassLoader().getResourceAsStream(filename);
-             final Scanner scanner = new Scanner(resourceAsStream)) {
-
-            StringBuilder sb = new StringBuilder();
-            while (scanner.hasNextLine()) {
-                final String nextLine = scanner.nextLine();
-                sb.append(nextLine);
-            }
-            final StringTokenizer stringTokenizer = new StringTokenizer(sb.toString(), ";");
-
-            while (stringTokenizer.hasMoreTokens()) {
-                final String nextToken = stringTokenizer.nextToken();
-                statement.execute(nextToken);
-            }
+    public static UTDatabase getInstance() {
+        if (Objects.isNull(instance)) {
+            instance = new UTDatabase();
         }
+        return instance;
     }
 
     private void addCompanies() {
@@ -127,7 +97,8 @@ public class UTDatabase {
         final OrderBy.Field field = pageable.getOrderBy().getField();
         final OrderBy.Direction direction = pageable.getOrderBy().getDirection();
         final Comparator<Computer> byId = reverse(Comparator.comparingLong(Computer::getId), direction);
-        final Comparator<Computer> byName = reverse(Comparator.comparing(Computer::getName), direction).thenComparing(byId);
+        final Comparator<Computer> byName = reverse(Comparator.comparing(Computer::getName), direction)
+                .thenComparing(byId);
 
         switch (field) {
             case ID:
@@ -138,17 +109,20 @@ public class UTDatabase {
                 break;
             case INTRODUCED: {
                 final Function<Computer, LocalDate> keyExtractor = Computer::getIntroduced;
-                comparator = comparatorComputer(keyExtractor, reverse(LocalDate::compareTo, direction)).thenComparing(byName);
+                comparator = reverse(comparatorComputer(keyExtractor, LocalDate::compareTo), direction)
+                        .thenComparing(byName);
             }
             break;
             case DISCONTINUED: {
                 final Function<Computer, LocalDate> keyExtractor = Computer::getDiscontinued;
-                comparator = comparatorComputer(keyExtractor, reverse(LocalDate::compareTo, direction)).thenComparing(byName);
+                comparator = reverse(comparatorComputer(keyExtractor, LocalDate::compareTo), direction)
+                        .thenComparing(byName);
             }
             break;
             case COMPANY: {
                 final Function<Computer, Company> keyExtractor = Computer::getManufacturer;
-                comparator = comparatorComputer(keyExtractor, reverse(Comparator.comparing(Company::getName), direction)).thenComparing(byName);
+                comparator = reverse(comparatorComputer(keyExtractor, Comparator.comparing(Company::getName)), direction)
+                        .thenComparing(byName);
             }
             break;
             default:
@@ -166,9 +140,9 @@ public class UTDatabase {
             if (k1 == k2) {
                 return 0;
             } else if (Objects.isNull(k1)) {
-                return 1;
-            } else if (Objects.isNull(k2)) {
                 return -1;
+            } else if (Objects.isNull(k2)) {
+                return 1;
             } else {
                 return comparator.compare(k1, k2);
             }
@@ -185,11 +159,6 @@ public class UTDatabase {
 
     public List<Company> findAllCompanies() {
         return companies.values().stream().sorted(Comparator.comparing(Company::getName)).collect(Collectors.toList());
-    }
-
-    public void reload() throws IOException, SQLException {
-        executeScript(SCHEMA_SQL);
-        executeScript(ENTRIES_SQL);
     }
 
     public List<Company> findAllCompanies(long page, long limit) {

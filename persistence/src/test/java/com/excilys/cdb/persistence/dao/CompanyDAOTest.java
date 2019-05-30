@@ -2,76 +2,57 @@ package com.excilys.cdb.persistence.dao;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.config.PersistenceConfigTest;
-import com.excilys.cdb.persistence.database.UTDatabase;
 import com.excilys.cdb.shared.pagination.Page;
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.rules.SpringClassRule;
-import org.springframework.test.context.junit4.rules.SpringMethodRule;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(JUnitParamsRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = PersistenceConfigTest.class)
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "entries.sql")
 public class CompanyDAOTest {
-
-    @ClassRule
-    public static final SpringClassRule springClassRule = new SpringClassRule();
-    @Rule
-    public final SpringMethodRule springMethodRule = new SpringMethodRule();
-    private UTDatabase database;
+    private UTDatabase database = UTDatabase.getInstance();
     private CompanyDAO companyDAO;
-
-    @Autowired
-    public void setDatabase(UTDatabase database) {
-        this.database = database;
-    }
 
     @Autowired
     public void setCompanyDAO(CompanyDAO companyDAO) {
         this.companyDAO = companyDAO;
     }
 
-    public Object[] provideCompanyId() {
+    public static Stream<Long> provideCompanyId() {
         final Stream.Builder<Long> builder = Stream.builder();
         for (long i = 0; i < 25; i++) {
             builder.add(i);
         }
-        return builder.build().toArray();
+        return builder.build();
     }
 
-    public Object[] providePageLimit() {
-        return new Object[][]{{1, 30}, {1, 5}, {3, 5}, {2, 10}};
+    public static Stream<Arguments> providePageLimit() {
+        return Stream.of(Arguments.of(1, 30), Arguments.of(1, 5), Arguments.of(3, 5), Arguments.of(2, 10));
     }
 
-    @Before
-    public void loadEnttries() throws IOException, SQLException {
-        database.reload();
-    }
-
-    @Test
-    @Parameters(method = "provideCompanyId")
+    @ParameterizedTest
+    @MethodSource("provideCompanyId")
     public void findById(long id) {
         final Optional<Company> expected = Optional.ofNullable(database.findCompanyById(id));
         final Optional<Company> actual = companyDAO.findById(id);
         assertEquals(expected, actual);
     }
 
-    @Test
-    @Parameters(method = "providePageLimit")
+    @ParameterizedTest
+    @MethodSource("providePageLimit")
     public void findAll(long index, long limit) {
         final Page page = Page.builder().page(index).size(limit).build();
         final List<Company> actual = companyDAO.findAll(page);
@@ -91,4 +72,23 @@ public class CompanyDAOTest {
         final long count = companyDAO.count();
         assertEquals(database.findAllCompanies().size(), count);
     }
+
+    @Test
+    public void deleteById() {
+        final int id = 7;
+        final Optional<Company> le5avant = companyDAO.findById(id);
+        companyDAO.deleteById(id);
+        final Optional<Company> le5apres = companyDAO.findById(id);
+        assertTrue(le5avant.isPresent());
+        assertFalse(le5apres.isPresent());
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideCompanyId")
+    public void exist(long id) {
+        final boolean expected = Optional.ofNullable(database.findCompanyById(id)).isPresent();
+        final boolean actual = companyDAO.exist(id);
+        assertEquals(expected, actual);
+    }
+
 }

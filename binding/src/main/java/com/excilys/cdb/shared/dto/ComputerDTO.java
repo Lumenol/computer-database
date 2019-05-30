@@ -7,17 +7,17 @@ public class ComputerDTO {
     private LocalDate discontinued;
     private long id;
     private LocalDate introduced;
-    private String mannufacturer;
+    private String manufacturer;
     private String name;
 
     public ComputerDTO() {
     }
 
-    ComputerDTO(LocalDate discontinued, long id, LocalDate introduced, String mannufacturer, String name) {
+    ComputerDTO(LocalDate discontinued, long id, LocalDate introduced, String manufacturer, String name) {
         this.discontinued = discontinued;
         this.id = id;
         this.introduced = introduced;
-        this.mannufacturer = mannufacturer;
+        this.manufacturer = manufacturer;
         this.name = name;
     }
 
@@ -28,7 +28,7 @@ public class ComputerDTO {
     @Override
     public String toString() {
         return "ComputerDTO{" + "discontinued='" + discontinued + '\'' + ", id=" + id + ", introduced='" + introduced
-                + '\'' + ", mannufacturer='" + mannufacturer + '\'' + ", name='" + name + '\'' + '}';
+                + '\'' + ", manufacturer='" + manufacturer + '\'' + ", name='" + name + '\'' + '}';
     }
 
     @Override
@@ -39,13 +39,13 @@ public class ComputerDTO {
             return false;
         ComputerDTO that = (ComputerDTO) o;
         return id == that.id && Objects.equals(discontinued, that.discontinued)
-                && Objects.equals(introduced, that.introduced) && Objects.equals(mannufacturer, that.mannufacturer)
+                && Objects.equals(introduced, that.introduced) && Objects.equals(manufacturer, that.manufacturer)
                 && Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(discontinued, id, introduced, mannufacturer, name);
+        return Objects.hash(discontinued, id, introduced, manufacturer, name);
     }
 
     public LocalDate getDiscontinued() {
@@ -72,12 +72,12 @@ public class ComputerDTO {
         this.introduced = introduced;
     }
 
-    public String getMannufacturer() {
-        return mannufacturer;
+    public String getmanufacturer() {
+        return manufacturer;
     }
 
-    public void setMannufacturer(String mannufacturer) {
-        this.mannufacturer = mannufacturer;
+    public void setmanufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
     }
 
     public String getName() {
@@ -92,7 +92,7 @@ public class ComputerDTO {
         private LocalDate discontinued;
         private long id;
         private LocalDate introduced;
-        private String mannufacturer;
+        private String manufacturer;
         private String name;
 
         ComputerDTOBuilder() {
@@ -113,8 +113,8 @@ public class ComputerDTO {
             return this;
         }
 
-        public ComputerDTOBuilder mannufacturer(String mannufacturer) {
-            this.mannufacturer = mannufacturer;
+        public ComputerDTOBuilder manufacturer(String manufacturer) {
+            this.manufacturer = manufacturer;
             return this;
         }
 
@@ -124,13 +124,13 @@ public class ComputerDTO {
         }
 
         public ComputerDTO build() {
-            return new ComputerDTO(discontinued, id, introduced, mannufacturer, name);
+            return new ComputerDTO(discontinued, id, introduced, manufacturer, name);
         }
 
         @Override
         public String toString() {
             return "ComputerDTO.ComputerDTOBuilder(discontinued=" + this.discontinued + ", id=" + this.id
-                    + ", introduced=" + this.introduced + ", mannufacturer=" + this.mannufacturer + ", name="
+                    + ", introduced=" + this.introduced + ", manufacturer=" + this.manufacturer + ", name="
                     + this.name + ")";
         }
     }

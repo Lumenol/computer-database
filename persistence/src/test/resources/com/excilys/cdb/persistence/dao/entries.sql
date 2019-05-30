@@ -1,3 +1,8 @@
+delete
+from computer;
+delete
+from company;
+
 insert into company (id,name) values (  1,'Apple Inc.');
 insert into company (id,name) values (  2,'Thinking Machines');
 insert into company (id,name) values (  3,'RCA');

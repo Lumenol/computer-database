@@ -1,5 +1,8 @@
 package com.excilys.cdb.web.config;
 
+import com.excilys.cdb.persistence.config.PersistenceConfig;
+import com.excilys.cdb.service.config.ServiceConfig;
+import com.excilys.cdb.shared.config.SharedConfig;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -20,7 +23,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
         container.addListener(new ContextLoaderListener(rootContext));
         // Create the dispatcher servlet's Spring application context
         AnnotationConfigWebApplicationContext dispatcherContext = new AnnotationConfigWebApplicationContext();
-        dispatcherContext.register(WebMvcConfiguration.class);
+        dispatcherContext.register(WebMvcConfiguration.class, SharedConfig.class, ServiceConfig.class, PersistenceConfig.class);
 
         // Register and map the dispatcher servlet
         ServletRegistration.Dynamic dispatcher = container.addServlet("dispatcher", new DispatcherServlet(dispatcherContext));
