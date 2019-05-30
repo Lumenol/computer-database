@@ -190,7 +190,7 @@
                                 <configuration>
                                     <autocommit>true</autocommit>
                                     <srcFiles>
-                                        <srcFile>../persistence/src/test/resources/schema.sql</srcFile>
+                                        <srcFile>../webapp/src/test/resources/schema.sql</srcFile>
                                     </srcFiles>
                                 </configuration>
                             </execution>
@@ -204,7 +204,7 @@
                                 <configuration>
                                     <autocommit>true</autocommit>
                                     <srcFiles>
-                                        <srcFile>src/test/resources/entriesIT.sql</srcFile>
+                                        <srcFile>src/test/resources/entries.sql</srcFile>
                                     </srcFiles>
                                 </configuration>
                             </execution>
