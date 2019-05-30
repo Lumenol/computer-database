@@ -4,7 +4,6 @@ coverage:
   precision: 2
 
 ignore:
-  - "src/main/java/com/excilys/cdb/persistence/entity/**"
-  - "src/main/java/com/excilys/cdb/persistence/exception/**"
-  - "src/main/java/com/excilys/cdb/persistence/config/**"
-  - "src/main/java/com/excilys/cdb/persistence/config/**"
+  - "persistence/src/main/java/com/excilys/cdb/persistence/entity"
+  - "persistence/src/main/java/com/excilys/cdb/persistence/exception"
+  - "persistence/src/main/java/com/excilys/cdb/persistence/config"
