@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class Cli {
 
     private static final String DATE_FORMAT_ALLOWED = "Les dates doivents être vide ou aaaa-mm-jj";
-    private static final String ID_manufacturer_FORMAT_ALLOWED = "L'id du fabricant peut être vide";
+    private static final String ID_MANUFACTURER_FORMAT_ALLOWED = "L'id du fabricant peut être vide";
     private static final int PAGE_SIZE = 20;
     private final Controller controller;
     private final Scanner in;
@@ -31,7 +31,7 @@ public class Cli {
     private void createComputer() {
         out.println("nom | date debut | date fin | id fabriquant");
         out.println(DATE_FORMAT_ALLOWED);
-        out.println(ID_manufacturer_FORMAT_ALLOWED);
+        out.println(ID_MANUFACTURER_FORMAT_ALLOWED);
 
         final String delim = "\\|";
         final List<String> tokens = readLine(delim);
@@ -254,7 +254,7 @@ public class Cli {
     private void updateComputer() {
         out.println("id | nom | date debut | date fin | id fabriquant");
         out.println(DATE_FORMAT_ALLOWED);
-        out.println(ID_manufacturer_FORMAT_ALLOWED);
+        out.println(ID_MANUFACTURER_FORMAT_ALLOWED);
         final String delim = "\\|";
         final List<String> tokens = readLine(delim);
         final int numberOfToken = 5;
