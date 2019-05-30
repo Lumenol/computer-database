@@ -4,15 +4,13 @@ import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.entity.CompanyEntity;
 import com.excilys.cdb.persistence.entity.CompanyEntity_;
 import com.excilys.cdb.persistence.exception.CompanyDAOException;
+import com.excilys.cdb.shared.logexception.LogAndWrapException;
 import com.excilys.cdb.shared.mapper.Mapper;
 import com.excilys.cdb.shared.pagination.Page;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
@@ -25,8 +23,6 @@ import java.util.stream.Collectors;
 @Repository
 public class CompanyDAOImpl implements CompanyDAO {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAO.class);
-
     private EntityManager entityManager;
 
     private final Mapper<CompanyEntity, Company> companyEntityToCompanyMapper;
@@ -36,74 +32,50 @@ public class CompanyDAOImpl implements CompanyDAO {
     }
 
     @Override
-    public long count() {
-	try {
+	@LogAndWrapException(logger = CompanyDAO.class, exception = CompanyDAOException.class)
+	public long count() {
 	    final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
 	    final CriteriaQuery<Long> cQuery = cBuilder.createQuery(Long.class);
 	    cQuery.select(cBuilder.count(cQuery.from(CompanyEntity.class)));
 	    final TypedQuery<Long> query = entityManager.createQuery(cQuery);
 	    return query.getSingleResult();
-	} catch (PersistenceException e) {
-	    LOGGER.error("count()", e);
-	    throw new CompanyDAOException(e);
-	}
     }
 
     @Override
-    public void deleteById(long id) {
-	try {
+	@LogAndWrapException(logger = CompanyDAO.class, exception = CompanyDAOException.class)
+	public void deleteById(long id) {
 	    final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
 	    final CriteriaDelete<CompanyEntity> cQuery = cBuilder.createCriteriaDelete(CompanyEntity.class);
 	    final Root<CompanyEntity> c = cQuery.from(CompanyEntity.class);
 		cQuery.where(cBuilder.equal(c.get(CompanyEntity_.ID), id));
 	    entityManager.createQuery(cQuery).executeUpdate();
-	} catch (PersistenceException e) {
-	    LOGGER.error("deleteById(" + id + ")", e);
-	    throw new CompanyDAOException(e);
-	}
     }
 
     @Override
-    public boolean exist(long id) {
-	try {
+	@LogAndWrapException(logger = CompanyDAO.class, exception = CompanyDAOException.class)
+	public boolean exist(long id) {
 	    return findById(id).isPresent();
-	} catch (CompanyDAOException e) {
-	    LOGGER.error("exist(" + id + ")", e);
-	    throw new CompanyDAOException(e);
-	}
     }
 
     @Override
-    public List<Company> findAll() {
-	try {
+	@LogAndWrapException(logger = CompanyDAO.class, exception = CompanyDAOException.class)
+	public List<Company> findAll() {
 	    return mapAll(queryFindAll().getResultList());
-	} catch (PersistenceException e) {
-	    LOGGER.error("findAll()", e);
-	    throw new CompanyDAOException(e);
-	}
     }
 
     @Override
-    public List<Company> findAll(Page page) {
-	try {
+	@LogAndWrapException(logger = CompanyDAO.class, exception = CompanyDAOException.class)
+	public List<Company> findAll(Page page) {
 	    final TypedQuery<CompanyEntity> query = queryFindAll().setFirstResult((int) page.getOffset())
 		    .setMaxResults((int) page.getSize());
 	    return mapAll(query.getResultList());
-	} catch (PersistenceException e) {
-	    LOGGER.error("findAll(" + page + ")", e);
-	    throw new CompanyDAOException(e);
-	}
     }
 
     @Override
-    public Optional<Company> findById(long id) {
-	try {
+	@LogAndWrapException(logger = CompanyDAO.class, exception = CompanyDAOException.class)
+	public Optional<Company> findById(long id) {
 	    return Optional.ofNullable(entityManager.find(CompanyEntity.class, id))
 		    .map(companyEntityToCompanyMapper::map);
-	} catch (PersistenceException e) {
-	    LOGGER.error("findById(" + id + ")", e);
-	    throw new CompanyDAOException(e);
-	}
     }
 
     private List<Company> mapAll(List<CompanyEntity> list) {

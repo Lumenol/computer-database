@@ -3,9 +3,8 @@ package com.excilys.cdb.service;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.dao.CompanyDAO;
 import com.excilys.cdb.persistence.dao.ComputerDAO;
-import com.excilys.cdb.persistence.exception.CompanyDAOException;
-import com.excilys.cdb.persistence.exception.ComputerDAOException;
 import com.excilys.cdb.service.exception.CompanyServiceException;
+import com.excilys.cdb.shared.logexception.LogAndWrapException;
 import com.excilys.cdb.shared.mapper.FindCompanyById;
 import com.excilys.cdb.shared.pagination.Page;
 import com.excilys.cdb.shared.validator.CompanyExistById;
@@ -30,64 +29,40 @@ public class CompanyServiceImpl implements CompanyService, CompanyExistById, Fin
     }
 
     @Override
+    @LogAndWrapException(logger = CompanyService.class, exception = CompanyServiceException.class)
     public long count() {
-        try {
-            return companyDAO.count();
-        } catch (CompanyDAOException e) {
-            LOGGER.error("count()", e);
-            throw new CompanyServiceException(e);
-        }
+        return companyDAO.count();
     }
 
     @Override
+    @LogAndWrapException(logger = CompanyService.class, exception = CompanyServiceException.class)
     public boolean exist(long id) {
-        try {
-            return companyDAO.exist(id);
-        } catch (CompanyDAOException e) {
-            LOGGER.error("exist(" + id + ")", e);
-            throw new CompanyServiceException(e);
-        }
+        return companyDAO.exist(id);
     }
 
     @Override
+    @LogAndWrapException(logger = CompanyService.class, exception = CompanyServiceException.class)
     public List<Company> findAll(Page page) {
-        try {
-            return companyDAO.findAll(page);
-        } catch (CompanyDAOException e) {
-            LOGGER.error("findAll(" + page + ")", e);
-            throw new CompanyServiceException(e);
-        }
+        return companyDAO.findAll(page);
     }
 
     @Override
+    @LogAndWrapException(logger = CompanyService.class, exception = CompanyServiceException.class)
     public Optional<Company> findById(long id) {
-        try {
-            return companyDAO.findById(id);
-        } catch (CompanyServiceException e) {
-            LOGGER.error("findById(" + id + ")", e);
-            throw new CompanyServiceException(e);
-        }
+        return companyDAO.findById(id);
     }
 
     @Override
+    @LogAndWrapException(logger = CompanyService.class, exception = CompanyServiceException.class)
     public List<Company> findAll() {
-        try {
-            return companyDAO.findAll();
-        } catch (CompanyDAOException e) {
-            LOGGER.error("findAll()", e);
-            throw new CompanyServiceException(e);
-        }
+        return companyDAO.findAll();
     }
 
     @Override
     @Transactional
+    @LogAndWrapException(logger = CompanyService.class, exception = CompanyServiceException.class)
     public void delete(long id) {
-        try {
-            computerDAO.deleteBymanufacturerId(id);
-            companyDAO.deleteById(id);
-        } catch (ComputerDAOException | CompanyDAOException e) {
-            LOGGER.error("delete(" + id + ")", e);
-            throw new CompanyServiceException(e);
-        }
+        computerDAO.deleteBymanufacturerId(id);
+        companyDAO.deleteById(id);
     }
 }
