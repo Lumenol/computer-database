@@ -1,7 +1,9 @@
 package com.excilys.cdb.persistence.dao;
 
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.persistence.entity.CompanyEntity_;
 import com.excilys.cdb.persistence.entity.ComputerEntity;
+import com.excilys.cdb.persistence.entity.ComputerEntity_;
 import com.excilys.cdb.persistence.exception.ComputerDAOException;
 import com.excilys.cdb.shared.mapper.Mapper;
 import com.excilys.cdb.shared.pagination.OrderBy;
@@ -62,9 +64,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 	final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
 	final CriteriaQuery<Long> cQuery = cBuilder.createQuery(Long.class);
 	final Root<ComputerEntity> c = cQuery.from(ComputerEntity.class);
-	c.join("manufacturer", JoinType.LEFT);
-	final Predicate namePredicate = cBuilder.like(cBuilder.upper(c.get("name")), pattern);
-	final Predicate companyNamePredicate = cBuilder.like(cBuilder.upper(c.get("manufacturer").get("name")),
+		c.join(ComputerEntity_.MANUFACTURER, JoinType.LEFT);
+		final Predicate namePredicate = cBuilder.like(cBuilder.upper(c.get(ComputerEntity_.NAME)), pattern);
+		final Predicate companyNamePredicate = cBuilder.like(cBuilder.upper(c.get(ComputerEntity_.MANUFACTURER).get(CompanyEntity_.NAME)),
 		pattern);
 
 	cQuery.select(cBuilder.count(c)).where(cBuilder.or(namePredicate, companyNamePredicate));
@@ -91,7 +93,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	    final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
 	    final CriteriaDelete<ComputerEntity> cQuery = cBuilder.createCriteriaDelete(ComputerEntity.class);
 	    final Root<ComputerEntity> c = cQuery.from(ComputerEntity.class);
-	    cQuery.where(cBuilder.equal(c.get("id"), id));
+		cQuery.where(cBuilder.equal(c.get(ComputerEntity_.ID), id));
 	    entityManager.createQuery(cQuery).executeUpdate();
 	} catch (PersistenceException e) {
 	    LOGGER.error("deleteById(" + id + ")", e);
@@ -105,7 +107,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	    final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
 	    final CriteriaDelete<ComputerEntity> cQuery = cBuilder.createCriteriaDelete(ComputerEntity.class);
 	    final Root<ComputerEntity> c = cQuery.from(ComputerEntity.class);
-	    cQuery.where(cBuilder.equal(c.get("manufacturer").get("id"), id));
+		cQuery.where(cBuilder.equal(c.get(ComputerEntity_.MANUFACTURER).get(CompanyEntity_.ID), id));
 	    entityManager.createQuery(cQuery).executeUpdate();
 	} catch (PersistenceException e) {
 	    LOGGER.error("deleteBymanufacturerId(" + id + ")", e);
@@ -138,9 +140,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 	final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
 	final CriteriaQuery<ComputerEntity> cQuery = cBuilder.createQuery(ComputerEntity.class);
 	final Root<ComputerEntity> c = cQuery.from(ComputerEntity.class);
-        c.join("manufacturer", JoinType.LEFT);
-	final Predicate namePredicate = cBuilder.like(cBuilder.upper(c.get("name")), pattern);
-	final Predicate companyNamePredicate = cBuilder.like(cBuilder.upper(c.get("manufacturer").get("name")),
+		c.join(ComputerEntity_.MANUFACTURER, JoinType.LEFT);
+		final Predicate namePredicate = cBuilder.like(cBuilder.upper(c.get(ComputerEntity_.NAME)), pattern);
+		final Predicate companyNamePredicate = cBuilder.like(cBuilder.upper(c.get(ComputerEntity_.MANUFACTURER).get(CompanyEntity_.NAME)),
 		pattern);
 
 	cQuery.select(c).where(cBuilder.or(namePredicate, companyNamePredicate))
@@ -165,8 +167,8 @@ public class ComputerDAOImpl implements ComputerDAO {
     private List<Order> orderByToOrder(CriteriaBuilder cBuilder, Root<ComputerEntity> c, OrderBy orderBy) {
 	final Path<Object> field;
 	final Function<Expression<?>, Order> direction;
-	final Path<Object> name = c.get("name");
-	final Path<Object> id = c.get("id");
+		final Path<Object> name = c.get(ComputerEntity_.NAME);
+		final Path<Object> id = c.get(ComputerEntity_.ID);
 	switch (orderBy.getField()) {
 	default:
 	case ID:
@@ -176,13 +178,13 @@ public class ComputerDAOImpl implements ComputerDAO {
 	    field = name;
 	    break;
 	case INTRODUCED:
-	    field = c.get("introduced");
+		field = c.get(ComputerEntity_.INTRODUCED);
 	    break;
 	case DISCONTINUED:
-	    field = c.get("discontinued");
+		field = c.get(ComputerEntity_.DISCONTINUED);
 	    break;
 	case COMPANY:
-	    field = c.get("manufacturer").get("name");
+		field = c.get(ComputerEntity_.MANUFACTURER).get(CompanyEntity_.NAME);
 	    break;
 	}
 	if (orderBy.getDirection() == OrderBy.Direction.DESC) {

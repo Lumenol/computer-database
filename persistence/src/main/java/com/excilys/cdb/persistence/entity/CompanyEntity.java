@@ -3,7 +3,8 @@ package com.excilys.cdb.persistence.entity;
 import javax.persistence.*;
 import java.util.Objects;
 
-@Entity(name = "company")
+@Entity
+@Table(name = "company")
 public class CompanyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

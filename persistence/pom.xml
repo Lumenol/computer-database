@@ -31,7 +31,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>${hibernate-core.version}</version>
+			<version>${hibernate-orm.version}</version>
 		</dependency>
 
 		<dependency>
@@ -39,6 +39,12 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql-connector.version}</version>
 			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-jpamodelgen</artifactId>
+			<version>${hibernate-orm.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- Tests -->

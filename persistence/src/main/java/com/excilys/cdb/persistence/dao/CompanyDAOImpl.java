@@ -1,8 +1,14 @@
 package com.excilys.cdb.persistence.dao;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import com.excilys.cdb.model.Company;
+import com.excilys.cdb.persistence.entity.CompanyEntity;
+import com.excilys.cdb.persistence.entity.CompanyEntity_;
+import com.excilys.cdb.persistence.exception.CompanyDAOException;
+import com.excilys.cdb.shared.mapper.Mapper;
+import com.excilys.cdb.shared.pagination.Page;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -12,16 +18,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
-
-import com.excilys.cdb.model.Company;
-import com.excilys.cdb.persistence.entity.CompanyEntity;
-import com.excilys.cdb.persistence.exception.CompanyDAOException;
-import com.excilys.cdb.shared.mapper.Mapper;
-import com.excilys.cdb.shared.pagination.Page;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class CompanyDAOImpl implements CompanyDAO {
@@ -56,7 +55,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	    final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
 	    final CriteriaDelete<CompanyEntity> cQuery = cBuilder.createCriteriaDelete(CompanyEntity.class);
 	    final Root<CompanyEntity> c = cQuery.from(CompanyEntity.class);
-	    cQuery.where(cBuilder.equal(c.get("id"), id));
+		cQuery.where(cBuilder.equal(c.get(CompanyEntity_.ID), id));
 	    entityManager.createQuery(cQuery).executeUpdate();
 	} catch (PersistenceException e) {
 	    LOGGER.error("deleteById(" + id + ")", e);
@@ -115,7 +114,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
 	final CriteriaQuery<CompanyEntity> cQuery = cBuilder.createQuery(CompanyEntity.class);
 	final Root<CompanyEntity> c = cQuery.from(CompanyEntity.class);
-	cQuery.select(c).orderBy(cBuilder.asc(c.get("name")));
+		cQuery.select(c).orderBy(cBuilder.asc(c.get(CompanyEntity_.NAME)));
 	return entityManager.createQuery(cQuery);
     }
 
