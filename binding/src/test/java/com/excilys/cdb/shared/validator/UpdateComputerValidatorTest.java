@@ -2,22 +2,22 @@ package com.excilys.cdb.shared.validator;
 
 import com.excilys.cdb.shared.config.SharedConfigTest;
 import com.excilys.cdb.shared.dto.UpdateComputerDTO;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.validation.BindException;
 
 import java.time.LocalDate;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = SharedConfigTest.class)
 public class UpdateComputerValidatorTest {
 
@@ -40,7 +40,7 @@ public class UpdateComputerValidatorTest {
         this.computerExistById = computerExistById;
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         reset(companyExistByIdMock, computerExistById);
     }
