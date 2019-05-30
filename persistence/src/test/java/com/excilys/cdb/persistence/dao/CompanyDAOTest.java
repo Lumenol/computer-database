@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = PersistenceConfigTest.class)
@@ -72,4 +72,23 @@ public class CompanyDAOTest {
         final long count = companyDAO.count();
         assertEquals(database.findAllCompanies().size(), count);
     }
+
+    @Test
+    public void deleteById() {
+        final int id = 7;
+        final Optional<Company> le5avant = companyDAO.findById(id);
+        companyDAO.deleteById(id);
+        final Optional<Company> le5apres = companyDAO.findById(id);
+        assertTrue(le5avant.isPresent());
+        assertFalse(le5apres.isPresent());
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideCompanyId")
+    public void exist(long id) {
+        final boolean expected = Optional.ofNullable(database.findCompanyById(id)).isPresent();
+        final boolean actual = companyDAO.exist(id);
+        assertEquals(expected, actual);
+    }
+
 }

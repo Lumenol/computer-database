@@ -176,4 +176,12 @@ public class ComputerDAOTest {
 
         assertFalse(computersOfCompany.stream().map(Computer::getId).map(computerDAO::findById).anyMatch(Optional::isPresent), "Les ordinateurs sont dans la bases après la supression.");
     }
+
+    @ParameterizedTest
+    @MethodSource("provideComputerId")
+    public void exist(long id) {
+        final boolean expected = Optional.ofNullable(database.findComputerById(id)).isPresent();
+        final boolean actual = computerDAO.exist(id);
+        assertEquals(expected, actual);
+    }
 }
