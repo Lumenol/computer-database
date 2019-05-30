@@ -1,10 +1,14 @@
 package com.excilys.cdb.persistence.config;
 
 import com.zaxxer.hikari.HikariConfig;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
+
+import java.util.Properties;
 
 @Configuration
-@ComponentScan("com.excilys.cdb.persistence.database")
 @Import(PersistenceConfig.class)
 public class PersistenceConfigTest {
     @Bean
@@ -17,4 +21,14 @@ public class PersistenceConfigTest {
         hikariConfig.setJdbcUrl("jdbc:h2:mem:db;DB_CLOSE_DELAY=-1");
         return hikariConfig;
     }
+
+    @Bean
+    @Primary
+    public Properties jpaProperties() {
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.hbm2ddl.auto", "create");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+        return properties;
+    }
+
 }

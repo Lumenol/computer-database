@@ -1,11 +1,25 @@
 package com.excilys.cdb.persistence.dao;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Computer.ComputerBuilder;
+import com.excilys.cdb.persistence.config.PersistenceConfigTest;
+import com.excilys.cdb.persistence.exception.ComputerDAOException;
+import com.excilys.cdb.shared.pagination.OrderBy;
+import com.excilys.cdb.shared.pagination.Page;
+import com.excilys.cdb.shared.pagination.Pageable;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
+import org.junit.ClassRule;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.junit4.rules.SpringClassRule;
+import org.springframework.test.context.junit4.rules.SpringMethodRule;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,31 +28,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.rules.SpringClassRule;
-import org.springframework.test.context.junit4.rules.SpringMethodRule;
-
-import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.model.Computer.ComputerBuilder;
-import com.excilys.cdb.persistence.config.PersistenceConfigTest;
-import com.excilys.cdb.persistence.database.UTDatabase;
-import com.excilys.cdb.persistence.exception.ComputerDAOException;
-import com.excilys.cdb.shared.pagination.OrderBy;
-import com.excilys.cdb.shared.pagination.Page;
-import com.excilys.cdb.shared.pagination.Pageable;
-
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
+import static org.junit.Assert.*;
 
 @RunWith(JUnitParamsRunner.class)
 @ContextConfiguration(classes = PersistenceConfigTest.class)
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "entries.sql")
 public class ComputerDAOTest {
     @ClassRule
     public static final SpringClassRule springClassRule = new SpringClassRule();
@@ -46,16 +40,11 @@ public class ComputerDAOTest {
     public final SpringMethodRule springMethodRule = new SpringMethodRule();
 
     private ComputerDAO computerDAO;
-    private UTDatabase database;
+	private UTDatabase database = UTDatabase.getInstance();
 
     @Autowired
     public void setComputerDAO(ComputerDAO computerDAO) {
 	this.computerDAO = computerDAO;
-    }
-
-    @Autowired
-    public void setDatabase(UTDatabase database) {
-	this.database = database;
     }
 
     public Object[] provideComputerId() {
@@ -100,11 +89,6 @@ public class ComputerDAOTest {
 	    }
 	}
 	return params.toArray();
-    }
-
-    @Before
-    public void loadEnttries() throws IOException, SQLException {
-	database.reload();
     }
 
     @Test

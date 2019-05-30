@@ -2,7 +2,6 @@ package com.excilys.cdb.persistence.dao;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.config.PersistenceConfigTest;
-import com.excilys.cdb.persistence.database.UTDatabase;
 import com.excilys.cdb.shared.pagination.Page;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
@@ -13,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.rules.SpringClassRule;
 import org.springframework.test.context.junit4.rules.SpringMethodRule;
 
@@ -26,19 +26,15 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnitParamsRunner.class)
 @ContextConfiguration(classes = PersistenceConfigTest.class)
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "entries.sql")
 public class CompanyDAOTest {
 
     @ClassRule
     public static final SpringClassRule springClassRule = new SpringClassRule();
     @Rule
     public final SpringMethodRule springMethodRule = new SpringMethodRule();
-    private UTDatabase database;
+    private UTDatabase database = UTDatabase.getInstance();
     private CompanyDAO companyDAO;
-
-    @Autowired
-    public void setDatabase(UTDatabase database) {
-        this.database = database;
-    }
 
     @Autowired
     public void setCompanyDAO(CompanyDAO companyDAO) {
@@ -59,7 +55,7 @@ public class CompanyDAOTest {
 
     @Before
     public void loadEnttries() throws IOException, SQLException {
-        database.reload();
+        //database.reload();
     }
 
     @Test

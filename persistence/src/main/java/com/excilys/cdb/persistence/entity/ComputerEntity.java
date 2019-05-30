@@ -1,7 +1,7 @@
 package com.excilys.cdb.persistence.entity;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
@@ -10,8 +10,8 @@ public class ComputerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDate discontinued;
-    private LocalDate introduced;
+    private Timestamp discontinued;
+    private Timestamp introduced;
     @ManyToOne
     @JoinColumn(name = "company_id")
     private CompanyEntity manufacturer;
@@ -21,7 +21,7 @@ public class ComputerEntity {
     public ComputerEntity() {
     }
 
-    ComputerEntity(LocalDate discontinued, Long id, LocalDate introduced, CompanyEntity manufacturer, String name) {
+    ComputerEntity(Timestamp discontinued, Long id, Timestamp introduced, CompanyEntity manufacturer, String name) {
         this.discontinued = discontinued;
         this.id = id;
         this.introduced = introduced;
@@ -47,11 +47,11 @@ public class ComputerEntity {
                 && Objects.equals(name, other.name);
     }
 
-    public LocalDate getDiscontinued() {
+    public Timestamp getDiscontinued() {
         return discontinued;
     }
 
-    public void setDiscontinued(LocalDate discontinued) {
+    public void setDiscontinued(Timestamp discontinued) {
         this.discontinued = discontinued;
     }
 
@@ -63,11 +63,11 @@ public class ComputerEntity {
         this.id = id;
     }
 
-    public LocalDate getIntroduced() {
+    public Timestamp getIntroduced() {
         return introduced;
     }
 
-    public void setIntroduced(LocalDate introduced) {
+    public void setIntroduced(Timestamp introduced) {
         this.introduced = introduced;
     }
 
@@ -99,16 +99,16 @@ public class ComputerEntity {
     }
 
     public static class ComputerEntityBuilder {
-        private LocalDate discontinued;
+        private Timestamp discontinued;
         private Long id;
-        private LocalDate introduced;
+        private Timestamp introduced;
         private CompanyEntity manufacturer;
         private String name;
 
         ComputerEntityBuilder() {
         }
 
-        public ComputerEntityBuilder discontinued(LocalDate discontinued) {
+        public ComputerEntityBuilder discontinued(Timestamp discontinued) {
             this.discontinued = discontinued;
             return this;
         }
@@ -118,7 +118,7 @@ public class ComputerEntity {
             return this;
         }
 
-        public ComputerEntityBuilder introduced(LocalDate introduced) {
+        public ComputerEntityBuilder introduced(Timestamp introduced) {
             this.introduced = introduced;
             return this;
         }
