@@ -1,4 +1,4 @@
-package com.excilys.cdb.web.database;
+package com.excilys.cdb.web.selenium;
 
 import com.excilys.cdb.shared.dto.CompanyDTO;
 import com.excilys.cdb.shared.dto.ComputerDTO;
@@ -9,13 +9,22 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
 
-public class ITDatabase {
+class ITDatabase {
     private Map<Long, CompanyDTO> companies = new TreeMap<>();
     private Map<Long, ComputerDTO> computers = new TreeMap<>();
 
-    public ITDatabase() {
+    private static ITDatabase instance;
+
+    private ITDatabase() {
         addCompanies();
         addComputers();
+    }
+
+    public static ITDatabase getInstance() {
+        if (Objects.isNull(instance)) {
+            instance = new ITDatabase();
+        }
+        return instance;
     }
 
     private void addCompanies() {

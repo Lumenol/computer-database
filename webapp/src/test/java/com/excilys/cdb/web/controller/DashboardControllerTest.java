@@ -1,6 +1,7 @@
 package com.excilys.cdb.web.controller;
 
 import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.shared.config.SharedConfig;
 import com.excilys.cdb.web.config.WebConfigTest;
 import com.excilys.cdb.web.config.WebMvcConfiguration;
 import org.junit.Before;
@@ -23,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {WebConfigTest.class, WebMvcConfiguration.class})
+@ContextConfiguration(classes = {WebConfigTest.class, WebMvcConfiguration.class, SharedConfig.class})
 @WebAppConfiguration
 public class DashboardControllerTest {
     private static final String PARAMETER_PAGE = "page";

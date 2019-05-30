@@ -1,7 +1,6 @@
 package com.excilys.cdb.web.selenium;
 
 import com.excilys.cdb.shared.dto.ComputerDTO;
-import com.excilys.cdb.web.database.ITDatabase;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.*;
 import org.openqa.selenium.By;
@@ -50,7 +49,7 @@ public class DashboardTest {
 
     private WebDriver driver;
 
-    private ITDatabase database = new ITDatabase();
+    private ITDatabase database = ITDatabase.getInstance();
 
     @BeforeClass
     public static void setUpClass() {
