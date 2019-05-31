@@ -26,7 +26,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @ComponentScan(basePackages = { "com.excilys.cdb.persistence.dao",
 	"com.excilys.cdb.persistence.mapper" }, excludeFilters = @ComponentScan.Filter(Configuration.class))
 @EnableTransactionManagement
-@PropertySource("classpath:database.properties")
+@PropertySource("classpath:hibernate.properties")
 public class PersistenceConfig {
 
     private static final String HIBERNATE_SHOW_SQL = "hibernate.show_sql";
@@ -41,7 +41,7 @@ public class PersistenceConfig {
 
     @Bean
     public HikariConfig hikariConfig() {
-	return new HikariConfig("/database.properties");
+	return new HikariConfig("/hikari.properties");
 
     }
 
