@@ -1,6 +1,6 @@
-package com.excilys.cdb.persistence.config;
+package com.excilys.cdb.persistence.configuration;
 
-import com.excilys.cdb.shared.config.SharedConfig;
+import com.excilys.cdb.shared.configuration.SharedConfiguration;
 import com.zaxxer.hikari.HikariConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Primary;
 import java.util.Properties;
 
 @Configuration
-@Import({PersistenceConfig.class, SharedConfig.LogExceptionConfig.class})
-public class PersistenceConfigTest {
+@Import({PersistenceConfiguration.class, SharedConfiguration.LogExceptionConfiguration.class})
+public class PersistenceConfigurationTest {
     @Bean
     @Primary
     public HikariConfig hikariConfig() {

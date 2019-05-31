@@ -1,12 +1,12 @@
-package com.excilys.cdb.shared.config;
+package com.excilys.cdb.shared.configuration;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
 @Configuration
-@Import({SharedConfig.BeanConfig.class, SharedConfig.ValidatorConfig.class, SharedConfig.MapperConfig.class, SharedConfig.LogExceptionConfig.class})
-public class SharedConfig {
+@Import({SharedConfiguration.BeanConfig.class, SharedConfiguration.ValidatorConfiguration.class, SharedConfiguration.MapperConfiguration.class, SharedConfiguration.LogExceptionConfiguration.class})
+public class SharedConfiguration {
 
     @Configuration
     public static class BeanConfig {
@@ -20,18 +20,18 @@ public class SharedConfig {
 
     @Configuration
     @ComponentScan("com.excilys.cdb.shared.validator")
-    public static class ValidatorConfig {
+    public static class ValidatorConfiguration {
     }
 
     @Configuration
     @ComponentScan("com.excilys.cdb.shared.mapper")
-    public static class MapperConfig {
+    public static class MapperConfiguration {
     }
 
     @Configuration
     @ComponentScan("com.excilys.cdb.shared.logexception")
     @EnableAspectJAutoProxy
-    public static class LogExceptionConfig {
+    public static class LogExceptionConfiguration {
     }
 
 }

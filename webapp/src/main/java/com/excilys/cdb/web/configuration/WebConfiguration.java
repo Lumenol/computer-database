@@ -1,18 +1,17 @@
-package com.excilys.cdb.web.config;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+package com.excilys.cdb.web.configuration;
 
 import com.excilys.cdb.web.pagination.Paging;
 import com.excilys.cdb.web.pagination.PagingParameters;
 import com.excilys.cdb.web.sorting.Sorting;
 import com.excilys.cdb.web.sorting.SortingParameters;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ComponentScan(basePackages = {
 	"com.excilys.cdb.web.controller" }, excludeFilters = @ComponentScan.Filter(Configuration.class))
-public class WebConfig {
+public class WebConfiguration {
 
     @Bean
     public PagingParameters paginationParameters() {

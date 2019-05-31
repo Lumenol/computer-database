@@ -1,4 +1,4 @@
-package com.excilys.cdb.shared.config;
+package com.excilys.cdb.shared.configuration;
 
 import com.excilys.cdb.shared.mapper.FindCompanyById;
 import com.excilys.cdb.shared.validator.CompanyExistById;
@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Import;
 import static org.mockito.Mockito.mock;
 
 @Configuration
-@Import(SharedConfig.class)
-public class SharedConfigTest {
+@Import(SharedConfiguration.class)
+public class SharedConfigurationTest {
     @Bean
     public ComputerExistById computerExistById() {
         return mock(ComputerExistById.class);
