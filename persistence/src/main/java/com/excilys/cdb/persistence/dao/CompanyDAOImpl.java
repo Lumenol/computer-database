@@ -8,6 +8,7 @@ import com.excilys.cdb.shared.logexception.LogAndWrapException;
 import com.excilys.cdb.shared.mapper.Mapper;
 import com.excilys.cdb.shared.pagination.Page;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -21,6 +22,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
+@Transactional(readOnly = true)
 public class CompanyDAOImpl implements CompanyDAO {
 
     private EntityManager entityManager;
@@ -43,6 +45,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 
     @Override
 	@LogAndWrapException(logger = CompanyDAO.class, exception = CompanyDAOException.class)
+	@Transactional
 	public void deleteById(long id) {
 	    final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
 	    final CriteriaDelete<CompanyEntity> cQuery = cBuilder.createCriteriaDelete(CompanyEntity.class);

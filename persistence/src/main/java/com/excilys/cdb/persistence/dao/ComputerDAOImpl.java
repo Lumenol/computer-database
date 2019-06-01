@@ -10,6 +10,7 @@ import com.excilys.cdb.shared.mapper.Mapper;
 import com.excilys.cdb.shared.pagination.OrderBy;
 import com.excilys.cdb.shared.pagination.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,6 +24,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Repository
+@Transactional(readOnly = true)
 public class ComputerDAOImpl implements ComputerDAO {
     private final Mapper<ComputerEntity, Computer> computerEntityToComputerMapper;
     private final Mapper<Computer, ComputerEntity> computerToComputerEntityMapper;
@@ -64,6 +66,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
     @Override
     @LogAndWrapException(logger = ComputerDAO.class, exception = ComputerDAOException.class)
+    @Transactional
     public long create(Computer computer) {
         final ComputerEntity cEntity = computerToComputerEntityMapper.map(computer);
         entityManager.persist(cEntity);
@@ -72,6 +75,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
     @Override
     @LogAndWrapException(logger = ComputerDAO.class, exception = ComputerDAOException.class)
+    @Transactional
     public void deleteById(long id) {
         final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
         final CriteriaDelete<ComputerEntity> cQuery = cBuilder.createCriteriaDelete(ComputerEntity.class);
@@ -82,6 +86,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
     @Override
     @LogAndWrapException(logger = ComputerDAO.class, exception = ComputerDAOException.class)
+    @Transactional
     public void deleteBymanufacturerId(long id) {
         final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
         final CriteriaDelete<ComputerEntity> cQuery = cBuilder.createCriteriaDelete(ComputerEntity.class);
@@ -173,6 +178,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
     @Override
     @LogAndWrapException(logger = ComputerDAO.class, exception = ComputerDAOException.class)
+    @Transactional
     public void update(Computer computer) {
         final ComputerEntity entity = computerToComputerEntityMapper.map(computer);
         entityManager.merge(entity);

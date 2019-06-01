@@ -7,6 +7,7 @@ import com.excilys.cdb.persistence.exception.UserDAOException;
 import com.excilys.cdb.shared.logexception.LogAndWrapException;
 import com.excilys.cdb.shared.mapper.Mapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,6 +19,7 @@ import javax.persistence.criteria.Root;
 import java.util.Optional;
 
 @Repository
+@Transactional(readOnly = true)
 public class UserDAOImpl implements UserDAO {
     private final Mapper<UserEntity, User> userEntityToUserMapper;
     private final Mapper<User, UserEntity> userToUserEntityMapper;
@@ -31,6 +33,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     @LogAndWrapException(logger = UserDAO.class, exception = UserDAOException.class)
+    @Transactional
     public long create(User user) {
         entityManager.persist(userToUserEntityMapper.map(user));
         return user.getId();
@@ -38,6 +41,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     @LogAndWrapException(logger = UserDAO.class, exception = UserDAOException.class)
+    @Transactional
     public void deleteByLogin(String login) {
         final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
         final CriteriaDelete<UserEntity> cQuery = cBuilder.createCriteriaDelete(UserEntity.class);
