@@ -9,8 +9,6 @@ import com.excilys.cdb.shared.logexception.LogAndWrapException;
 import com.excilys.cdb.shared.mapper.Mapper;
 import com.excilys.cdb.shared.pagination.OrderBy;
 import com.excilys.cdb.shared.pagination.Pageable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -26,7 +24,6 @@ import java.util.stream.Collectors;
 
 @Repository
 public class ComputerDAOImpl implements ComputerDAO {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
     private final Mapper<ComputerEntity, Computer> computerEntityToComputerMapper;
     private final Mapper<Computer, ComputerEntity> computerToComputerEntityMapper;
     private EntityManager entityManager;

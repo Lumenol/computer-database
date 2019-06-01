@@ -1,22 +1,7 @@
 package com.excilys.cdb.persistence.entity;
 
-import java.util.HashSet;
+import javax.persistence.*;
 import java.util.Objects;
-import java.util.Set;
-
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import com.excilys.cdb.model.Role;
 
 @Entity
 @Table(name = "user")
@@ -29,118 +14,95 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "role")
-    private Set<Role> roles;
+    public UserEntity() {
+    }
+
+    UserEntity(Long id, String login, String password) {
+        this.id = id;
+        this.login = login;
+        this.password = password;
+    }
+
+    public static UserEntityBuilder builder() {
+        return new UserEntityBuilder();
+    }
 
     @Override
     public String toString() {
-	return "UserEntity [id=" + id + ", login=" + login + ", password=" + password + ", roles=" + roles + "]";
+        return "UserEntity [id=" + id + ", login=" + login + ", password=" + password + "]";
     }
 
     @Override
     public int hashCode() {
-	return Objects.hash(id, login, password, roles);
+        return Objects.hash(id, login, password);
     }
 
     @Override
     public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	UserEntity other = (UserEntity) obj;
-	return Objects.equals(id, other.id) && Objects.equals(login, other.login)
-		&& Objects.equals(password, other.password) && Objects.equals(roles, other.roles);
-    }
-
-    public UserEntity() {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        UserEntity other = (UserEntity) obj;
+        return Objects.equals(id, other.id) && Objects.equals(login, other.login)
+                && Objects.equals(password, other.password);
     }
 
     public Long getId() {
-	return id;
+        return id;
     }
 
     public void setId(Long id) {
-	this.id = id;
+        this.id = id;
     }
 
     public String getLogin() {
-	return login;
+        return login;
     }
 
     public void setLogin(String login) {
-	this.login = login;
+        this.login = login;
     }
 
     public String getPassword() {
-	return password;
+        return password;
     }
 
     public void setPassword(String password) {
-	this.password = password;
-    }
-
-    public Set<Role> getRoles() {
-	return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-	this.roles = roles;
-    }
-
-    UserEntity(Long id, String login, String password, Set<Role> roles) {
-	this.id = id;
-	this.login = login;
-	this.password = password;
-	this.roles = roles;
+        this.password = password;
     }
 
     public static class UserEntityBuilder {
-	private Long id;
-	private String login;
-	private String password;
-	private Set<Role> roles = new HashSet<>();
+        private Long id;
+        private String login;
+        private String password;
 
-	UserEntityBuilder() {
-	}
+        UserEntityBuilder() {
+        }
 
-	public UserEntityBuilder id(Long id) {
-	    this.id = id;
-	    return this;
-	}
+        public UserEntityBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
 
-	public UserEntityBuilder login(String login) {
-	    Objects.requireNonNull(login);
-	    this.login = login;
-	    return this;
-	}
+        public UserEntityBuilder login(String login) {
+            this.login = login;
+            return this;
+        }
 
-	public UserEntityBuilder password(String password) {
-	    Objects.requireNonNull(password);
-	    this.password = password;
-	    return this;
-	}
+        public UserEntityBuilder password(String password) {
+            this.password = password;
+            return this;
+        }
 
-	public UserEntityBuilder roles(Set<Role> roles) {
-	    Objects.requireNonNull(roles);
-	    this.roles = roles;
-	    return this;
-	}
+        public UserEntity build() {
+            return new UserEntity(id, login, password);
+        }
 
-	public UserEntity build() {
-	    return new UserEntity(id, login, password, roles);
-	}
-
-	@Override
-	public String toString() {
-	    return "UserEntityBuilder [id=" + id + ", login=" + login + ", password=" + password + ", roles=" + roles
-		    + "]";
-	}
-
+        public String toString() {
+            return "UserEntity.UserEntityBuilder(id=" + this.id + ", login=" + this.login + ", password=" + this.password + ")";
+        }
     }
-
 }
