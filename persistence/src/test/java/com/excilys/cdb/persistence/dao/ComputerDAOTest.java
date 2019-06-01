@@ -3,7 +3,7 @@ package com.excilys.cdb.persistence.dao;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Computer.ComputerBuilder;
-import com.excilys.cdb.persistence.config.PersistenceConfigTest;
+import com.excilys.cdb.persistence.config.TestPersistenceConfig;
 import com.excilys.cdb.persistence.exception.ComputerDAOException;
 import com.excilys.cdb.shared.pagination.OrderBy;
 import com.excilys.cdb.shared.pagination.Page;
@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = PersistenceConfigTest.class)
+@ContextConfiguration(classes = TestPersistenceConfig.class)
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "entries.sql")
 public class ComputerDAOTest {
     private ComputerDAO computerDAO;

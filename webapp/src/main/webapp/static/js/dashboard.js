@@ -132,7 +132,7 @@ function load() {
     var orderBy = getParameter('field');
     var direction = getParameter('direction');
 
-    var url = "dashboard?page=" + index + "&size=" + size;
+    var url = "dashboard?index=" + index + "&size=" + size;
     if (search) {
         url += "&search=" + search;
     }

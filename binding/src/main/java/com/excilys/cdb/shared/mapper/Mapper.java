@@ -1,5 +1,5 @@
 package com.excilys.cdb.shared.mapper;
 
-public interface Mapper<From, To> {
-    To map(From from);
+public interface Mapper<I, O> {
+    O map(I i);
 }

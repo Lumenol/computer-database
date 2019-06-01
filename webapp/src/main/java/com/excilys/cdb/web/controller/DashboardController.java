@@ -100,7 +100,7 @@ public class DashboardController {
         final StringBuilder stringBuilder = new StringBuilder(DASHBOARD).append("?");
 
         final Page page = pageable.getPage();
-        stringBuilder.append(pagingParameters.getPage()).append("=").append(page.getPage());
+        stringBuilder.append(pagingParameters.getPage()).append("=").append(page.getIndex());
         stringBuilder.append("&");
         stringBuilder.append(pagingParameters.getSize()).append("=").append(page.getSize());
 

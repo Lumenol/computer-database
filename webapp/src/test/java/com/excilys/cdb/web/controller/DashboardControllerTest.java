@@ -2,7 +2,7 @@ package com.excilys.cdb.web.controller;
 
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.shared.config.SharedConfig;
-import com.excilys.cdb.web.config.WebConfigTest;
+import com.excilys.cdb.web.config.TestWebConfig;
 import com.excilys.cdb.web.config.WebMvcConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,10 +24,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {WebConfigTest.class, WebMvcConfiguration.class, SharedConfig.class})
+@ContextConfiguration(classes = {TestWebConfig.class, WebMvcConfiguration.class, SharedConfig.class})
 @WebAppConfiguration
 public class DashboardControllerTest {
-    private static final String PARAMETER_PAGE = "page";
+    private static final String PARAMETER_PAGE = "index";
     private static final String PARAMETER_NUMBER_OF_COMPUTERS = "numberOfComputers";
     final String PARAMETER_PAGES = "pages";
     private WebApplicationContext wac;

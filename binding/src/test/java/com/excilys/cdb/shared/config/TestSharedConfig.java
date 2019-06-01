@@ -11,7 +11,7 @@ import static org.mockito.Mockito.mock;
 
 @Configuration
 @Import(SharedConfig.class)
-public class SharedConfigTest {
+public class TestSharedConfig {
     @Bean
     public ComputerExistById computerExistById() {
         return mock(ComputerExistById.class);

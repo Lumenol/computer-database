@@ -11,7 +11,7 @@ import java.util.Properties;
 
 @Configuration
 @Import({PersistenceConfig.class, SharedConfig.LogExceptionConfig.class})
-public class PersistenceConfigTest {
+public class TestPersistenceConfig {
     @Bean
     @Primary
     public HikariConfig hikariConfig() {

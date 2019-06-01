@@ -57,17 +57,15 @@ public class Paging {
     }
 
     public Optional<Page> redirectIfPageOutOfRange(Page page, double numberOfEntities) {
-        long pageIndex = page.getPage();
+        long pageIndex = page.getIndex();
         long pageSize = page.getSize();
         long indexLastPage = indexLastPage(numberOfEntities, pageSize);
-        final Page newPage = Page.builder().page(page.getPage()).build();
+        final Page newPage = Page.builder().page(page.getIndex()).build();
         if (pageIndex < 1) {
-            newPage.setPage(1);
-        } else if (pageIndex > 1) {
-            if (pageIndex > indexLastPage) {
-                final long max = Math.max(indexLastPage, 1);
-                newPage.setPage(max);
-            }
+            newPage.setIndex(1);
+        } else if (pageIndex > 1 && pageIndex > indexLastPage) {
+            final long max = Math.max(indexLastPage, 1);
+            newPage.setIndex(max);
         }
         if (page.getSize() > 0) {
             newPage.setSize(page.getSize());
@@ -85,11 +83,11 @@ public class Paging {
     }
 
     public void setPageParameters(ModelAndView modelAndView, Page page, long numberOfEntities) {
-        setPreviousPage(modelAndView, page.getPage());
-        setNextPage(modelAndView, page.getPage(), numberOfEntities, page.getSize());
-        setPagesNumbers(modelAndView, page.getPage(), numberOfEntities, page.getSize());
+        setPreviousPage(modelAndView, page.getIndex());
+        setNextPage(modelAndView, page.getIndex(), numberOfEntities, page.getSize());
+        setPagesNumbers(modelAndView, page.getIndex(), numberOfEntities, page.getSize());
         setPageSize(modelAndView, page.getSize());
-        setCurrentPageIndex(modelAndView, page.getPage());
+        setCurrentPageIndex(modelAndView, page.getIndex());
     }
 
     private void setPreviousPage(ModelAndView modelAndView, long pageCurrent) {

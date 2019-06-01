@@ -1,6 +1,6 @@
 package com.excilys.cdb.shared.validator;
 
-import com.excilys.cdb.shared.config.SharedConfigTest;
+import com.excilys.cdb.shared.config.TestSharedConfig;
 import com.excilys.cdb.shared.dto.CreateComputerDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,14 +18,14 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = SharedConfigTest.class)
+@ContextConfiguration(classes = TestSharedConfig.class)
 public class CreateComputerValidatorTest {
 
-    private Validator<CreateComputerDTO> createComputerValidator;
+    private CreateComputerValidator createComputerValidator;
     private CompanyExistById companyExistByIdMock;
 
     @Autowired
-    public void setCreateComputerValidator(Validator<CreateComputerDTO> createComputerValidator) {
+    public void setCreateComputerValidator(CreateComputerValidator createComputerValidator) {
         this.createComputerValidator = createComputerValidator;
     }
 

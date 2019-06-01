@@ -54,7 +54,7 @@
     </div>
     <c:url var="dashboard" value="/dashboard"/>
     <form id="deleteForm" action="${dashboard}" method="POST">
-        <input type="hidden" name=page value="${page}"/> <input
+        <input type="hidden" name=index value="${index}"/> <input
             type="hidden" name="size" value="${size}"/> <input type="hidden"
                                                                name="search" value="${search}"/> <input type="hidden"
                                                                                                         name="field"
@@ -168,8 +168,8 @@
         src="${pageContext.request.contextPath}/static/js/bootstrap.min.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/dashboard.js"></script>
 <form id="parameters" hidden>
-    <input name="index" value="${page}"> <input name="size"
-                                                value="${size}"> <input name="search" value="${search}">
+    <input name="index" value="${index}"> <input name="size"
+                                                 value="${size}"> <input name="search" value="${search}">
     <input name="field" value="${order_by}"> <input
         name="direction" value="${direction}">
 </form>

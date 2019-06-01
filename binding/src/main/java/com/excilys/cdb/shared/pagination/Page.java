@@ -3,15 +3,15 @@ package com.excilys.cdb.shared.pagination;
 import java.util.Objects;
 
 public class Page {
-    private long page;
+    private long index;
     private long size;
 
     public Page() {
         this(1, 50);
     }
 
-    Page(long page, long size) {
-        this.page = page;
+    Page(long index, long size) {
+        this.index = index;
         this.size = size;
     }
 
@@ -24,13 +24,13 @@ public class Page {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Page page1 = (Page) o;
-        return page == page1.page &&
+        return index == page1.index &&
                 size == page1.size;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(page, size);
+        return Objects.hash(index, size);
     }
 
     public long getSize() {
@@ -42,20 +42,20 @@ public class Page {
     }
 
     public long getOffset() {
-        return (page - 1) * size;
+        return (index - 1) * size;
     }
 
-    public long getPage() {
-        return page;
+    public long getIndex() {
+        return index;
     }
 
-    public void setPage(long page) {
-        this.page = page;
+    public void setIndex(long index) {
+        this.index = index;
     }
 
     @Override
     public String toString() {
-        return "Page{" + "page=" + page + ", offset=" + getOffset() + ", size=" + size + '}';
+        return "Page{" + "index=" + index + ", offset=" + getOffset() + ", size=" + size + '}';
     }
 
     public static class PageBuilder {

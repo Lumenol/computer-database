@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Primary;
 
 @Configuration
 @Import(WebConfig.class)
-public class WebConfigTest {
+public class TestWebConfig {
     @Bean
     @Primary
     public ComputerServiceImpl computerService() {

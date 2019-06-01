@@ -15,7 +15,7 @@ public class WebConfig {
     @Bean
     public PagingParameters paginationParameters() {
         final String PARAMETER_NEXT = "next";
-        final String PARAMETER_PAGE = "page";
+        final String PARAMETER_PAGE = "index";
         final String PARAMETER_PAGES = "pages";
         final String PARAMETER_PREVIOUS = "previous";
         final String PARAMETER_SIZE = "size";

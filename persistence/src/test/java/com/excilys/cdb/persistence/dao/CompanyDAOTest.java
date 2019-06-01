@@ -1,7 +1,7 @@
 package com.excilys.cdb.persistence.dao;
 
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.persistence.config.PersistenceConfigTest;
+import com.excilys.cdb.persistence.config.TestPersistenceConfig;
 import com.excilys.cdb.shared.pagination.Page;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = PersistenceConfigTest.class)
+@ContextConfiguration(classes = TestPersistenceConfig.class)
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "entries.sql")
 public class CompanyDAOTest {
     private UTDatabase database = UTDatabase.getInstance();
