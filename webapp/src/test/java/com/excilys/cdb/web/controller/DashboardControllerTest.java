@@ -1,6 +1,6 @@
 package com.excilys.cdb.web.controller;
 
-import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.service.service.ComputerService;
 import com.excilys.cdb.shared.configuration.SharedConfiguration;
 import com.excilys.cdb.web.configuration.WebConfigurationTest;
 import com.excilys.cdb.web.configuration.WebMvcConfiguration;

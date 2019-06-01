@@ -1,8 +1,8 @@
 package com.excilys.cdb.web.controller;
 
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.service.CompanyService;
-import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.service.service.CompanyService;
+import com.excilys.cdb.service.service.ComputerService;
 import com.excilys.cdb.shared.dto.CompanyDTO;
 import com.excilys.cdb.shared.dto.CreateComputerDTO;
 import com.excilys.cdb.shared.mapper.CompanyToCompanyDTOMapper;

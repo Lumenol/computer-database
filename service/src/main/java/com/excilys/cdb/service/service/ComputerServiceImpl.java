@@ -1,4 +1,4 @@
-package com.excilys.cdb.service;
+package com.excilys.cdb.service.service;
 
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.dao.ComputerDAO;
@@ -6,8 +6,6 @@ import com.excilys.cdb.service.exception.ComputerServiceException;
 import com.excilys.cdb.shared.logexception.LogAndWrapException;
 import com.excilys.cdb.shared.pagination.Pageable;
 import com.excilys.cdb.shared.validator.ComputerExistById;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +16,6 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class ComputerServiceImpl implements ComputerExistById, ComputerService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
     private final ComputerDAO computerDAO;
 
     public ComputerServiceImpl(ComputerDAO computerDAO) {

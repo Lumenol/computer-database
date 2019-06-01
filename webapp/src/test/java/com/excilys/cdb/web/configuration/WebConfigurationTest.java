@@ -1,7 +1,7 @@
 package com.excilys.cdb.web.configuration;
 
-import com.excilys.cdb.service.CompanyServiceImpl;
-import com.excilys.cdb.service.ComputerServiceImpl;
+import com.excilys.cdb.service.service.CompanyServiceImpl;
+import com.excilys.cdb.service.service.ComputerServiceImpl;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.excilys.cdb.service;
+package com.excilys.cdb.service.service;
 
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.shared.pagination.Pageable;

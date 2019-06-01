@@ -1,7 +1,7 @@
 package com.excilys.cdb.web.controller;
 
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.service.service.ComputerService;
 import com.excilys.cdb.shared.dto.ComputerDTO;
 import com.excilys.cdb.shared.mapper.ComputerToComputerDTOMapper;
 import com.excilys.cdb.shared.pagination.OrderBy;
