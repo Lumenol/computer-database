@@ -2,6 +2,7 @@ package com.excilys.cdb.shared.validator;
 
 import com.excilys.cdb.shared.configuration.SharedConfigurationTest;
 import com.excilys.cdb.shared.dto.CreateComputerDTO;
+import com.excilys.cdb.shared.dto.UpdateComputerDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,8 +13,7 @@ import org.springframework.validation.BindException;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
@@ -37,6 +37,16 @@ public class CreateComputerValidatorTest {
     @BeforeEach
     public void setUp() {
         reset(companyExistByIdMock);
+    }
+
+    @Test
+    void supportsOk() {
+        assertTrue(createComputerValidator.supports(CreateComputerDTO.class));
+    }
+
+    @Test
+    void supportsKo() {
+        assertFalse(createComputerValidator.supports(UpdateComputerDTO.class));
     }
 
     @Test
@@ -121,4 +131,21 @@ public class CreateComputerValidatorTest {
             fail("La validation a échoué");
         }
     }
+
+    @Test
+    public void unvalidBecauseDiscontinuedIsAfter2038() {
+        final long manufacturerId = 5L;
+        when(companyExistByIdMock.exist(manufacturerId)).thenReturn(true);
+        final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
+        createComputerDTO.setName("Un nom correct");
+        createComputerDTO.setmanufacturerId(manufacturerId);
+        createComputerDTO.setIntroduced(LocalDate.of(2016, 2, 4));
+        createComputerDTO.setDiscontinued(LocalDate.of(2040, 10, 20));
+        final BindException errors = new BindException(createComputerDTO, "dto");
+        createComputerValidator.validate(createComputerDTO, errors);
+        if (!errors.hasFieldErrors("discontinued")) {
+            fail("La validation a échoué");
+        }
+    }
+
 }
