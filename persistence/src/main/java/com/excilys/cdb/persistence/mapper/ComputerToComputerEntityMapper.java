@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.time.LocalTime;
-import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -25,15 +24,11 @@ public class ComputerToComputerEntityMapper implements Mapper<Computer, Computer
     @Override
     public ComputerEntity map(Computer computer) {
         final ComputerEntityBuilder builder = ComputerEntity.builder().id(computer.getId()).name(computer.getName());
-        if (Objects.nonNull(computer.getIntroduced())) {
-            builder.introduced(Timestamp.valueOf(computer.getIntroduced().atTime(LocalTime.MIDNIGHT)));
-        }
-        if (Objects.nonNull(computer.getDiscontinued())) {
-            builder.discontinued(Timestamp.valueOf(computer.getDiscontinued().atTime(LocalTime.MIDNIGHT)));
-        }
 
-        Optional.ofNullable(computer.getManufacturer()).map(companyToCompanyEntityMapper::map)
-                .ifPresent(builder::manufacturer);
+        Optional.ofNullable(computer.getIntroduced()).map(d -> d.atTime(LocalTime.MIDNIGHT)).map(Timestamp::valueOf).ifPresent(builder::introduced);
+        Optional.ofNullable(computer.getDiscontinued()).map(d -> d.atTime(LocalTime.MIDNIGHT)).map(Timestamp::valueOf).ifPresent(builder::discontinued);
+
+        Optional.ofNullable(computer.getManufacturer()).map(companyToCompanyEntityMapper::map).ifPresent(builder::manufacturer);
 
         return builder.build();
     }

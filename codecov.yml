@@ -4,6 +4,18 @@ coverage:
   precision: 2
 
 ignore:
+  - "core/src/main/java/com/excilys/cdb/model"
+  - "binding/src/main/java/com/excilys/cdb/shared/configuration"
+  - "binding/src/main/java/com/excilys/cdb/shared/dto"
+  - "binding/src/main/java/com/excilys/cdb/shared/exception"
+  - "binding/src/main/java/com/excilys/cdb/shared/logexception"
   - "persistence/src/main/java/com/excilys/cdb/persistence/entity"
   - "persistence/src/main/java/com/excilys/cdb/persistence/exception"
   - "persistence/src/main/java/com/excilys/cdb/persistence/configuration"
+  - "service/src/main/java/com/excilys/cdb/service/configuration"
+  - "service/src/main/java/com/excilys/cdb/service/exception"
+  - "console/src/main/java/com/excilys/cdb/cli/configuration"
+  - "console/src/main/java/com/excilys/cdb/cli/exception"
+  - "webapp/src/main/java/com/excilys/cdb/web/configuration"
+  - "webapp/src/main/java/com/excilys/cdb/web/exception"
+
