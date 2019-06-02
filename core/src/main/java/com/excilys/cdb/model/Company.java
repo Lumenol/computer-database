@@ -3,9 +3,11 @@ package com.excilys.cdb.model;
 import java.util.Objects;
 
 public class Company {
+    private Long id;
+    private String name;
 
-    private final Long id;
-    private final String name;
+    public Company() {
+    }
 
     private Company(Long id, String name) {
         Objects.requireNonNull(name);
@@ -33,8 +35,16 @@ public class Company {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

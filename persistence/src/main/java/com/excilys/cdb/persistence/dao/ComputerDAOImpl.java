@@ -9,9 +9,8 @@ import com.excilys.cdb.shared.logexception.LogAndWrapException;
 import com.excilys.cdb.shared.mapper.Mapper;
 import com.excilys.cdb.shared.pagination.OrderBy;
 import com.excilys.cdb.shared.pagination.Pageable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,8 +24,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Repository
+@Transactional(readOnly = true)
 public class ComputerDAOImpl implements ComputerDAO {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
     private final Mapper<ComputerEntity, Computer> computerEntityToComputerMapper;
     private final Mapper<Computer, ComputerEntity> computerToComputerEntityMapper;
     private EntityManager entityManager;
@@ -67,14 +66,16 @@ public class ComputerDAOImpl implements ComputerDAO {
 
     @Override
     @LogAndWrapException(logger = ComputerDAO.class, exception = ComputerDAOException.class)
-    public long create(Computer computer) {
+    @Transactional
+    public void create(Computer computer) {
         final ComputerEntity cEntity = computerToComputerEntityMapper.map(computer);
         entityManager.persist(cEntity);
-        return cEntity.getId();
+        computer.setId(cEntity.getId());
     }
 
     @Override
     @LogAndWrapException(logger = ComputerDAO.class, exception = ComputerDAOException.class)
+    @Transactional
     public void deleteById(long id) {
         final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
         final CriteriaDelete<ComputerEntity> cQuery = cBuilder.createCriteriaDelete(ComputerEntity.class);
@@ -85,6 +86,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
     @Override
     @LogAndWrapException(logger = ComputerDAO.class, exception = ComputerDAOException.class)
+    @Transactional
     public void deleteBymanufacturerId(long id) {
         final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
         final CriteriaDelete<ComputerEntity> cQuery = cBuilder.createCriteriaDelete(ComputerEntity.class);
@@ -176,6 +178,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
     @Override
     @LogAndWrapException(logger = ComputerDAO.class, exception = ComputerDAOException.class)
+    @Transactional
     public void update(Computer computer) {
         final ComputerEntity entity = computerToComputerEntityMapper.map(computer);
         entityManager.merge(entity);

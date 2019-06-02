@@ -5,11 +5,11 @@ import java.util.Objects;
 
 public class Computer {
 
-    private final LocalDate discontinued;
-    private final Long id;
-    private final LocalDate introduced;
-    private final Company manufacturer;
-    private final String name;
+    private LocalDate discontinued;
+    private Long id;
+    private LocalDate introduced;
+    private Company manufacturer;
+    private String name;
 
     Computer(LocalDate discontinued, Long id, LocalDate introduced, Company manufacturer, String name) {
         this.discontinued = discontinued;
@@ -17,6 +17,9 @@ public class Computer {
         this.introduced = introduced;
         this.manufacturer = manufacturer;
         this.name = name;
+    }
+
+    public Computer() {
     }
 
     public static ComputerBuilder builder() {
@@ -41,20 +44,40 @@ public class Computer {
         return discontinued;
     }
 
+    public void setDiscontinued(LocalDate discontinued) {
+        this.discontinued = discontinued;
+    }
+
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public LocalDate getIntroduced() {
         return introduced;
     }
 
+    public void setIntroduced(LocalDate introduced) {
+        this.introduced = introduced;
+    }
+
     public Company getManufacturer() {
         return manufacturer;
     }
 
+    public void setManufacturer(Company manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

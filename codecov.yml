@@ -6,4 +6,4 @@ coverage:
 ignore:
   - "persistence/src/main/java/com/excilys/cdb/persistence/entity"
   - "persistence/src/main/java/com/excilys/cdb/persistence/exception"
-  - "persistence/src/main/java/com/excilys/cdb/persistence/config"
+  - "persistence/src/main/java/com/excilys/cdb/persistence/configuration"

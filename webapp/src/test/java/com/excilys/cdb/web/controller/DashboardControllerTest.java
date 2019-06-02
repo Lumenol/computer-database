@@ -1,9 +1,9 @@
 package com.excilys.cdb.web.controller;
 
-import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.shared.config.SharedConfig;
-import com.excilys.cdb.web.config.WebConfigTest;
-import com.excilys.cdb.web.config.WebMvcConfiguration;
+import com.excilys.cdb.service.service.ComputerService;
+import com.excilys.cdb.shared.configuration.SharedConfiguration;
+import com.excilys.cdb.web.configuration.WebConfigurationTest;
+import com.excilys.cdb.web.configuration.WebMvcConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {WebConfigTest.class, WebMvcConfiguration.class, SharedConfig.class})
+@ContextConfiguration(classes = {WebConfigurationTest.class, WebMvcConfiguration.class, SharedConfiguration.class})
 @WebAppConfiguration
 public class DashboardControllerTest {
     private static final String PARAMETER_PAGE = "page";

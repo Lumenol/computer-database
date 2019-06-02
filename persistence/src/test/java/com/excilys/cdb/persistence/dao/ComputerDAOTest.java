@@ -3,7 +3,7 @@ package com.excilys.cdb.persistence.dao;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Computer.ComputerBuilder;
-import com.excilys.cdb.persistence.config.PersistenceConfigTest;
+import com.excilys.cdb.persistence.configuration.PersistenceConfigurationTest;
 import com.excilys.cdb.persistence.exception.ComputerDAOException;
 import com.excilys.cdb.shared.pagination.OrderBy;
 import com.excilys.cdb.shared.pagination.Page;
@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = PersistenceConfigTest.class)
+@ContextConfiguration(classes = PersistenceConfigurationTest.class)
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "entries.sql")
 public class ComputerDAOTest {
     private ComputerDAO computerDAO;
@@ -90,10 +90,10 @@ public class ComputerDAOTest {
         final ComputerBuilder builder = Computer.builder().introduced(LocalDate.of(2012, 4, 14))
                 .discontinued(LocalDate.of(2020, 5, 10)).name("Le modifié").manufacturer(company);
         final Computer cree = builder.build();
-        final long id = computerDAO.create(cree);
+        computerDAO.create(cree);
 
-        final Computer expected = builder.id(id).build();
-        final Computer actual = computerDAO.findById(id).get();
+        final Computer expected = builder.id(cree.getId()).build();
+        final Computer actual = computerDAO.findById(expected.getId()).get();
         assertEquals(expected, actual);
     }
 
