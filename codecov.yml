@@ -7,3 +7,7 @@ ignore:
   - "persistence/src/main/java/com/excilys/cdb/persistence/entity"
   - "persistence/src/main/java/com/excilys/cdb/persistence/exception"
   - "persistence/src/main/java/com/excilys/cdb/persistence/configuration"
+  - "binding/src/main/java/com/excilys/cdb/shared/configuration"
+  - "binding/src/main/java/com/excilys/cdb/shared/dto"
+  - "binding/src/main/java/com/excilys/cdb/shared/exception"
+  - "binding/src/main/java/com/excilys/cdb/shared/logexception"
