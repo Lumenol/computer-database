@@ -90,10 +90,10 @@ public class ComputerDAOTest {
         final ComputerBuilder builder = Computer.builder().introduced(LocalDate.of(2012, 4, 14))
                 .discontinued(LocalDate.of(2020, 5, 10)).name("Le modifié").manufacturer(company);
         final Computer cree = builder.build();
-        final long id = computerDAO.create(cree);
+        computerDAO.create(cree);
 
-        final Computer expected = builder.id(id).build();
-        final Computer actual = computerDAO.findById(id).get();
+        final Computer expected = builder.id(cree.getId()).build();
+        final Computer actual = computerDAO.findById(expected.getId()).get();
         assertEquals(expected, actual);
     }
 

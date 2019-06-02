@@ -28,8 +28,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @LogAndWrapException(logger = UserService.class, exception = UserServiceException.class)
     @Transactional
-    public long create(User user) {
-        return userDAO.create(user);
+    public void create(User user) {
+        userDAO.create(user);
     }
 
     @Override

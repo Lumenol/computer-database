@@ -34,9 +34,10 @@ public class UserDAOImpl implements UserDAO {
     @Override
     @LogAndWrapException(logger = UserDAO.class, exception = UserDAOException.class)
     @Transactional
-    public long create(User user) {
-        entityManager.persist(userToUserEntityMapper.map(user));
-        return user.getId();
+    public void create(User user) {
+        final UserEntity userEntity = userToUserEntityMapper.map(user);
+        entityManager.persist(userEntity);
+        user.setId(userEntity.getId());
     }
 
     @Override

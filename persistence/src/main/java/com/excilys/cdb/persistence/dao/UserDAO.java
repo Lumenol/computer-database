@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface UserDAO {
 
-    long create(User user);
+    void create(User user);
 
     void deleteByLogin(String login);
 

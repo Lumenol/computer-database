@@ -11,7 +11,7 @@ public interface ComputerDAO {
 
     long countByNameOrCompanyName(String name);
 
-    long create(Computer computer);
+    void create(Computer computer);
 
     void deleteById(long id);
 

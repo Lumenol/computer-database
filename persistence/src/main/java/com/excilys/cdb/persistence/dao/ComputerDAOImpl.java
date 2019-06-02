@@ -67,10 +67,10 @@ public class ComputerDAOImpl implements ComputerDAO {
     @Override
     @LogAndWrapException(logger = ComputerDAO.class, exception = ComputerDAOException.class)
     @Transactional
-    public long create(Computer computer) {
+    public void create(Computer computer) {
         final ComputerEntity cEntity = computerToComputerEntityMapper.map(computer);
         entityManager.persist(cEntity);
-        return cEntity.getId();
+        computer.setId(cEntity.getId());
     }
 
     @Override
