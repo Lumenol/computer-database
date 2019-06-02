@@ -15,6 +15,9 @@ public class User {
         this.password = password;
     }
 
+    public User() {
+    }
+
     public static UserBuilder builder() {
         return new UserBuilder();
     }
@@ -23,12 +26,24 @@ public class User {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getLogin() {
         return login;
     }
 
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
