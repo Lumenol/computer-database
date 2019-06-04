@@ -4,10 +4,6 @@ import com.excilys.cdb.model.User;
 import com.excilys.cdb.persistence.dao.UserDAO;
 import com.excilys.cdb.service.exception.UserServiceException;
 import com.excilys.cdb.shared.logexception.LogAndWrapException;
-import com.excilys.cdb.shared.mapper.Mapper;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,14 +11,12 @@ import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService {
 
     private final UserDAO userDAO;
-    private final Mapper<User, UserDetails> userToUserDetailsMapper;
 
-    public UserServiceImpl(UserDAO userDAO, Mapper<User, UserDetails> userToUserDetailsMapper) {
+    public UserServiceImpl(UserDAO userDAO) {
         this.userDAO = userDAO;
-        this.userToUserDetailsMapper = userToUserDetailsMapper;
     }
 
     @Override
@@ -51,8 +45,4 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userDAO.findByLogin(login);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userDAO.findByLogin(username).map(userToUserDetailsMapper::map).orElseThrow(() -> new UsernameNotFoundException(username));
-    }
 }

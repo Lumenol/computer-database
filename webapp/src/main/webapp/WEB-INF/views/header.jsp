@@ -19,7 +19,11 @@
             </sec:authorize>
             <sec:authorize access="isAuthenticated()">
                 <c:url value="/logout" var="logout"/>
-                <a class="navbar-brand" href="${logout}"><spring:message code="header.logout"/></a>
+                <form action="${logout}" method="post" id="logout" hidden>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                </form>
+                <a href="#" class="navbar-brand" onclick="$('#logout').submit()"><spring:message
+                        code="header.logout"/></a>
             </sec:authorize>
         </div>
     </div>

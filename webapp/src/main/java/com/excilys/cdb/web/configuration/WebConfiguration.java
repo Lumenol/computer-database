@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ComponentScan(basePackages = {
-	"com.excilys.cdb.web.controller" }, excludeFilters = @ComponentScan.Filter(Configuration.class))
+		"com.excilys.cdb.web.mapper"}, excludeFilters = @ComponentScan.Filter(Configuration.class))
 public class WebConfiguration {
 
     @Bean
