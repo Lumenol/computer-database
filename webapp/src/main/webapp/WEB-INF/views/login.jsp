@@ -33,7 +33,7 @@
 				</c:if>
 				<c:url value="/login" var="login"/>
 				<form action="${login}" method="POST">
-				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 					<fieldset>
 						<div class='form-group'>
 							<spring:message code="login.username" var="username" />

@@ -136,17 +136,17 @@
     <div class="container text-center">
         <ul class="pagination">
             <c:if test="${not empty previous}">
-                <li><a aria-label="Previous" onclick="goPage(${previous})">
+                <li><a href="#" aria-label="Previous" onclick="goPage(${previous})">
                     <span aria-hidden="true">&laquo;</span>
                 </a></li>
             </c:if>
 
             <c:forEach var="page" items="${pages}">
-                <li><a onclick="goPage(${page})">${page}</a></li>
+                <li><a href="#" onclick="goPage(${page})">${page}</a></li>
             </c:forEach>
 
             <c:if test="${not empty next}">
-                <li><a aria-label="Next" onclick="goPage(${next})"> <span
+                <li><a href="#" aria-label="Next" onclick="goPage(${next})"> <span
                         aria-hidden="true">&raquo;</span>
                 </a></li>
             </c:if>

@@ -1,6 +1,7 @@
-package com.excilys.cdb.shared.mapper;
+package com.excilys.cdb.web.mapper;
 
 import com.excilys.cdb.model.User;
+import com.excilys.cdb.shared.mapper.Mapper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;

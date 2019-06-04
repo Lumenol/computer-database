@@ -3,8 +3,6 @@ package com.excilys.cdb.shared.configuration;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @Import({SharedConfiguration.BeanConfig.class, SharedConfiguration.ValidatorConfiguration.class, SharedConfiguration.MapperConfiguration.class, SharedConfiguration.LogExceptionConfiguration.class})
@@ -18,12 +16,6 @@ public class SharedConfiguration {
             bundleMessage.addBasenames("i18n/messages");
             return bundleMessage;
         }
-
-        @Bean
-        public PasswordEncoder passwordEncoder() {
-            return new BCryptPasswordEncoder();
-        }
-
     }
 
     @Configuration
