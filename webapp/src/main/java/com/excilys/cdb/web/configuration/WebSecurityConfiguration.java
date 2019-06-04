@@ -12,24 +12,25 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final UserDetailsService userDetailsService;
-    private final PasswordEncoder passwordEncoder;
+	private final UserDetailsService userDetailsService;
+	private final PasswordEncoder passwordEncoder;
 
-    public WebSecurityConfiguration(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
-        this.userDetailsService = userDetailsService;
-        this.passwordEncoder = passwordEncoder;
-    }
+	public WebSecurityConfiguration(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+		this.userDetailsService = userDetailsService;
+		this.passwordEncoder = passwordEncoder;
+	}
 
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.csrf().disable().authorizeRequests()
+		.antMatchers("/static/**").permitAll()
+				.anyRequest().authenticated().and()
+				.formLogin().loginPage("/login").permitAll()
+				.and().logout().permitAll();
+	}
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/login", "/logout").permitAll()
-                .anyRequest().authenticated()
-                .and().formLogin().and().logout();
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-    }
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+	}
 }
