@@ -14,8 +14,8 @@
             <a class="navbar-brand" href="?lang=fr">Français</a>
             <a class="navbar-brand" href="?lang=en">English</a>
             <sec:authorize access="!isAuthenticated()">
-                <c:url value="/login" var="login"/>
-                <a class="navbar-brand" href="${login}"><spring:message code="header.login"/></a>
+                <c:url value="/users" var="registry"/>
+                <a class="navbar-brand" href="${registry}"><spring:message code="header.registry"/></a>
             </sec:authorize>
             <sec:authorize access="isAuthenticated()">
                 <c:url value="/logout" var="logout"/>
