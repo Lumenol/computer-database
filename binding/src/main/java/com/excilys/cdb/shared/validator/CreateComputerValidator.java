@@ -3,12 +3,11 @@ package com.excilys.cdb.shared.validator;
 import com.excilys.cdb.shared.dto.CreateComputerDTO;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
 import java.util.Objects;
 
 @Component
-public class CreateComputerValidator implements Validator, com.excilys.cdb.shared.validator.Validator<CreateComputerDTO> {
+public class CreateComputerValidator implements Validator<CreateComputerDTO> {
 
     private final ComputerValidatorUtils computerValidatorUtils;
 
