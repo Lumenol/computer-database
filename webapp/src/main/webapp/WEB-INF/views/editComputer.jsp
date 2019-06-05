@@ -86,7 +86,7 @@
                     <div class="actions pull-right">
                         <spring:message code="form.edit" var="editButton"/>
                         <input type="submit" value="${editButton}" class="btn btn-primary">
-                        or
+                        <spring:message code="or"/>
                         <c:url var="dashboard" value="/dashboard"/>
                         <a href="${dashboard}" class="btn btn-default"><spring:message code="form.cancel"/></a>
                     </div>

@@ -55,8 +55,8 @@
 								<div class='form-group ${status.error?"has-error":""}'>
 									<spring:message code="user.password" var="password" />
 									<form:label path="password">${password}</form:label>
-									<form:input type="text" class="form-control" path="password"
-										id="password" placeholder="${password}" required="required" />
+									<form:input type="password" class="form-control" path="password"
+												id="password" placeholder="${password}" required="required" />
 									<form:errors path="password" cssClass="help-block" />
 								</div>
 							</spring:bind>
@@ -64,8 +64,8 @@
 								<div class='form-group ${status.error?"has-error":""}'>
 									<spring:message code="user.passwordCheck" var="passwordCheck" />
 									<form:label path="passwordCheck">${passwordCheck}</form:label>
-									<form:input type="text" class="form-control" path="passwordCheck"
-										id="passwordCheck" placeholder="${passwordCheck}" required="required" />
+									<form:input type="password" class="form-control" path="passwordCheck"
+												id="passwordCheck" placeholder="${passwordCheck}" required="required" />
 									<form:errors path="passwordCheck" cssClass="help-block" />
 								</div>
 							</spring:bind>
@@ -73,7 +73,7 @@
 						<div class="actions pull-right">
 							<spring:message code="form.add" var="addButton" />
 							<input type="submit" value="${addButton}" class="btn btn-primary">
-							or
+							<spring:message code="or"/>
 							<c:url var="dashboard" value="/dashboard" />
 							<a href="${dashboard}" class="btn btn-default"><spring:message
 									code="form.cancel" /></a>

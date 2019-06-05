@@ -16,7 +16,6 @@
 		<dependency>
 			<groupId>fr.credeville.cdb</groupId>
 			<artifactId>persistence</artifactId>
-			<version>${module.version}</version>
 		</dependency>
 	</dependencies>
 </project>
