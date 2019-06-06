@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.excilys.cdb.service.service.CompanyServiceImpl;
 import com.excilys.cdb.service.service.ComputerServiceImpl;
 import com.excilys.cdb.service.service.UserServiceImpl;
+import com.excilys.cdb.webapp.configuration.WebConfiguration;
 
 @Configuration
 @Import(WebConfiguration.class)

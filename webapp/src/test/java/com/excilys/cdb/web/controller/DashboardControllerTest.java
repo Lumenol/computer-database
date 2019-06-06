@@ -6,7 +6,8 @@ import com.excilys.cdb.service.service.ComputerService;
 import com.excilys.cdb.shared.configuration.SharedConfiguration;
 import com.excilys.cdb.shared.pagination.Pageable;
 import com.excilys.cdb.web.configuration.WebConfigurationTest;
-import com.excilys.cdb.web.configuration.WebMvcConfiguration;
+import com.excilys.cdb.webapp.configuration.WebMvcConfiguration;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
