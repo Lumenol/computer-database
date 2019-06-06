@@ -1,4 +1,4 @@
-package com.excilys.cdb.web.controller;
+package com.excilys.cdb.web.controller.mvc;
 
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.service.ComputerService;

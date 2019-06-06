@@ -1,4 +1,4 @@
-package com.excilys.cdb.web.controller;
+package com.excilys.cdb.web.controller.mvc;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;

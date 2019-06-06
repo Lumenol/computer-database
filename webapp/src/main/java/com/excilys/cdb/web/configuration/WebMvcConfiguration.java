@@ -1,11 +1,13 @@
 package com.excilys.cdb.web.configuration;
 
+import java.util.List;
 import java.util.Locale;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -26,8 +28,13 @@ import com.excilys.cdb.web.converter.StringToOrderByFieldConverter;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "com.excilys.cdb.web.controller", excludeFilters = @ComponentScan.Filter(Configuration.class))
+@ComponentScan(basePackages = "com.excilys.cdb.web.controller.mvc", excludeFilters = @ComponentScan.Filter(Configuration.class))
 public class WebMvcConfiguration implements WebMvcConfigurer {
+
+	@Override
+	public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
+		resolvers.set(resolvers.size() - 1, new ErrorHandler());
+	}
 
 	@Override
 	public void addFormatters(FormatterRegistry registry) {
