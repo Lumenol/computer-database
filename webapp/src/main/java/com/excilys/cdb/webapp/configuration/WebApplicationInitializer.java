@@ -7,6 +7,7 @@ import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import com.excilys.cdb.api.configuration.RestConfiguration;
 import com.excilys.cdb.persistence.configuration.PersistenceConfiguration;
 import com.excilys.cdb.service.configuration.ServiceConfiguration;
 import com.excilys.cdb.shared.configuration.SharedConfiguration;
@@ -25,7 +26,7 @@ public class WebApplicationInitializer implements org.springframework.web.WebApp
 
 		// Register and map the mvc dispatcher servlet
 		AnnotationConfigWebApplicationContext dispatcherContext = new AnnotationConfigWebApplicationContext();
-		dispatcherContext.register(WebMvcConfiguration.class);
+		dispatcherContext.register(WebMvcConfiguration.class,RestConfiguration.class);
 
 		final DispatcherServlet servlet = new DispatcherServlet(dispatcherContext);
 		servlet.setThrowExceptionIfNoHandlerFound(true);

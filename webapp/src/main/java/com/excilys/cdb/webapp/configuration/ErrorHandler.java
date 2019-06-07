@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
@@ -232,16 +233,31 @@ class ErrorHandler implements HandlerExceptionResolver {
 	@Override
 	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler,
 			Exception ex) {
-		ErrorHandler.ResponseInterceptError res = new ResponseInterceptError(response);
-		defaultHandlerExceptionResolver.resolveException(request, res, handler, ex);
+		int code = HttpStatus.INTERNAL_SERVER_ERROR.value();
+		String message = HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase();
 		final ModelAndView modelAndView = new ModelAndView(VIEW_NAME);
 
-		int code = Optional.ofNullable(res.getCode()).orElse(HttpStatus.INTERNAL_SERVER_ERROR.value());
-		String message = res.message;
-		if (Objects.isNull(message)) {
-			try {
-				message = HttpStatus.valueOf(code).getReasonPhrase();
-			} catch (IllegalArgumentException e) {
+		final Optional<ResponseStatus> responseStatuts = Optional.ofNullable(ex).map(Object::getClass)
+				.map(c -> c.getAnnotation(ResponseStatus.class));
+		if (responseStatuts.isPresent()) {
+			final ResponseStatus responseStatus = responseStatuts.get();
+			code = responseStatus.code().value();
+			message = responseStatus.reason().isEmpty() ? responseStatus.code().getReasonPhrase()
+					: responseStatus.reason();
+		} else {
+			ErrorHandler.ResponseInterceptError res = new ResponseInterceptError(response);
+			defaultHandlerExceptionResolver.resolveException(request, res, handler, ex);
+
+			if (Objects.nonNull(res.getCode())) {
+				code = res.getCode();
+				if (Objects.isNull(res.getMessage())) {
+					message = res.getMessage();
+				} else {
+					try {
+						message = HttpStatus.valueOf(code).getReasonPhrase();
+					} catch (IllegalArgumentException e) {
+					}
+				}
 			}
 		}
 		modelAndView.addObject(STATUS, code);

@@ -30,11 +30,13 @@ import com.excilys.cdb.webapp.converter.StringToOrderByFieldConverter;
 @EnableWebMvc
 @ComponentScan(basePackages = "com.excilys.cdb.webapp.controller", excludeFilters = @ComponentScan.Filter(Configuration.class))
 public class WebMvcConfiguration implements WebMvcConfigurer {
-
+	
 	@Override
-	public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
-		resolvers.set(resolvers.size() - 1, new ErrorHandler());
+	public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
+		resolvers.add(new ErrorHandler());
 	}
+
+
 
 	@Override
 	public void addFormatters(FormatterRegistry registry) {
