@@ -47,6 +47,11 @@ public class CompanyController {
 		return companyService.count();
 	}
 	
+	@GetMapping("/exist/{id}")
+	public boolean existById(@PathVariable long id) {
+		return companyService.exist(id);
+	}
+	
 	@DeleteMapping("/{id}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void deleteById(@PathVariable long id) {
