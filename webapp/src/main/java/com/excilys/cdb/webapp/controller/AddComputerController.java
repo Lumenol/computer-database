@@ -22,6 +22,7 @@ import com.excilys.cdb.shared.dto.CreateComputerDTO;
 import com.excilys.cdb.shared.mapper.CompanyToCompanyDTOMapper;
 import com.excilys.cdb.shared.mapper.CreateComputerDTOToComputerMapper;
 import com.excilys.cdb.shared.validator.CreateComputerValidator;
+import com.excilys.cdb.shared.validator.Validator;
 
 @Controller
 @RequestMapping("/computers/add")
@@ -34,11 +35,11 @@ public class AddComputerController {
 	private final CreateComputerDTOToComputerMapper createComputerDTOToComputerMapper;
 	private final CompanyToCompanyDTOMapper companyToCompanyDTOMapper;
 	private final ComputerService computerService;
-	private final CreateComputerValidator createComputerValidator;
+	private final Validator<CreateComputerDTO> createComputerValidator;
 
 	public AddComputerController(CompanyService companyService,
 			CreateComputerDTOToComputerMapper createComputerDTOToComputerMapper,
-			CreateComputerValidator createComputerValidator, CompanyToCompanyDTOMapper companyToCompanyDTOMapper,
+			Validator<CreateComputerDTO> createComputerValidator, CompanyToCompanyDTOMapper companyToCompanyDTOMapper,
 			ComputerService computerService) {
 		super();
 		this.companyService = companyService;

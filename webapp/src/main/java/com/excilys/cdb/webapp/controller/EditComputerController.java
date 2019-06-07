@@ -9,6 +9,7 @@ import com.excilys.cdb.shared.mapper.CompanyToCompanyDTOMapper;
 import com.excilys.cdb.shared.mapper.ComputerToUpdateComputerDTOMapper;
 import com.excilys.cdb.shared.mapper.UpdateComputerDTOToComputerMapper;
 import com.excilys.cdb.shared.validator.UpdateComputerValidator;
+import com.excilys.cdb.shared.validator.Validator;
 import com.excilys.cdb.webapp.exception.BadArgumentRequestException;
 
 import org.springframework.stereotype.Controller;
@@ -30,14 +31,14 @@ public class EditComputerController {
     private static final String EDIT_COMPUTER_JSP = "editComputer";
     private final CompanyService companyService;
     private final UpdateComputerDTOToComputerMapper updateComputerDTOToComputerMapper;
-    private final UpdateComputerValidator updateComputerValidator;
+    private final Validator<UpdateComputerDTO> updateComputerValidator;
     private final CompanyToCompanyDTOMapper companyToCompanyDTOMapper;
     private final ComputerService computerService;
     private final ComputerToUpdateComputerDTOMapper computerToUpdateComputerDTOMapper;
 
     public EditComputerController(CompanyService companyService,
-                                  UpdateComputerDTOToComputerMapper updateComputerDTOToComputerMapper,
-                                  UpdateComputerValidator updateComputerValidator, CompanyToCompanyDTOMapper companyToCompanyDTOMapper,
+    		UpdateComputerDTOToComputerMapper updateComputerDTOToComputerMapper,
+    		Validator<UpdateComputerDTO> updateComputerValidator, CompanyToCompanyDTOMapper companyToCompanyDTOMapper,
                                   ComputerService computerService, ComputerToUpdateComputerDTOMapper computerToUpdateComputerDTOMapper) {
         super();
         this.companyService = companyService;
