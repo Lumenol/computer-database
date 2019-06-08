@@ -43,6 +43,7 @@
 		<selenium.version>3.141.59</selenium.version>
 		<webdrivermanager.version>3.6.0</webdrivermanager.version>
 		<phantomjsdriver.version>1.4.4</phantomjsdriver.version>
+		<h2.version>1.4.199</h2.version>
 	</properties>
 
 
@@ -169,7 +170,7 @@
 			<dependency>
 				<groupId>com.h2database</groupId>
 				<artifactId>h2</artifactId>
-				<version>1.4.199</version>
+				<version>${h2.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
