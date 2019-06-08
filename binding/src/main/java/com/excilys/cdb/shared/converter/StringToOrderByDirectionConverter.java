@@ -1,4 +1,4 @@
-package com.excilys.cdb.webapp.converter;
+package com.excilys.cdb.shared.converter;
 
 import com.excilys.cdb.shared.pagination.OrderBy;
 import org.springframework.core.convert.converter.Converter;

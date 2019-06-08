@@ -14,6 +14,7 @@
 		<module>service</module>
 		<module>console</module>
 		<module>webapp</module>
+        <module>api</module>
 	</modules>
 
 	<properties>
@@ -35,6 +36,7 @@
 		<jstl.version>1.2</jstl.version>
 		<javax.validation-api>2.0.1.Final</javax.validation-api>
 		<hibernate-validator>6.0.16.Final</hibernate-validator>
+        <jackson.version>2.9.9</jackson.version>
 		<!-- Test -->
 
 		<junit.version>5.4.2</junit.version>
@@ -145,7 +147,12 @@
 				<groupId>com.zaxxer</groupId>
 				<artifactId>HikariCP</artifactId>
 				<version>${HikariCP.version}</version>
-			</dependency>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
 			<dependency>
 				<groupId>mysql</groupId>
 				<artifactId>mysql-connector-java</artifactId>

@@ -1,30 +1,19 @@
 package com.excilys.cdb.webapp.configuration;
 
-import java.util.List;
-import java.util.Locale;
-
+import com.excilys.cdb.shared.converter.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.theme.ThemeChangeInterceptor;
 
-import com.excilys.cdb.webapp.converter.LocalDateToStringConverter;
-import com.excilys.cdb.webapp.converter.OrderByDirectionToStringConverter;
-import com.excilys.cdb.webapp.converter.OrderByFieldToStringConverter;
-import com.excilys.cdb.webapp.converter.StringToLocalDateConverter;
-import com.excilys.cdb.webapp.converter.StringToOrderByDirectionConverter;
-import com.excilys.cdb.webapp.converter.StringToOrderByFieldConverter;
+import java.util.List;
+import java.util.Locale;
 
 @Configuration
 @EnableWebMvc
@@ -35,8 +24,6 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 	public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
 		resolvers.add(new ErrorHandler());
 	}
-
-
 
 	@Override
 	public void addFormatters(FormatterRegistry registry) {
