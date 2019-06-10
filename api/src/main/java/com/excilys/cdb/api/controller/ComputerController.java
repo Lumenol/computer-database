@@ -12,8 +12,7 @@ import com.excilys.cdb.shared.pagination.Page;
 import com.excilys.cdb.shared.pagination.Pageable;
 import com.excilys.cdb.shared.validator.Validator;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.WebDataBinder;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,12 +40,6 @@ public class ComputerController {
         this.updateComputerDTOComputerMapper = updateComputerDTOComputerMapper;
         this.updateComputerValidator = updateComputerValidator;
         this.createComputerValidator = createComputerValidator;
-    }
-
-    @InitBinder("computer")
-    protected void initBinding(WebDataBinder dataBinder) {
-        dataBinder.addValidators(createComputerValidator);
-        dataBinder.addValidators(updateComputerValidator);
     }
 
     @GetMapping
@@ -83,13 +76,23 @@ public class ComputerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@Validated @RequestBody CreateComputerDTO computer) {
+    public void create(@RequestBody CreateComputerDTO computer) throws BindException {
+        final BindException errors = new BindException(computer, "computer");
+        createComputerValidator.validate(computer, errors);
+        if (errors.hasErrors()) {
+            throw errors;
+        }
         computerService.create(createComputerDTOComputerMapper.map(computer));
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@Validated @RequestBody UpdateComputerDTO computer) {
+    public void update(@RequestBody UpdateComputerDTO computer) throws BindException {
+        final BindException errors = new BindException(computer, "computer");
+        updateComputerValidator.validate(computer, errors);
+        if (errors.hasErrors()) {
+            throw errors;
+        }
         computerService.update(updateComputerDTOComputerMapper.map(computer));
     }
 }
