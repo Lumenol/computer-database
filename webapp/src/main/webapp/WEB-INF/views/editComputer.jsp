@@ -60,7 +60,7 @@
                             </div>
                         </spring:bind>
                         <spring:bind path="discontinued">
-                            <div class='form-group'>
+                            <div class='form-group ${status.error?"has-error":""}'>
                                 <spring:message code="computer.discontinued" var="discontinued"/>
                                 <form:label path="discontinued">${discontinued}</form:label>
                                 <form:input type="date" class="form-control"
@@ -71,7 +71,7 @@
                             </div>
                         </spring:bind>
                         <spring:bind path="manufacturerId">
-                            <div class='form-group'>
+                            <div class='form-group ${status.error?"has-error":""}'>
                                 <form:label path="manufacturerId">Company</form:label>
                                 <form:select class="form-control" path="manufacturerId"
                                              id="manufacturerId">
