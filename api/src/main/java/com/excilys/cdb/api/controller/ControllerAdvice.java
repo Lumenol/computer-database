@@ -47,4 +47,5 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
         }
         return super.handleExceptionInternal(ex, body, headers, status, request);
     }
+
 }

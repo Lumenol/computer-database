@@ -1,11 +1,15 @@
 package com.excilys.cdb.shared.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class ComputerDTO {
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private LocalDate discontinued;
     private long id;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private LocalDate introduced;
     private String manufacturer;
     private String name;

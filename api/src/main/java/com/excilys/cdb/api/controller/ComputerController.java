@@ -26,27 +26,31 @@ public class ComputerController {
 
     private final ComputerService computerService;
     private final Mapper<Computer, ComputerDTO> computerToDto;
+    private final Mapper<CreateComputerDTO, Computer> createComputerDTOComputerMapper;
+    private final Mapper<UpdateComputerDTO, Computer> updateComputerDTOComputerMapper;
     private final Validator<UpdateComputerDTO> updateComputerValidator;
     private final Validator<CreateComputerDTO> createComputerValidator;
 
 
     public ComputerController(ComputerService computerService, Mapper<Computer, ComputerDTO> computerToDto,
-                              Validator<UpdateComputerDTO> updateComputerValidator,
+                              Mapper<CreateComputerDTO, Computer> createComputerDTOComputerMapper, Mapper<UpdateComputerDTO, Computer> updateComputerDTOComputerMapper, Validator<UpdateComputerDTO> updateComputerValidator,
                               Validator<CreateComputerDTO> createComputerValidator) {
         this.computerService = computerService;
         this.computerToDto = computerToDto;
+        this.createComputerDTOComputerMapper = createComputerDTOComputerMapper;
+        this.updateComputerDTOComputerMapper = updateComputerDTOComputerMapper;
         this.updateComputerValidator = updateComputerValidator;
         this.createComputerValidator = createComputerValidator;
     }
 
-    @InitBinder
+    @InitBinder("computer")
     protected void initBinding(WebDataBinder dataBinder) {
         dataBinder.addValidators(createComputerValidator);
         dataBinder.addValidators(updateComputerValidator);
     }
 
     @GetMapping
-    public List<ComputerDTO> findAll(@Validated @ModelAttribute Page page, @ModelAttribute OrderBy orderBy,
+    public List<ComputerDTO> findAll(@ModelAttribute Page page, @ModelAttribute OrderBy orderBy,
                                      @RequestParam Optional<String> search) {
         final Pageable pageable = Pageable.builder().page(page).orderBy(orderBy).build();
 
@@ -76,4 +80,16 @@ public class ComputerController {
         computerService.delete(id);
     }
 
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void create(@Validated @RequestBody CreateComputerDTO computer) {
+        computerService.create(createComputerDTOComputerMapper.map(computer));
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@Validated @RequestBody UpdateComputerDTO computer) {
+        computerService.update(updateComputerDTOComputerMapper.map(computer));
+    }
 }
