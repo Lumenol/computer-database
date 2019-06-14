@@ -1,23 +1,41 @@
 package com.excilys.cdb.api.controller;
 
-import org.springframework.http.HttpHeaders;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.HashMap;
-import java.util.Objects;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
-public class ControllerAdvice extends ResponseEntityExceptionHandler {
+public class ControllerAdvice {
 
     private static final String REASON = "reason";
     private static final String STATUS = "status";
+
+    private final MessageSource messageSource;
+
+    public ControllerAdvice(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
+
+    @ExceptionHandler(BindException.class)
+    public ResponseEntity<Object> validatorExceptionHandler(BindException ex) {
+        final List<String> reasons = ex.getAllErrors().stream().map(error -> messageSource.getMessage(error, LocaleContextHolder.getLocale())).collect(Collectors.toList());
+        final HashMap<String, Object> map = new HashMap<>();
+        map.put(REASON, reasons);
+        map.put(STATUS, HttpStatus.BAD_REQUEST.value());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map);
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> defaultHandleException(Exception ex, WebRequest request) {
@@ -34,18 +52,7 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
                     : responseStatus.reason());
         }
         body.put(STATUS, status.value());
-        return handleExceptionInternal(ex, body, new HttpHeaders(), status, request);
-    }
-
-    @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        if (Objects.isNull(body)) {
-            final HashMap<String, Object> map = new HashMap<>();
-            map.put(REASON, status.getReasonPhrase());
-            map.put(STATUS, status.value());
-            body = map;
-        }
-        return super.handleExceptionInternal(ex, body, headers, status, request);
+        return ResponseEntity.status(status).body(body);
     }
 
 }
