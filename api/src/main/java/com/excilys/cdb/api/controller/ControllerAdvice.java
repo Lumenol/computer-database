@@ -5,6 +5,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -28,6 +29,15 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
 
     public ControllerAdvice(MessageSource messageSource) {
         this.messageSource = messageSource;
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> accessDeniedHandler(AccessDeniedException ex) {
+        final HttpStatus status = HttpStatus.UNAUTHORIZED;
+        final HashMap<String, Object> body = new HashMap<>();
+        body.put(REASON, ex.getLocalizedMessage());
+        body.put(STATUS, status.value());
+        return ResponseEntity.status(status).body(body);
     }
 
     @ExceptionHandler(Exception.class)

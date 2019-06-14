@@ -2,10 +2,12 @@ package com.excilys.cdb.service.service;
 
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.shared.pagination.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 import java.util.Optional;
 
+@PreAuthorize("isAuthenticated()")
 public interface ComputerService {
     long count();
 
