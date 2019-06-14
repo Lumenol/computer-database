@@ -9,7 +9,11 @@ public interface UserService {
 
     void deleteByLogin(String login);
 
+    void deleteById(long id);
+
     boolean existByLogin(String login);
 
     Optional<User> findByLogin(String login);
+
+    Optional<User> findById(long id);
 }

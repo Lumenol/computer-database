@@ -12,9 +12,11 @@ import com.excilys.cdb.shared.pagination.Page;
 import com.excilys.cdb.shared.pagination.Pageable;
 import com.excilys.cdb.shared.validator.Validator;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,7 +31,6 @@ public class ComputerController {
     private final Mapper<UpdateComputerDTO, Computer> updateComputerDTOComputerMapper;
     private final Validator<UpdateComputerDTO> updateComputerValidator;
     private final Validator<CreateComputerDTO> createComputerValidator;
-
 
     public ComputerController(ComputerService computerService, Mapper<Computer, ComputerDTO> computerToDto,
                               Mapper<CreateComputerDTO, Computer> createComputerDTOComputerMapper, Mapper<UpdateComputerDTO, Computer> updateComputerDTOComputerMapper, Validator<UpdateComputerDTO> updateComputerValidator,
@@ -75,24 +76,25 @@ public class ComputerController {
 
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody CreateComputerDTO computer) throws BindException {
-        final BindException errors = new BindException(computer, "computer");
-        createComputerValidator.validate(computer, errors);
+    public ResponseEntity create(@RequestBody CreateComputerDTO createComputerDTO) throws BindException {
+        final BindException errors = new BindException(createComputerDTO, "computer");
+        createComputerValidator.validate(createComputerDTO, errors);
         if (errors.hasErrors()) {
             throw errors;
         }
-        computerService.create(createComputerDTOComputerMapper.map(computer));
+        final Computer computer = createComputerDTOComputerMapper.map(createComputerDTO);
+        computerService.create(computer);
+        return ResponseEntity.created(URI.create("/computers/" + computer.getId())).build();
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody UpdateComputerDTO computer) throws BindException {
-        final BindException errors = new BindException(computer, "computer");
-        updateComputerValidator.validate(computer, errors);
+    public void update(@RequestBody UpdateComputerDTO updateComputerDTO) throws BindException {
+        final BindException errors = new BindException(updateComputerDTO, "computer");
+        updateComputerValidator.validate(updateComputerDTO, errors);
         if (errors.hasErrors()) {
             throw errors;
         }
-        computerService.update(updateComputerDTOComputerMapper.map(computer));
+        computerService.update(updateComputerDTOComputerMapper.map(updateComputerDTO));
     }
 }
