@@ -1,7 +1,7 @@
 package com.excilys.cdb.api.configuration;
 
 import com.excilys.cdb.persistence.configuration.PersistenceConfiguration;
-import com.excilys.cdb.security.configuration.WebSecurityConfiguration;
+import com.excilys.cdb.security.configuration.SecurityConfiguration;
 import com.excilys.cdb.service.configuration.ServiceConfiguration;
 import com.excilys.cdb.shared.configuration.SharedConfiguration;
 import org.springframework.web.context.ContextLoaderListener;
@@ -18,7 +18,7 @@ public class WebApplicationInitializer implements org.springframework.web.WebApp
         // Create the 'root' Spring application context
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
         rootContext.register(RestConfiguration.class, SharedConfiguration.class, ServiceConfiguration.class,
-                PersistenceConfiguration.class, WebSecurityConfiguration.class);
+                PersistenceConfiguration.class, SecurityConfiguration.class);
 
         // Manage the lifecycle of the root application context
         container.addListener(new ContextLoaderListener(rootContext));

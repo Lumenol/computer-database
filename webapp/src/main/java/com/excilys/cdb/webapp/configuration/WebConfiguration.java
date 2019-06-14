@@ -1,18 +1,19 @@
 package com.excilys.cdb.webapp.configuration;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-
 import com.excilys.cdb.webapp.pagination.Paging;
 import com.excilys.cdb.webapp.pagination.PagingParameters;
 import com.excilys.cdb.webapp.sorting.Sorting;
 import com.excilys.cdb.webapp.sorting.SortingParameters;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 @Configuration
 @ComponentScan(basePackages = {
 		"com.excilys.cdb.webapp.mapper"}, excludeFilters = @ComponentScan.Filter(Configuration.class))
-public class WebConfiguration {
+public class WebConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PagingParameters paginationParameters() {
@@ -45,4 +46,9 @@ public class WebConfiguration {
 	return new Sorting(parameters);
     }
 
+
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests().and().formLogin().loginPage("/login").permitAll().and().logout().permitAll();
+	}
 }
