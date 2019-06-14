@@ -9,7 +9,6 @@
     </parent>
 
     <artifactId>api</artifactId>
-    <version>${module.version}</version>
     <packaging>war</packaging>
 
     <modelVersion>4.0.0</modelVersion>

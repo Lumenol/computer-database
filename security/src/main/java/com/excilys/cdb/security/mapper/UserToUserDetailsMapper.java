@@ -1,4 +1,4 @@
-package com.excilys.cdb.webapp.mapper;
+package com.excilys.cdb.security.mapper;
 
 import com.excilys.cdb.model.User;
 import com.excilys.cdb.shared.mapper.Mapper;

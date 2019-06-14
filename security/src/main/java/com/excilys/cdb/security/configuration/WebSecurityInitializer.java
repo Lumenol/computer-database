@@ -1,4 +1,4 @@
-package com.excilys.cdb.webapp.configuration;
+package com.excilys.cdb.security.configuration;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 

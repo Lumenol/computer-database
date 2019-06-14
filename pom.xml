@@ -13,12 +13,13 @@
         <module>persistence</module>
         <module>service</module>
         <module>console</module>
+        <module>security</module>
         <module>webapp</module>
         <module>api</module>
     </modules>
 
     <properties>
-        <module.version>1.0-SNAPSHOT</module.version>
+        <module.version>1.0</module.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -69,6 +70,11 @@
             <dependency>
                 <groupId>fr.credeville.cdb</groupId>
                 <artifactId>core</artifactId>
+                <version>${module.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>fr.credeville.cdb</groupId>
+                <artifactId>security</artifactId>
                 <version>${module.version}</version>
             </dependency>
             <!-- Spring -->
