@@ -18,7 +18,6 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/login")
-@Hea
 public class LoginController {
     private static final String BEARER = "Bearer";
     private static final int TOKEN_TIME_LIVE = 600_000;
