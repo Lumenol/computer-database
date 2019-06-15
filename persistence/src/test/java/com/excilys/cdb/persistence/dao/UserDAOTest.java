@@ -73,4 +73,25 @@ class UserDAOTest {
         assertEquals(byLogin.get(), user);
     }
 
+    @Test
+    public void findById() {
+        final User user = User.builder().login("log").password("word").build();
+        userDAO.create(user);
+        final Optional<User> byLogin = userDAO.findById(user.getId());
+        assertEquals(byLogin.get(), user);
+    }
+
+    @Test
+    public void deleteById() {
+        final User user = User.builder().login("login").password("password").build();
+        userDAO.create(user);
+        final Long id = user.getId();
+        final Optional<User> avant = userDAO.findById(id);
+        userDAO.deleteById(id);
+        final Optional<User> apres = userDAO.findById(id);
+        assertTrue(avant.isPresent());
+        assertFalse(apres.isPresent());
+    }
+
+
 }

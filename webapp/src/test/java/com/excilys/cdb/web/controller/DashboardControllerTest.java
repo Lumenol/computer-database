@@ -6,12 +6,13 @@ import com.excilys.cdb.service.service.ComputerService;
 import com.excilys.cdb.shared.configuration.SharedConfiguration;
 import com.excilys.cdb.shared.pagination.Pageable;
 import com.excilys.cdb.web.configuration.WebConfigurationTest;
-import com.excilys.cdb.web.configuration.WebMvcConfiguration;
+import com.excilys.cdb.webapp.configuration.WebMvcConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -59,6 +60,7 @@ public class DashboardControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void testComputers() throws Exception {
         final long count = 10_000L;
         when(mockComputerService.count()).thenReturn(count);

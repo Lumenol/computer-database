@@ -14,4 +14,7 @@ public interface UserDAO {
 
     Optional<User> findByLogin(String login);
 
+    void deleteById(long id);
+
+    Optional<User> findById(long id);
 }

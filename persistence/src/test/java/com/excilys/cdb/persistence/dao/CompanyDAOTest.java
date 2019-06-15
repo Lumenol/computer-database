@@ -26,11 +26,6 @@ public class CompanyDAOTest {
     private UTDatabase database = UTDatabase.getInstance();
     private CompanyDAO companyDAO;
 
-    @Autowired
-    public void setCompanyDAO(CompanyDAO companyDAO) {
-        this.companyDAO = companyDAO;
-    }
-
     public static Stream<Long> provideCompanyId() {
         final Stream.Builder<Long> builder = Stream.builder();
         for (long i = 0; i < 25; i++) {
@@ -41,6 +36,11 @@ public class CompanyDAOTest {
 
     public static Stream<Arguments> providePageLimit() {
         return Stream.of(Arguments.of(1, 30), Arguments.of(1, 5), Arguments.of(3, 5), Arguments.of(2, 10));
+    }
+
+    @Autowired
+    public void setCompanyDAO(CompanyDAO companyDAO) {
+        this.companyDAO = companyDAO;
     }
 
     @ParameterizedTest
