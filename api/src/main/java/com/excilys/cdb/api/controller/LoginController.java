@@ -1,6 +1,7 @@
 package com.excilys.cdb.api.controller;
 
 import io.jsonwebtoken.Jwts;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,7 +20,6 @@ import java.util.Objects;
 @RequestMapping("/login")
 public class LoginController {
     private static final String BEARER = "Bearer";
-    private static final String HEADER_NAME = "Authorization";
     private static final int TOKEN_TIME_LIVE = 600_000;
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
@@ -42,7 +42,7 @@ public class LoginController {
 
     private ResponseEntity createToken(UserDetails userDetails) {
         final String token = Jwts.builder().setSubject(userDetails.getUsername()).setIssuedAt(new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis() + TOKEN_TIME_LIVE)).signWith(key).compact();
-        return ResponseEntity.noContent().header(HEADER_NAME, BEARER + " " + token).build();
+        return ResponseEntity.noContent().header(HttpHeaders.AUTHORIZATION, BEARER + " " + token).build();
     }
 
     @PostMapping

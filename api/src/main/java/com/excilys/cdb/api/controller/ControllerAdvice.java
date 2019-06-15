@@ -1,5 +1,6 @@
 package com.excilys.cdb.api.controller;
 
+import com.excilys.cdb.api.utils.Utils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +39,8 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
         final HashMap<String, Object> body = new HashMap<>();
         body.put(REASON, ex.getLocalizedMessage());
         body.put(STATUS, status.value());
-        return ResponseEntity.status(status).body(body);
+        final String login = ServletUriComponentsBuilder.fromCurrentContextPath().path("/login").build().toString();
+        return ResponseEntity.status(status).header(HttpHeaders.LINK, Utils.createLink(login, "login")).body(body);
     }
 
     @ExceptionHandler(Exception.class)

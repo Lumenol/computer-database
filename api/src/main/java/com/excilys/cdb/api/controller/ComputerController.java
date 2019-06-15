@@ -15,11 +15,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/computers")
 public class ComputerController {
@@ -43,13 +45,15 @@ public class ComputerController {
     }
 
     @GetMapping
-    public List<ComputerDTO> findAll(@ModelAttribute Page page, @ModelAttribute OrderBy orderBy,
-                                     @RequestParam Optional<String> search) {
+    public ResponseEntity<List<ComputerDTO>> findAll(@ModelAttribute Page page, @ModelAttribute OrderBy orderBy,
+                                                     @RequestParam Optional<String> search) {
         final Pageable pageable = Pageable.builder().page(page).orderBy(orderBy).build();
 
-        return search.map(s -> computerService.searchByNameOrCompanyName(pageable, s))
+        final List<ComputerDTO> body = search.map(s -> computerService.searchByNameOrCompanyName(pageable, s))
                 .orElseGet(() -> computerService.findAll(pageable)).stream().map(computerToDto::map)
                 .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(body);
     }
 
     @GetMapping("/{id}")
@@ -83,7 +87,9 @@ public class ComputerController {
         }
         final Computer computer = createComputerDTOComputerMapper.map(createComputerDTO);
         computerService.create(computer);
-        return ResponseEntity.created(URI.create("/computers/" + computer.getId())).build();
+
+        final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(computer.getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     @PutMapping
