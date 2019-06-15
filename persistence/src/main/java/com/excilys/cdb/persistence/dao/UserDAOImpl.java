@@ -84,7 +84,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     @LogAndWrapException(logger = UserDAO.class, exception = UserDAOException.class)
     public Optional<User> findById(long id) {
-        return Optional.ofNullable(entityManager.find(User.class, id));
+        return Optional.ofNullable(entityManager.find(UserEntity.class, id)).map(userEntityToUserMapper::map);
     }
 
     @PersistenceContext
