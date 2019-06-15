@@ -72,6 +72,7 @@ class ErrorHandler implements HandlerExceptionResolver {
         return new ModelAndView("redirect:/login");
     }
 
+    @SuppressWarnings("deprecation")
     private static class ResponseInterceptError implements HttpServletResponse {
         private final HttpServletResponse response;
         private Integer code;
