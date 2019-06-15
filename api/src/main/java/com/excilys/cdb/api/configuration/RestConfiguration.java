@@ -34,7 +34,7 @@ public class RestConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilterBefore(tokenAuthenticationFilter, SessionManagementFilter.class).sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.csrf().disable().addFilterBefore(tokenAuthenticationFilter, SessionManagementFilter.class).sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
 }
