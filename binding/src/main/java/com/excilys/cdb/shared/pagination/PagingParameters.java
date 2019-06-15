@@ -1,4 +1,4 @@
-package com.excilys.cdb.shared.paging;
+package com.excilys.cdb.shared.pagination;
 
 import java.util.Objects;
 

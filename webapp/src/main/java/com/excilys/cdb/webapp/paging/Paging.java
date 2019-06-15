@@ -1,7 +1,7 @@
 package com.excilys.cdb.webapp.paging;
 
 import com.excilys.cdb.shared.pagination.Page;
-import com.excilys.cdb.shared.paging.PagingParameters;
+import com.excilys.cdb.shared.pagination.PagingParameters;
 import com.excilys.cdb.shared.utils.Utils;
 import org.springframework.web.servlet.ModelAndView;
 
