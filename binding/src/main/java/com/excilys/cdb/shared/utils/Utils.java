@@ -1,10 +1,6 @@
 package com.excilys.cdb.shared.utils;
 
-import com.excilys.cdb.shared.pagination.OrderBy;
-import com.excilys.cdb.shared.pagination.Page;
-import com.excilys.cdb.shared.pagination.Pageable;
-import com.excilys.cdb.shared.paging.PagingParameters;
-import com.excilys.cdb.shared.paging.SortingParameters;
+import com.excilys.cdb.shared.pagination.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

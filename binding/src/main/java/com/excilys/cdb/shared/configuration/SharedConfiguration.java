@@ -1,7 +1,7 @@
 package com.excilys.cdb.shared.configuration;
 
-import com.excilys.cdb.shared.paging.PagingParameters;
-import com.excilys.cdb.shared.paging.SortingParameters;
+import com.excilys.cdb.shared.pagination.PagingParameters;
+import com.excilys.cdb.shared.pagination.SortingParameters;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
