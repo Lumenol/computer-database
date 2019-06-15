@@ -10,10 +10,9 @@ import java.util.Objects;
 import java.util.TreeMap;
 
 class ITDatabase {
+    private static ITDatabase instance;
     private Map<Long, CompanyDTO> companies = new TreeMap<>();
     private Map<Long, ComputerDTO> computers = new TreeMap<>();
-
-    private static ITDatabase instance;
 
     private ITDatabase() {
         addCompanies();

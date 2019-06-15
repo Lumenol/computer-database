@@ -35,8 +35,8 @@ public class EditComputerController {
     private final ComputerToUpdateComputerDTOMapper computerToUpdateComputerDTOMapper;
 
     public EditComputerController(CompanyService companyService,
-    		UpdateComputerDTOToComputerMapper updateComputerDTOToComputerMapper,
-    		Validator<UpdateComputerDTO> updateComputerValidator, CompanyToCompanyDTOMapper companyToCompanyDTOMapper,
+                                  UpdateComputerDTOToComputerMapper updateComputerDTOToComputerMapper,
+                                  Validator<UpdateComputerDTO> updateComputerValidator, CompanyToCompanyDTOMapper companyToCompanyDTOMapper,
                                   ComputerService computerService, ComputerToUpdateComputerDTOMapper computerToUpdateComputerDTOMapper) {
         super();
         this.companyService = companyService;

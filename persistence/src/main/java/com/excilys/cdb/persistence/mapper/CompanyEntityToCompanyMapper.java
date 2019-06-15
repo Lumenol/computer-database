@@ -9,6 +9,6 @@ import org.springframework.stereotype.Component;
 public class CompanyEntityToCompanyMapper implements Mapper<CompanyEntity, Company> {
     @Override
     public Company map(CompanyEntity companyEntity) {
-	return Company.builder().id(companyEntity.getId()).name(companyEntity.getName()).build();
+        return Company.builder().id(companyEntity.getId()).name(companyEntity.getName()).build();
     }
 }

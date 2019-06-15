@@ -19,54 +19,54 @@ import java.util.Locale;
 @EnableWebMvc
 @ComponentScan(basePackages = "com.excilys.cdb.webapp.controller", excludeFilters = @ComponentScan.Filter(Configuration.class))
 public class WebMvcConfiguration implements WebMvcConfigurer {
-	
-	@Override
-	public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
-		resolvers.add(new ErrorHandler());
-	}
 
-	@Override
-	public void addFormatters(FormatterRegistry registry) {
-		registry.addConverter(new StringToOrderByFieldConverter());
-		registry.addConverter(new OrderByFieldToStringConverter());
-		registry.addConverter(new StringToOrderByDirectionConverter());
-		registry.addConverter(new OrderByDirectionToStringConverter());
+    @Override
+    public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
+        resolvers.add(new ErrorHandler());
+    }
 
-		registry.addConverter(new StringToLocalDateConverter());
-		registry.addConverter(new LocalDateToStringConverter());
-	}
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new StringToOrderByFieldConverter());
+        registry.addConverter(new OrderByFieldToStringConverter());
+        registry.addConverter(new StringToOrderByDirectionConverter());
+        registry.addConverter(new OrderByDirectionToStringConverter());
 
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/static/**").addResourceLocations("/static/");
-	}
+        registry.addConverter(new StringToLocalDateConverter());
+        registry.addConverter(new LocalDateToStringConverter());
+    }
 
-	@Override
-	public void configureViewResolvers(ViewResolverRegistry registry) {
-		registry.jsp("/WEB-INF/views/", ".jsp");
-	}
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/**").addResourceLocations("/static/");
+    }
 
-	@Bean
-	public LocaleResolver localeResolver() {
-		CookieLocaleResolver localeResolver = new CookieLocaleResolver();
-		localeResolver.setDefaultLocale(Locale.FRENCH);
-		return localeResolver;
-	}
+    @Override
+    public void configureViewResolvers(ViewResolverRegistry registry) {
+        registry.jsp("/WEB-INF/views/", ".jsp");
+    }
 
-	@Override
-	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addRedirectViewController("/", "/dashboard");
-		registry.addViewController("/login").setViewName("login");
-	}
+    @Bean
+    public LocaleResolver localeResolver() {
+        CookieLocaleResolver localeResolver = new CookieLocaleResolver();
+        localeResolver.setDefaultLocale(Locale.FRENCH);
+        return localeResolver;
+    }
 
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		ThemeChangeInterceptor themeChangeInterceptor = new ThemeChangeInterceptor();
-		themeChangeInterceptor.setParamName("theme");
-		registry.addInterceptor(themeChangeInterceptor);
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addRedirectViewController("/", "/dashboard");
+        registry.addViewController("/login").setViewName("login");
+    }
 
-		LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-		localeChangeInterceptor.setParamName("lang");
-		registry.addInterceptor(localeChangeInterceptor);
-	}
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        ThemeChangeInterceptor themeChangeInterceptor = new ThemeChangeInterceptor();
+        themeChangeInterceptor.setParamName("theme");
+        registry.addInterceptor(themeChangeInterceptor);
+
+        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+        localeChangeInterceptor.setParamName("lang");
+        registry.addInterceptor(localeChangeInterceptor);
+    }
 }
