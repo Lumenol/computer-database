@@ -1,12 +1,15 @@
 package com.excilys.cdb.api.controller;
 
 import com.excilys.cdb.api.utils.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -26,7 +29,7 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
 
     private static final String REASON = "reason";
     private static final String STATUS = "status";
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(ControllerAdvice.class);
     private final MessageSource messageSource;
 
     public ControllerAdvice(MessageSource messageSource) {
@@ -43,8 +46,18 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(status).header(HttpHeaders.LINK, Utils.createLink(login, "login")).body(body);
     }
 
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Object> badCredencialsdHandler(BadCredentialsException ex) {
+        final HttpStatus status = HttpStatus.UNAUTHORIZED;
+        final HashMap<String, Object> body = new HashMap<>();
+        body.put(REASON, ex.getLocalizedMessage());
+        body.put(STATUS, status.value());
+        return ResponseEntity.status(status).body(body);
+    }
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> defaultHandleException(Exception ex, WebRequest request) {
+    public ResponseEntity<Object> defaultHandleException(Exception ex) {
+        LOGGER.warn("defaultHandleException: ", ex);
         final HashMap<String, Object> body = new HashMap<>();
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         body.put(REASON, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());

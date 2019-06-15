@@ -42,7 +42,7 @@ public class CreateUserValidator implements Validator<CreateUserDTO> {
     }
 
     private void checkLogin(String login, Errors errors) {
-        if (login.trim().isEmpty()) {
+        if (Objects.isNull(login) || login.trim().isEmpty()) {
             errors.rejectValue("login", "validation.login.blank");
         } else if (userExistByLogin.existByLogin(login)) {
             errors.rejectValue("login", "validation.login.alreadyExist");

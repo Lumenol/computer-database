@@ -1,6 +1,7 @@
-package com.excilys.cdb.webapp.sorting;
+package com.excilys.cdb.webapp.paging;
 
 import com.excilys.cdb.shared.pagination.OrderBy;
+import com.excilys.cdb.shared.paging.SortingParameters;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Objects;

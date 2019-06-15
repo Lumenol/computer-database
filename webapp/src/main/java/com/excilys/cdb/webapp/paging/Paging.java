@@ -1,6 +1,8 @@
-package com.excilys.cdb.webapp.pagination;
+package com.excilys.cdb.webapp.paging;
 
 import com.excilys.cdb.shared.pagination.Page;
+import com.excilys.cdb.shared.paging.PagingParameters;
+import com.excilys.cdb.shared.utils.Utils;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
@@ -16,10 +18,6 @@ public class Paging {
 
     public PagingParameters getParameters() {
         return parameters;
-    }
-
-    private long indexLastPage(double numberOfEntities, long pageSize) {
-        return (long) Math.ceil(numberOfEntities / pageSize);
     }
 
     private List<Long> indexOfPages(long pageCurrent, long pageSize, long numberOfEntities) {
@@ -56,10 +54,10 @@ public class Paging {
         }
     }
 
-    public Optional<Page> redirectIfPageOutOfRange(Page page, double numberOfEntities) {
+    public Optional<Page> redirectIfPageOutOfRange(Page page, long numberOfEntities) {
         long pageIndex = page.getPage();
         long pageSize = page.getSize();
-        long indexLastPage = indexLastPage(numberOfEntities, pageSize);
+        long indexLastPage = Utils.indexLastPage(numberOfEntities, pageSize);
         final Page newPage = Page.builder().page(page.getPage()).build();
         if (pageIndex < 1) {
             newPage.setPage(1);

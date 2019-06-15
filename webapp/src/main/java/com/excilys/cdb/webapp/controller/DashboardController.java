@@ -7,17 +7,16 @@ import com.excilys.cdb.shared.mapper.ComputerToComputerDTOMapper;
 import com.excilys.cdb.shared.pagination.OrderBy;
 import com.excilys.cdb.shared.pagination.Page;
 import com.excilys.cdb.shared.pagination.Pageable;
-import com.excilys.cdb.webapp.pagination.Paging;
-import com.excilys.cdb.webapp.pagination.PagingParameters;
-import com.excilys.cdb.webapp.sorting.Sorting;
-import com.excilys.cdb.webapp.sorting.SortingParameters;
-
+import com.excilys.cdb.shared.paging.PagingParameters;
+import com.excilys.cdb.shared.paging.SortingParameters;
+import com.excilys.cdb.shared.utils.Utils;
+import com.excilys.cdb.webapp.paging.Paging;
+import com.excilys.cdb.webapp.paging.Sorting;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -92,42 +91,12 @@ public class DashboardController {
         } else {
             return computerService.countByNameOrCompanyName(search);
         }
-
     }
 
     private String redirectToPageNumber(Pageable pageable, String search) throws UnsupportedEncodingException {
         final PagingParameters pagingParameters = paging.getParameters();
         final SortingParameters sortingParameters = sorting.getParameters();
-        final StringBuilder stringBuilder = new StringBuilder(DASHBOARD).append("?");
-
-        final Page page = pageable.getPage();
-        stringBuilder.append(pagingParameters.getPage()).append("=").append(page.getPage());
-        stringBuilder.append("&");
-        stringBuilder.append(pagingParameters.getSize()).append("=").append(page.getSize());
-
-        if (Objects.nonNull(search)) {
-            stringBuilder.append("&");
-            stringBuilder.append(encode(PARAMETER_SEARCH)).append("=").append(encode(search));
-        }
-
-        final OrderBy orderBy = pageable.getOrderBy();
-        if (Objects.nonNull(orderBy.getField())) {
-            stringBuilder.append("&");
-            stringBuilder.append(encode(sortingParameters.getOrderBy())).append("=")
-                    .append(encode(orderBy.getField().getIdentifier()));
-        }
-
-        if (Objects.nonNull(orderBy.getDirection())) {
-            stringBuilder.append("&");
-            stringBuilder.append(encode(sortingParameters.getDirection())).append("=")
-                    .append(encode(orderBy.getDirection().getIdentifier()));
-        }
-
-        return "redirect:" + stringBuilder.toString();
-    }
-
-    private String encode(String s) throws UnsupportedEncodingException {
-        return URLEncoder.encode(s, "UTF-8");
+        return "redirect:" + Utils.createPagingUrl(DASHBOARD, pageable, search, PARAMETER_SEARCH, pagingParameters, sortingParameters);
     }
 
 }

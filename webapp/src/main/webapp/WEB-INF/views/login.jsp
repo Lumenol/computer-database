@@ -50,7 +50,7 @@
 					</fieldset>
 					<div class="actions pull-right">
 						<spring:message code="header.login" var="connection" />
-						<input type="submit" name="submit" value="${connection}" class="btn btn-primary">
+                        <input id="login" type="submit" name="submit" value="${connection}" class="btn btn-primary">
 					</div>
 				</form>
 			</div>

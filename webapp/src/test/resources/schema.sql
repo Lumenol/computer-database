@@ -1,5 +1,6 @@
 drop table if exists computer;
 drop table if exists company;
+drop table if exists user;
 
 create table company
 (

@@ -11,6 +11,7 @@ import org.openqa.selenium.phantomjs.PhantomJSDriver;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 public class DashboardTest {
@@ -60,7 +61,28 @@ public class DashboardTest {
     public void setUp() {
         driver = new PhantomJSDriver();
         driver.manage().window().setSize(new Dimension(1366, 768));
-        driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
+        driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+
+        final int random = ThreadLocalRandom.current().nextInt();
+        String username = "testUser" + random;
+        String password = "testUserPassword" + random;
+        registration(username, password);
+        login(username, password);
+    }
+
+    public void registration(String username, String password) {
+        driver.get(BASE_URL + "/users");
+        driver.findElement(By.id("login")).sendKeys(username);
+        driver.findElement(By.id("password")).sendKeys(password);
+        driver.findElement(By.id("passwordCheck")).sendKeys(password);
+        driver.findElement(By.id("add")).click();
+    }
+
+    public void login(String username, String password) {
+        driver.get(BASE_URL + "/login");
+        driver.findElement(By.id("username")).sendKeys(username);
+        driver.findElement(By.id("password")).sendKeys(password);
+        driver.findElement(By.id("login")).click();
     }
 
     @AfterEach
@@ -82,21 +104,21 @@ public class DashboardTest {
 
     private void assertEquals(ComputerDTO expectedComputerDTO, WebElement actualElement) {
         final String id = actualElement.findElement(By.xpath("td[1]/input")).getAttribute("value");
-        Assertions.assertEquals("id", Long.toString(expectedComputerDTO.getId()), id);
+        Assertions.assertEquals(Long.toString(expectedComputerDTO.getId()), id, "id");
 
         final String name = actualElement.findElement(By.xpath("td[2]")).getText();
-        Assertions.assertEquals("nom", expectedComputerDTO.getName(), name);
+        Assertions.assertEquals(expectedComputerDTO.getName(), name, "nom");
 
         final String introduced = actualElement.findElement(By.xpath("td[3]")).getText();
-        Assertions.assertEquals("introduced", Objects.toString(expectedComputerDTO.getIntroduced(), ""), introduced);
+        Assertions.assertEquals(Objects.toString(expectedComputerDTO.getIntroduced(), ""), introduced, "introduced");
 
         final String discontinued = actualElement.findElement(By.xpath("td[4]")).getText();
-        Assertions.assertEquals("discontinued", Objects.toString(expectedComputerDTO.getDiscontinued(), ""), discontinued);
+        Assertions.assertEquals(Objects.toString(expectedComputerDTO.getDiscontinued(), ""), discontinued, "discontinued");
 
         final String manufacturerName = actualElement.findElement(By.xpath("td[5]")).getText();
 
-        Assertions.assertEquals("nom fabriquant", Objects.toString(expectedComputerDTO.getmanufacturer(), ""),
-                manufacturerName);
+        Assertions.assertEquals(Objects.toString(expectedComputerDTO.getmanufacturer(), ""),
+                manufacturerName, "nom fabriquant");
     }
 
     private void clickPaginationButton(String text) {
