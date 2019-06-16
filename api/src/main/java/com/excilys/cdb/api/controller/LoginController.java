@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.security.Key;
 import java.util.Date;
@@ -32,7 +33,7 @@ public class LoginController {
     }
 
     @GetMapping
-    public ResponseEntity refreshToken(Authentication authentication) {
+    public ResponseEntity refreshToken(@ApiIgnore Authentication authentication) {
         if (Objects.nonNull(authentication)) {
             return createToken((UserDetails) authentication.getPrincipal());
         } else {
@@ -46,16 +47,37 @@ public class LoginController {
     }
 
     @PostMapping
-    public ResponseEntity login(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity login(@RequestBody Credentials credentials) {
         try {
-            final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            if (passwordEncoder.matches(password, userDetails.getPassword())) {
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(credentials.getUsername());
+            if (passwordEncoder.matches(credentials.getPassword(), userDetails.getPassword())) {
                 return createToken(userDetails);
             } else {
                 throw new BadCredentialsException("Bad credentials");
             }
         } catch (UsernameNotFoundException e) {
             throw new BadCredentialsException("Bad credentials");
+        }
+    }
+
+    private static final class Credentials {
+        private String username;
+        private String password;
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
         }
     }
 
