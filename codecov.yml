@@ -11,6 +11,7 @@ ignore:
   - "binding/src/main/java/com/excilys/cdb/shared/exception"
   - "binding/src/main/java/com/excilys/cdb/shared/converter"
   - "binding/src/main/java/com/excilys/cdb/shared/utils"
+  - "binding/src/main/java/com/excilys/cdb/shared/pagination"
   - "binding/src/main/java/com/excilys/cdb/shared/logexception"
   - "persistence/src/main/java/com/excilys/cdb/persistence/entity"
   - "persistence/src/main/java/com/excilys/cdb/persistence/exception"
