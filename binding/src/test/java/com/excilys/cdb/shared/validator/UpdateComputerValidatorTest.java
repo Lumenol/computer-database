@@ -76,7 +76,7 @@ public class UpdateComputerValidatorTest {
         final UpdateComputerDTO updateComputerDTO = new UpdateComputerDTO();
         updateComputerDTO.setId(id);
         updateComputerDTO.setName("Un nom correct");
-        updateComputerDTO.setmanufacturerId(manufacturerId);
+        updateComputerDTO.setManufacturerId(manufacturerId);
         final BindException errors = new BindException(updateComputerDTO, "dto");
         updateComputerValidator.validate(updateComputerDTO, errors);
         assertFalse(errors.hasErrors());
@@ -91,7 +91,7 @@ public class UpdateComputerValidatorTest {
         final UpdateComputerDTO updateComputerDTO = new UpdateComputerDTO();
         updateComputerDTO.setId(id);
         updateComputerDTO.setName("Un nom correct");
-        updateComputerDTO.setmanufacturerId(manufacturerId);
+        updateComputerDTO.setManufacturerId(manufacturerId);
         updateComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4));
         updateComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20));
         final BindException errors = new BindException(updateComputerDTO, "dto");
@@ -108,7 +108,7 @@ public class UpdateComputerValidatorTest {
         final UpdateComputerDTO updateComputerDTO = new UpdateComputerDTO();
         updateComputerDTO.setId(id);
         updateComputerDTO.setName("Un nom correct");
-        updateComputerDTO.setmanufacturerId(manufacturerId);
+        updateComputerDTO.setManufacturerId(manufacturerId);
         updateComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20));
         final BindException errors = new BindException(updateComputerDTO, "dto");
         updateComputerValidator.validate(updateComputerDTO, errors);
@@ -124,7 +124,7 @@ public class UpdateComputerValidatorTest {
         final UpdateComputerDTO updateComputerDTO = new UpdateComputerDTO();
         updateComputerDTO.setId(id);
         updateComputerDTO.setName("Un nom correct");
-        updateComputerDTO.setmanufacturerId(manufacturerId);
+        updateComputerDTO.setManufacturerId(manufacturerId);
         updateComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4));
         final BindException errors = new BindException(updateComputerDTO, "dto");
         updateComputerValidator.validate(updateComputerDTO, errors);
@@ -140,7 +140,7 @@ public class UpdateComputerValidatorTest {
         final UpdateComputerDTO updateComputerDTO = new UpdateComputerDTO();
         updateComputerDTO.setId(id);
         updateComputerDTO.setName("");
-        updateComputerDTO.setmanufacturerId(manufacturerId);
+        updateComputerDTO.setManufacturerId(manufacturerId);
         updateComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4));
         updateComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20));
         final BindException errors = new BindException(updateComputerDTO, "dto");
@@ -159,7 +159,7 @@ public class UpdateComputerValidatorTest {
         final UpdateComputerDTO updateComputerDTO = new UpdateComputerDTO();
         updateComputerDTO.setId(id);
         updateComputerDTO.setName(null);
-        updateComputerDTO.setmanufacturerId(manufacturerId);
+        updateComputerDTO.setManufacturerId(manufacturerId);
         updateComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4));
         updateComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20));
         final BindException errors = new BindException(updateComputerDTO, "dto");
@@ -178,7 +178,7 @@ public class UpdateComputerValidatorTest {
         final UpdateComputerDTO updateComputerDTO = new UpdateComputerDTO();
         updateComputerDTO.setId(id);
         updateComputerDTO.setName("Un nom correct");
-        updateComputerDTO.setmanufacturerId(manufacturerId);
+        updateComputerDTO.setManufacturerId(manufacturerId);
         updateComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4));
         updateComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20));
         final BindException errors = new BindException(updateComputerDTO, "dto");
@@ -197,7 +197,7 @@ public class UpdateComputerValidatorTest {
         final UpdateComputerDTO updateComputerDTO = new UpdateComputerDTO();
         updateComputerDTO.setId(id);
         updateComputerDTO.setName("Un nom correct");
-        updateComputerDTO.setmanufacturerId(manufacturerId);
+        updateComputerDTO.setManufacturerId(manufacturerId);
         updateComputerDTO.setIntroduced(LocalDate.of(2016, 2, 4));
         updateComputerDTO.setDiscontinued(LocalDate.of(2012, 10, 20));
         final BindException errors = new BindException(updateComputerDTO, "dto");
@@ -214,7 +214,7 @@ public class UpdateComputerValidatorTest {
         final UpdateComputerDTO updateComputerDTO = new UpdateComputerDTO();
         updateComputerDTO.setId(null);
         updateComputerDTO.setName("Un nom correct");
-        updateComputerDTO.setmanufacturerId(manufacturerId);
+        updateComputerDTO.setManufacturerId(manufacturerId);
         updateComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4));
         updateComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20));
         final BindException errors = new BindException(updateComputerDTO, "dto");
@@ -233,7 +233,7 @@ public class UpdateComputerValidatorTest {
         final UpdateComputerDTO updateComputerDTO = new UpdateComputerDTO();
         updateComputerDTO.setId(id);
         updateComputerDTO.setName("Un nom correct");
-        updateComputerDTO.setmanufacturerId(manufacturerId);
+        updateComputerDTO.setManufacturerId(manufacturerId);
         updateComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4));
         updateComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20));
         final BindException errors = new BindException(updateComputerDTO, "dto");
@@ -252,7 +252,7 @@ public class UpdateComputerValidatorTest {
         final UpdateComputerDTO updateComputerDTO = new UpdateComputerDTO();
         updateComputerDTO.setId(id);
         updateComputerDTO.setName("Un nom correct");
-        updateComputerDTO.setmanufacturerId(manufacturerId);
+        updateComputerDTO.setManufacturerId(manufacturerId);
         updateComputerDTO.setIntroduced(LocalDate.of(1969, 10, 20));
         updateComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20));
         final BindException errors = new BindException(updateComputerDTO, "dto");

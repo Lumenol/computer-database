@@ -64,7 +64,7 @@ public class CreateComputerValidatorTest {
         when(companyExistByIdMock.exist(manufacturerId)).thenReturn(true);
         final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
         createComputerDTO.setName("Un nom correct");
-        createComputerDTO.setmanufacturerId(manufacturerId);
+        createComputerDTO.setManufacturerId(manufacturerId);
         final BindException errors = new BindException(createComputerDTO, "dto");
         createComputerValidator.validate(createComputerDTO, errors);
         assertFalse(errors.hasErrors());
@@ -76,7 +76,7 @@ public class CreateComputerValidatorTest {
         when(companyExistByIdMock.exist(manufacturerId)).thenReturn(true);
         final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
         createComputerDTO.setName("Un nom correct");
-        createComputerDTO.setmanufacturerId(manufacturerId);
+        createComputerDTO.setManufacturerId(manufacturerId);
         createComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4));
         createComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20));
         final BindException errors = new BindException(createComputerDTO, "dto");
@@ -90,7 +90,7 @@ public class CreateComputerValidatorTest {
         when(companyExistByIdMock.exist(manufacturerId)).thenReturn(true);
         final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
         createComputerDTO.setName("");
-        createComputerDTO.setmanufacturerId(manufacturerId);
+        createComputerDTO.setManufacturerId(manufacturerId);
         createComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4));
         createComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20));
         final BindException errors = new BindException(createComputerDTO, "dto");
@@ -106,7 +106,7 @@ public class CreateComputerValidatorTest {
         when(companyExistByIdMock.exist(manufacturerId)).thenReturn(false);
         final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
         createComputerDTO.setName("Un nom correct");
-        createComputerDTO.setmanufacturerId(manufacturerId);
+        createComputerDTO.setManufacturerId(manufacturerId);
         createComputerDTO.setIntroduced(LocalDate.of(2012, 2, 4));
         createComputerDTO.setDiscontinued(LocalDate.of(2016, 10, 20));
         final BindException errors = new BindException(createComputerDTO, "dto");
@@ -122,7 +122,7 @@ public class CreateComputerValidatorTest {
         when(companyExistByIdMock.exist(manufacturerId)).thenReturn(true);
         final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
         createComputerDTO.setName("Un nom correct");
-        createComputerDTO.setmanufacturerId(manufacturerId);
+        createComputerDTO.setManufacturerId(manufacturerId);
         createComputerDTO.setIntroduced(LocalDate.of(2016, 2, 4));
         createComputerDTO.setDiscontinued(LocalDate.of(2012, 10, 20));
         final BindException errors = new BindException(createComputerDTO, "dto");
@@ -138,7 +138,7 @@ public class CreateComputerValidatorTest {
         when(companyExistByIdMock.exist(manufacturerId)).thenReturn(true);
         final CreateComputerDTO createComputerDTO = new CreateComputerDTO();
         createComputerDTO.setName("Un nom correct");
-        createComputerDTO.setmanufacturerId(manufacturerId);
+        createComputerDTO.setManufacturerId(manufacturerId);
         createComputerDTO.setIntroduced(LocalDate.of(2016, 2, 4));
         createComputerDTO.setDiscontinued(LocalDate.of(2040, 10, 20));
         final BindException errors = new BindException(createComputerDTO, "dto");
