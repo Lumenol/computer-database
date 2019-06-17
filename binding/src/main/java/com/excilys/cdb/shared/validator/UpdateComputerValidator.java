@@ -40,7 +40,7 @@ public class UpdateComputerValidator implements Validator, com.excilys.cdb.share
         computerValidatorUtils.checkDiscontinued(toValidate.getDiscontinued(), errors);
         computerValidatorUtils.checkIntroducedIsBeforeDiscontinued(toValidate.getIntroduced(),
                 toValidate.getDiscontinued(), errors);
-        computerValidatorUtils.checkmanufacturerId(toValidate.getmanufacturerId(), errors);
+        computerValidatorUtils.checkmanufacturerId(toValidate.getManufacturerId(), errors);
         checkId(toValidate.getId(), errors);
     }
 }

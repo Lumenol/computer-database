@@ -23,7 +23,7 @@ public class CreateComputerDTOToComputerMapper implements Mapper<CreateComputerD
         ComputerBuilder builder = Computer.builder().name(dto.getName().trim()).introduced(dto.getIntroduced())
                 .discontinued(dto.getDiscontinued());
 
-        Optional.ofNullable(dto.getmanufacturerId()).flatMap(findCompanyById::findById)
+        Optional.ofNullable(dto.getManufacturerId()).flatMap(findCompanyById::findById)
                 .ifPresent(builder::manufacturer);
 
         return builder.build();

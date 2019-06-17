@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 public class UserEntityToUserMapper implements Mapper<UserEntity, User> {
     @Override
     public User map(UserEntity userEntity) {
-        return User.builder().id(userEntity.getId()).login(userEntity.getLogin()).password(userEntity.getPassword()).build();
+        final User.UserBuilder builder = User.builder().id(userEntity.getId()).login(userEntity.getLogin()).password(userEntity.getPassword());
+        userEntity.getRoles().forEach(builder::addRole);
+        return builder.build();
     }
 }

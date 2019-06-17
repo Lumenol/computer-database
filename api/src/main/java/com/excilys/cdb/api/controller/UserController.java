@@ -1,5 +1,6 @@
 package com.excilys.cdb.api.controller;
 
+import com.excilys.cdb.model.Role;
 import com.excilys.cdb.model.User;
 import com.excilys.cdb.service.service.UserService;
 import com.excilys.cdb.shared.dto.CreateUserDTO;
@@ -43,6 +44,7 @@ public class UserController {
             throw errors;
         }
         final User user = createUserDTOUserMapper.map(createUserDTO);
+        user.addRole(Role.USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.create(user);
         final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();

@@ -1,7 +1,11 @@
 package com.excilys.cdb.persistence.entity;
 
+import com.excilys.cdb.model.Role;
+
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -13,41 +17,51 @@ public class UserEntity {
     private String login;
     @Column(nullable = false)
     private String password;
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    private Set<Role> roles;
 
     public UserEntity() {
     }
 
-    UserEntity(Long id, String login, String password) {
+    UserEntity(Long id, String login, String password, Set<Role> roles) {
         this.id = id;
         this.login = login;
         this.password = password;
+        this.roles = roles;
     }
 
     public static UserEntityBuilder builder() {
         return new UserEntityBuilder();
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
     @Override
-    public String toString() {
-        return "UserEntity [id=" + id + ", login=" + login + ", password=" + password + "]";
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserEntity that = (UserEntity) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(login, that.login) &&
+                Objects.equals(password, that.password) &&
+                Objects.equals(roles, that.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, login, password);
+        return Objects.hash(id, login, password, roles);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        UserEntity other = (UserEntity) obj;
-        return Objects.equals(id, other.id) && Objects.equals(login, other.login)
-                && Objects.equals(password, other.password);
+    public String toString() {
+        return "UserEntity [id=" + id + ", login=" + login + ", password=" + password + "]";
     }
 
     public Long getId() {
@@ -78,6 +92,8 @@ public class UserEntity {
         private Long id;
         private String login;
         private String password;
+        private Set<Role> roles = new HashSet<>();
+
 
         UserEntityBuilder() {
         }
@@ -97,12 +113,17 @@ public class UserEntity {
             return this;
         }
 
+        public UserEntityBuilder addRole(Role role) {
+            roles.add(role);
+            return this;
+        }
+
         public UserEntity build() {
-            return new UserEntity(id, login, password);
+            return new UserEntity(id, login, password, roles);
         }
 
         public String toString() {
-            return "UserEntity.UserEntityBuilder(id=" + this.id + ", login=" + this.login + ", password=" + this.password + ")";
+            return "UserEntity.UserEntityBuilder(id=" + this.id + ", login=" + this.login + ", password=" + this.password + ", roles=" + this.roles + ")";
         }
     }
 }

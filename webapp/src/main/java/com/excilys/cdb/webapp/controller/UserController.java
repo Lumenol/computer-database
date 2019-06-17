@@ -1,5 +1,6 @@
 package com.excilys.cdb.webapp.controller;
 
+import com.excilys.cdb.model.Role;
 import com.excilys.cdb.model.User;
 import com.excilys.cdb.service.service.UserService;
 import com.excilys.cdb.shared.dto.CreateUserDTO;
@@ -52,6 +53,7 @@ public class UserController {
         final ModelAndView modelAndView = new ModelAndView(ADD_USER_JSP);
         if (!result.hasErrors()) {
             final User user = createUserDtoToUserMapper.map(userDTO);
+            user.addRole(Role.USER);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userService.create(user);
             modelAndView.addObject(PARAMETER_USER, new CreateUserDTO());
