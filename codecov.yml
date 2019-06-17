@@ -17,6 +17,6 @@ ignore:
   - "service/src/main/java/com/excilys/cdb/service/exception"
   - "console/src/main/java/com/excilys/cdb/cli/configuration"
   - "console/src/main/java/com/excilys/cdb/cli/exception"
-  - "webapp/src/main/java/com/excilys/cdb/web/configuration"
-  - "webapp/src/main/java/com/excilys/cdb/web/exception"
+  - "webapp/src/main/java/com/excilys/cdb/webapp/configuration"
+  - "webapp/src/main/java/com/excilys/cdb/webapp/exception"
 
