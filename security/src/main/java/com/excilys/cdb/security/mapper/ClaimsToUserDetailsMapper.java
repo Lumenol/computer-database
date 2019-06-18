@@ -1,41 +1,38 @@
 package com.excilys.cdb.security.mapper;
 
-import com.excilys.cdb.model.Role;
-import com.excilys.cdb.model.User;
 import com.excilys.cdb.shared.mapper.Mapper;
+import io.jsonwebtoken.Claims;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.Collections;
 
 @Component
-public class UserToUserDetailsMapper implements Mapper<User, UserDetails> {
-
-    private final Mapper<Role, GrantedAuthority> roleGrantedAuthorityMapper;
-
-    public UserToUserDetailsMapper(Mapper<Role, GrantedAuthority> roleGrantedAuthorityMapper) {
-        this.roleGrantedAuthorityMapper = roleGrantedAuthorityMapper;
-    }
-
+public class ClaimsToUserDetailsMapper implements Mapper<Claims, UserDetails> {
     @Override
-    public UserDetails map(User user) {
+    public UserDetails map(Claims claims) {
         return new UserDetails() {
-
             @Override
             public Collection<? extends GrantedAuthority> getAuthorities() {
-                return user.getRoles().stream().map(roleGrantedAuthorityMapper::map).collect(Collectors.toList());
+                final Object authorisation = claims.get(HttpHeaders.AUTHORIZATION);
+                if (authorisation instanceof Collection) {
+                    return ((Collection<?>) authorisation).stream().map(Object::toString)
+                } else {
+                    return Collections.emptyList();
+                }
             }
 
             @Override
             public String getPassword() {
-                return user.getPassword();
+                return null;
             }
 
             @Override
             public String getUsername() {
-                return user.getLogin();
+                return claims.getSubject();
             }
 
             @Override

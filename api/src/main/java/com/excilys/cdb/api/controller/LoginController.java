@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,8 +17,10 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/login")
@@ -47,7 +50,8 @@ public class LoginController {
     }
 
     private ResponseEntity createToken(UserDetails userDetails) {
-        final String token = Jwts.builder().setSubject(userDetails.getUsername()).setIssuedAt(new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis() + tokenTimeLive)).signWith(key).compact();
+        final List<String> authorities = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        final String token = Jwts.builder().setSubject(userDetails.getUsername()).claim(HttpHeaders.AUTHORIZATION, authorities).setIssuedAt(new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis() + tokenTimeLive)).signWith(key).compact();
         return ResponseEntity.noContent().header(HttpHeaders.AUTHORIZATION, BEARER + " " + token).build();
     }
 

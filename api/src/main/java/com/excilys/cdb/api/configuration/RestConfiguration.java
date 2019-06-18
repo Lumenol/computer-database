@@ -1,5 +1,6 @@
 package com.excilys.cdb.api.configuration;
 
+import com.excilys.cdb.security.filter.TokenAuthenticationFilter;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.context.annotation.Bean;

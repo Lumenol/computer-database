@@ -11,6 +11,7 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,10 +25,9 @@ import java.util.stream.Collectors;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-@ComponentScan(basePackages = "com.excilys.cdb.security.mapper")
+@ComponentScan(basePackages = {"com.excilys.cdb.security.mapper", "com.excilys.cdb.security.filter"})
 public class SecurityConfiguration {
 
-    private static final String ROLE_PREFIX = "ROLE_";
 
     @Bean
     public static UserDetailsService userDetailsService(UserService userService,
@@ -42,10 +42,10 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public RoleHierarchy roleHierarchy() {
+    public RoleHierarchy roleHierarchy(Mapper<Role, GrantedAuthority> roleGrantedAuthorityMapper) {
         RoleHierarchyImpl r = new RoleHierarchyImpl();
         final List<Role> roles = Arrays.asList(Role.ADMIN, Role.USER);
-        final String hierarchy = String.join(" > ", roles.stream().map(role -> ROLE_PREFIX + role.name()).collect(Collectors.toList()));
+        final String hierarchy = String.join(" > ", roles.stream().map(roleGrantedAuthorityMapper::map).map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
         r.setHierarchy(hierarchy);
         return r;
     }
