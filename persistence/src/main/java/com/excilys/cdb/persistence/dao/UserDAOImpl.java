@@ -70,6 +70,23 @@ public class UserDAOImpl implements UserDAO {
                 .map(userEntityToUserMapper::map);
     }
 
+    @Override
+    @LogAndWrapException(logger = UserDAO.class, exception = UserDAOException.class)
+    @Transactional
+    public void deleteById(long id) {
+        final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
+        final CriteriaDelete<UserEntity> cQuery = cBuilder.createCriteriaDelete(UserEntity.class);
+        final Root<UserEntity> c = cQuery.from(UserEntity.class);
+        cQuery.where(cBuilder.equal(c.get(UserEntity_.ID), id));
+        entityManager.createQuery(cQuery).executeUpdate();
+    }
+
+    @Override
+    @LogAndWrapException(logger = UserDAO.class, exception = UserDAOException.class)
+    public Optional<User> findById(long id) {
+        return Optional.ofNullable(entityManager.find(UserEntity.class, id)).map(userEntityToUserMapper::map);
+    }
+
     @PersistenceContext
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;

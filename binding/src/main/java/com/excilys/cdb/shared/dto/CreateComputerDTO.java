@@ -61,11 +61,11 @@ public class CreateComputerDTO {
         this.introduced = introduced;
     }
 
-    public Long getmanufacturerId() {
+    public Long getManufacturerId() {
         return manufacturerId;
     }
 
-    public void setmanufacturerId(Long manufacturerId) {
+    public void setManufacturerId(Long manufacturerId) {
         this.manufacturerId = manufacturerId;
     }
 

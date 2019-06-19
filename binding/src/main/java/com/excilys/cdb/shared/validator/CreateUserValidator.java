@@ -30,19 +30,19 @@ public class CreateUserValidator implements Validator<CreateUserDTO> {
     }
 
     private void checkPasswordAreSame(String password, String passwordCheck, Errors errors) {
-        if (!password.equals(passwordCheck)) {
+        if (Objects.nonNull(password) && !password.equals(passwordCheck)) {
             errors.rejectValue("passwordCheck", "validation.passwordCheck.notSame");
         }
     }
 
     private void checkPassword(String password, Errors errors) {
-        if (password.trim().isEmpty()) {
+        if (Objects.isNull(password) || password.trim().isEmpty()) {
             errors.rejectValue("password", "validation.password.blank");
         }
     }
 
     private void checkLogin(String login, Errors errors) {
-        if (login.trim().isEmpty()) {
+        if (Objects.isNull(login) || login.trim().isEmpty()) {
             errors.rejectValue("login", "validation.login.blank");
         } else if (userExistByLogin.existByLogin(login)) {
             errors.rejectValue("login", "validation.login.alreadyExist");

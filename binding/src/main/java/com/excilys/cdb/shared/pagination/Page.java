@@ -1,10 +1,12 @@
 package com.excilys.cdb.shared.pagination;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.Objects;
 
 public class Page {
-    private long page;
-    private long size;
+    private @Min(1) long page;
+    private @Min(1) @Max(100) long size;
 
     public Page() {
         this(1, 50);
@@ -21,11 +23,12 @@ public class Page {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Page page1 = (Page) o;
-        return page == page1.page &&
-                size == page1.size;
+        return page == page1.page && size == page1.size;
     }
 
     @Override

@@ -9,7 +9,6 @@
     </parent>
 
     <artifactId>webapp</artifactId>
-    <version>${module.version}</version>
     <packaging>war</packaging>
 
     <modelVersion>4.0.0</modelVersion>
@@ -19,16 +18,12 @@
             <artifactId>service</artifactId>
         </dependency>
         <dependency>
+            <groupId>fr.credeville.cdb</groupId>
+            <artifactId>security</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -43,11 +38,15 @@
             <groupId>jstl</groupId>
             <artifactId>jstl</artifactId>
         </dependency>
-
         <!-- Tests -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -83,6 +82,14 @@
     </dependencies>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.2.2</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -132,6 +139,56 @@
                     </plugin>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>sql-maven-plugin</artifactId>
+                        <version>1.5</version>
+
+                        <dependencies>
+                            <dependency>
+                                <groupId>mysql</groupId>
+                                <artifactId>mysql-connector-java</artifactId>
+                                <version>${mysql-connector-java.version}</version>
+                            </dependency>
+                        </dependencies>
+
+                        <configuration>
+                            <driver>com.mysql.cj.jdbc.Driver</driver>
+                            <url>jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=CONVERT_TO_NULL&amp;serverTimezone=UTC</url>
+                            <username>admincdb</username>
+                            <password>qwerty1234</password>
+                        </configuration>
+
+                        <executions>
+                            <execution>
+                                <id>create-schema</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <autocommit>true</autocommit>
+                                    <srcFiles>
+                                        <srcFile>../webapp/src/test/resources/schema.sql</srcFile>
+                                    </srcFiles>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>create-data</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <autocommit>true</autocommit>
+                                    <srcFiles>
+                                        <srcFile>src/test/resources/entries.sql</srcFile>
+                                    </srcFiles>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
                         <artifactId>build-helper-maven-plugin</artifactId>
                         <version>1.7</version>
                         <executions>
@@ -174,57 +231,6 @@
                                 <goals>
                                     <goal>shutdown</goal>
                                 </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>sql-maven-plugin</artifactId>
-                        <version>1.5</version>
-
-                        <dependencies>
-                            <dependency>
-                                <groupId>mysql</groupId>
-                                <artifactId>mysql-connector-java</artifactId>
-                                <version>${mysql-connector.version}</version>
-                            </dependency>
-                        </dependencies>
-
-                        <configuration>
-                            <driver>com.mysql.cj.jdbc.Driver</driver>
-                            <url>jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=CONVERT_TO_NULL&amp;serverTimezone=UTC</url>
-                            <username>admincdb</username>
-                            <password>qwerty1234</password>
-                        </configuration>
-
-                        <executions>
-                            <execution>
-                                <id>create-schema</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>execute</goal>
-                                </goals>
-                                <configuration>
-                                    <autocommit>true</autocommit>
-                                    <srcFiles>
-                                        <srcFile>../webapp/src/test/resources/schema.sql</srcFile>
-                                    </srcFiles>
-                                </configuration>
-                            </execution>
-
-                            <execution>
-                                <id>create-data</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>execute</goal>
-                                </goals>
-                                <configuration>
-                                    <autocommit>true</autocommit>
-                                    <srcFiles>
-                                        <srcFile>src/test/resources/entries.sql</srcFile>
-                                    </srcFiles>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
