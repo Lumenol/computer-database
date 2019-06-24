@@ -33,6 +33,11 @@ public class CompanyController {
         this.pagingParameters = pagingParameters;
     }
 
+    @GetMapping(params = {"!page", "!size"})
+    public List<CompanyDTO> findAll() {
+        return companyService.findAll().stream().map(companyToDto::map).collect(Collectors.toList());
+    }
+
     @GetMapping
     public ResponseEntity<List<CompanyDTO>> findAll(@Validated @ModelAttribute Page page) throws UnsupportedEncodingException {
         final List<CompanyDTO> body = companyService.findAll(page).stream().map(companyToDto::map).collect(Collectors.toList());
