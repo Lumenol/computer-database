@@ -1,22 +1,23 @@
 package com.excilys.cdb.persistence.dao;
 
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.persistence.entity.CompanyEntity_;
 import com.excilys.cdb.persistence.entity.ComputerEntity;
-import com.excilys.cdb.persistence.entity.ComputerEntity_;
+import com.excilys.cdb.persistence.entity.QComputerEntity;
 import com.excilys.cdb.persistence.exception.ComputerDAOException;
 import com.excilys.cdb.shared.logexception.LogAndWrapException;
 import com.excilys.cdb.shared.mapper.Mapper;
 import com.excilys.cdb.shared.pagination.OrderBy;
 import com.excilys.cdb.shared.pagination.Pageable;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.ComparableExpressionBase;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,14 +27,17 @@ import java.util.stream.Collectors;
 @Repository
 @Transactional(readOnly = true)
 public class ComputerDAOImpl implements ComputerDAO {
+    public static final QComputerEntity Q_COMPUTER_ENTITY = QComputerEntity.computerEntity;
     private final Mapper<ComputerEntity, Computer> computerEntityToComputerMapper;
     private final Mapper<Computer, ComputerEntity> computerToComputerEntityMapper;
     private EntityManager entityManager;
+    private final JPAQueryFactory jpaQueryFactory;
 
     public ComputerDAOImpl(Mapper<ComputerEntity, Computer> computerEntityToComputerMapper,
-                           Mapper<Computer, ComputerEntity> computerToComputerEntityMapper) {
+                           Mapper<Computer, ComputerEntity> computerToComputerEntityMapper, JPAQueryFactory jpaQueryFactory) {
         this.computerEntityToComputerMapper = computerEntityToComputerMapper;
         this.computerToComputerEntityMapper = computerToComputerEntityMapper;
+        this.jpaQueryFactory = jpaQueryFactory;
     }
 
     @Override
@@ -51,17 +55,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 
     private Long countWithNameOrCompanyNameLike(String name) {
         final String pattern = "%" + name.toUpperCase() + "%";
-        final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<Long> cQuery = cBuilder.createQuery(Long.class);
-        final Root<ComputerEntity> c = cQuery.from(ComputerEntity.class);
-        c.join(ComputerEntity_.MANUFACTURER, JoinType.LEFT);
-        final Predicate namePredicate = cBuilder.like(cBuilder.upper(c.get(ComputerEntity_.NAME)), pattern);
-        final Predicate companyNamePredicate = cBuilder.like(cBuilder.upper(c.get(ComputerEntity_.MANUFACTURER).get(CompanyEntity_.NAME)),
-                pattern);
-
-        cQuery.select(cBuilder.count(c)).where(cBuilder.or(namePredicate, companyNamePredicate));
-
-        return entityManager.createQuery(cQuery).getSingleResult();
+        return jpaQueryFactory.from(Q_COMPUTER_ENTITY).leftJoin(Q_COMPUTER_ENTITY.manufacturer).where(Q_COMPUTER_ENTITY.name.toUpperCase().like(pattern).or(Q_COMPUTER_ENTITY.manufacturer.name.toUpperCase().like(pattern))).fetchCount();
     }
 
     @Override
@@ -77,22 +71,14 @@ public class ComputerDAOImpl implements ComputerDAO {
     @LogAndWrapException(logger = ComputerDAO.class, exception = ComputerDAOException.class)
     @Transactional
     public void deleteById(long id) {
-        final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
-        final CriteriaDelete<ComputerEntity> cQuery = cBuilder.createCriteriaDelete(ComputerEntity.class);
-        final Root<ComputerEntity> c = cQuery.from(ComputerEntity.class);
-        cQuery.where(cBuilder.equal(c.get(ComputerEntity_.ID), id));
-        entityManager.createQuery(cQuery).executeUpdate();
+        jpaQueryFactory.delete(Q_COMPUTER_ENTITY).where(Q_COMPUTER_ENTITY.id.eq(id)).execute();
     }
 
     @Override
     @LogAndWrapException(logger = ComputerDAO.class, exception = ComputerDAOException.class)
     @Transactional
     public void deleteBymanufacturerId(long id) {
-        final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
-        final CriteriaDelete<ComputerEntity> cQuery = cBuilder.createCriteriaDelete(ComputerEntity.class);
-        final Root<ComputerEntity> c = cQuery.from(ComputerEntity.class);
-        cQuery.where(cBuilder.equal(c.get(ComputerEntity_.MANUFACTURER).get(CompanyEntity_.ID), id));
-        entityManager.createQuery(cQuery).executeUpdate();
+        jpaQueryFactory.delete(Q_COMPUTER_ENTITY).where(Q_COMPUTER_ENTITY.manufacturer.id.eq(id)).execute();
     }
 
     @Override
@@ -109,20 +95,12 @@ public class ComputerDAOImpl implements ComputerDAO {
 
     private List<Computer> findAllWithNameOrCompanyNameLike(String name, Pageable pageable) {
         final String pattern = "%" + name.toUpperCase() + "%";
-        final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<ComputerEntity> cQuery = cBuilder.createQuery(ComputerEntity.class);
-        final Root<ComputerEntity> c = cQuery.from(ComputerEntity.class);
-        c.join(ComputerEntity_.MANUFACTURER, JoinType.LEFT);
-        final Predicate namePredicate = cBuilder.like(cBuilder.upper(c.get(ComputerEntity_.NAME)), pattern);
-        final Predicate companyNamePredicate = cBuilder.like(cBuilder.upper(c.get(ComputerEntity_.MANUFACTURER).get(CompanyEntity_.NAME)),
-                pattern);
-
-        cQuery.select(c).where(cBuilder.or(namePredicate, companyNamePredicate))
-                .orderBy(orderByToOrder(cBuilder, c, pageable.getOrderBy()));
-        final TypedQuery<ComputerEntity> query = entityManager.createQuery(cQuery)
-                .setFirstResult((int) pageable.getPage().getOffset()).setMaxResults((int) pageable.getPage().getSize());
-
-        return query.getResultList().stream().map(computerEntityToComputerMapper::map).collect(Collectors.toList());
+        return jpaQueryFactory.selectFrom(Q_COMPUTER_ENTITY).leftJoin(Q_COMPUTER_ENTITY.manufacturer)
+                .where(Q_COMPUTER_ENTITY.name.toUpperCase().like(pattern).or(Q_COMPUTER_ENTITY.manufacturer.name.toUpperCase().like(pattern)))
+                .offset(pageable.getPage().getOffset()).limit(pageable.getPage().getSize())
+                .orderBy(orderByToOrder(pageable.getOrderBy()))
+                .fetch()
+                .stream().map(computerEntityToComputerMapper::map).collect(Collectors.toList());
     }
 
     @Override
@@ -132,11 +110,11 @@ public class ComputerDAOImpl implements ComputerDAO {
                 .map(computerEntityToComputerMapper::map);
     }
 
-    private List<Order> orderByToOrder(CriteriaBuilder cBuilder, Root<ComputerEntity> c, OrderBy orderBy) {
-        final Path<Object> field;
-        final Function<Expression<?>, Order> direction;
-        final Path<Object> name = c.get(ComputerEntity_.NAME);
-        final Path<Object> id = c.get(ComputerEntity_.ID);
+    private OrderSpecifier[] orderByToOrder(OrderBy orderBy) {
+        final ComparableExpressionBase field;
+        final Function<ComparableExpressionBase, OrderSpecifier> direction;
+        StringPath name = Q_COMPUTER_ENTITY.name;
+        NumberPath<Long> id = Q_COMPUTER_ENTITY.id;
         switch (orderBy.getField()) {
             default:
             case ID:
@@ -146,22 +124,22 @@ public class ComputerDAOImpl implements ComputerDAO {
                 field = name;
                 break;
             case INTRODUCED:
-                field = c.get(ComputerEntity_.INTRODUCED);
+                field = Q_COMPUTER_ENTITY.introduced;
                 break;
             case DISCONTINUED:
-                field = c.get(ComputerEntity_.DISCONTINUED);
+                field = Q_COMPUTER_ENTITY.discontinued;
                 break;
             case COMPANY:
-                field = c.get(ComputerEntity_.MANUFACTURER).get(CompanyEntity_.NAME);
+                field = Q_COMPUTER_ENTITY.manufacturer.name;
                 break;
         }
         if (orderBy.getDirection() == OrderBy.Direction.DESC) {
-            direction = cBuilder::desc;
+            direction = f -> f.desc();
         } else {
-            direction = cBuilder::asc;
+            direction = f -> f.asc();
         }
 
-        return Arrays.asList(direction.apply(field), direction.apply(name), direction.apply(id));
+        return new OrderSpecifier[]{direction.apply(field).nullsLast(), direction.apply(name), direction.apply(id)};
     }
 
     @Override
