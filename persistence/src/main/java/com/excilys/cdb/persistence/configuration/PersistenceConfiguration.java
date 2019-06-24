@@ -1,11 +1,9 @@
 package com.excilys.cdb.persistence.configuration;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -14,7 +12,9 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import java.util.Optional;
 import java.util.Properties;
@@ -25,7 +25,9 @@ import java.util.TimeZone;
         "com.excilys.cdb.persistence.mapper"}, excludeFilters = @ComponentScan.Filter(Configuration.class))
 @EnableTransactionManagement
 @PropertySource("classpath:hibernate.properties")
+@Import(PersistenceConfiguration.QueryDSLConfiguration.class)
 public class PersistenceConfiguration {
+
 
     private static final String HIBERNATE_SHOW_SQL = "hibernate.show_sql";
     private static final String HIBERNATE_DIALECT = "hibernate.dialect";
@@ -79,5 +81,22 @@ public class PersistenceConfiguration {
                 .ifPresent(v -> properties.setProperty(HIBERNATE_SHOW_SQL, v));
         return properties;
     }
+
+    @Configuration
+    public static class QueryDSLConfiguration {
+        private EntityManager entityManager;
+
+        @PersistenceContext
+        public void setEntityManager(EntityManager entityManager) {
+            this.entityManager = entityManager;
+        }
+
+        @Bean
+        public JPAQueryFactory jpaQueryFactory() {
+            return new JPAQueryFactory(entityManager);
+        }
+
+    }
+
 
 }

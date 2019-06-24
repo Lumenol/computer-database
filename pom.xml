@@ -41,6 +41,7 @@
         <org.glassfish.web.javax.el.version>2.2.6</org.glassfish.web.javax.el.version>
         <jackson.version>2.9.9</jackson.version>
         <swagger.version>2.9.2</swagger.version>
+        <querydsl.version>4.2.1</querydsl.version>
         <!-- Test -->
 
         <junit.version>5.4.2</junit.version>
@@ -123,11 +124,6 @@
                 <version>${hibernate.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-jpamodelgen</artifactId>
-                <version>${hibernate.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.hibernate.validator</groupId>
                 <artifactId>hibernate-validator</artifactId>
                 <version>${hibernate-validator}</version>
@@ -206,6 +202,16 @@
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger-ui</artifactId>
                 <version>${swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-apt</artifactId>
+                <version>${querydsl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-jpa</artifactId>
+                <version>${querydsl.version}</version>
             </dependency>
             <!-- Tests -->
             <dependency>

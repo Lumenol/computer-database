@@ -2,21 +2,18 @@ package com.excilys.cdb.persistence.dao;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.entity.CompanyEntity;
-import com.excilys.cdb.persistence.entity.CompanyEntity_;
+import com.excilys.cdb.persistence.entity.QCompanyEntity;
 import com.excilys.cdb.persistence.exception.CompanyDAOException;
 import com.excilys.cdb.shared.logexception.LogAndWrapException;
 import com.excilys.cdb.shared.mapper.Mapper;
 import com.excilys.cdb.shared.pagination.Page;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,32 +22,28 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class CompanyDAOImpl implements CompanyDAO {
 
+    public static final QCompanyEntity Q_COMPANY_ENTITY = QCompanyEntity.companyEntity;
     private final Mapper<CompanyEntity, Company> companyEntityToCompanyMapper;
     private EntityManager entityManager;
 
-    public CompanyDAOImpl(Mapper<CompanyEntity, Company> companyEntityToCompanyMapper) {
+    private final JPAQueryFactory jpaQueryFactory;
+
+    public CompanyDAOImpl(Mapper<CompanyEntity, Company> companyEntityToCompanyMapper, JPAQueryFactory jpaQueryFactory) {
         this.companyEntityToCompanyMapper = companyEntityToCompanyMapper;
+        this.jpaQueryFactory = jpaQueryFactory;
     }
 
     @Override
     @LogAndWrapException(logger = CompanyDAO.class, exception = CompanyDAOException.class)
     public long count() {
-        final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<Long> cQuery = cBuilder.createQuery(Long.class);
-        cQuery.select(cBuilder.count(cQuery.from(CompanyEntity.class)));
-        final TypedQuery<Long> query = entityManager.createQuery(cQuery);
-        return query.getSingleResult();
+        return jpaQueryFactory.from(Q_COMPANY_ENTITY).fetchCount();
     }
 
     @Override
     @LogAndWrapException(logger = CompanyDAO.class, exception = CompanyDAOException.class)
     @Transactional
     public void deleteById(long id) {
-        final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
-        final CriteriaDelete<CompanyEntity> cQuery = cBuilder.createCriteriaDelete(CompanyEntity.class);
-        final Root<CompanyEntity> c = cQuery.from(CompanyEntity.class);
-        cQuery.where(cBuilder.equal(c.get(CompanyEntity_.ID), id));
-        entityManager.createQuery(cQuery).executeUpdate();
+        jpaQueryFactory.delete(Q_COMPANY_ENTITY).where(Q_COMPANY_ENTITY.id.eq(id)).execute();
     }
 
     @Override
@@ -62,15 +55,15 @@ public class CompanyDAOImpl implements CompanyDAO {
     @Override
     @LogAndWrapException(logger = CompanyDAO.class, exception = CompanyDAOException.class)
     public List<Company> findAll() {
-        return mapAll(queryFindAll().getResultList());
+        List<CompanyEntity> companyEntities = queryFindAll().fetch();
+        return mapAll(companyEntities);
     }
 
     @Override
     @LogAndWrapException(logger = CompanyDAO.class, exception = CompanyDAOException.class)
     public List<Company> findAll(Page page) {
-        final TypedQuery<CompanyEntity> query = queryFindAll().setFirstResult((int) page.getOffset())
-                .setMaxResults((int) page.getSize());
-        return mapAll(query.getResultList());
+        List<CompanyEntity> companyEntities = queryFindAll().offset(page.getOffset()).limit(page.getSize()).fetch();
+        return mapAll(companyEntities);
     }
 
     @Override
@@ -84,12 +77,8 @@ public class CompanyDAOImpl implements CompanyDAO {
         return list.stream().map(companyEntityToCompanyMapper::map).collect(Collectors.toList());
     }
 
-    private TypedQuery<CompanyEntity> queryFindAll() {
-        final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<CompanyEntity> cQuery = cBuilder.createQuery(CompanyEntity.class);
-        final Root<CompanyEntity> c = cQuery.from(CompanyEntity.class);
-        cQuery.select(c).orderBy(cBuilder.asc(c.get(CompanyEntity_.NAME)));
-        return entityManager.createQuery(cQuery);
+    private JPAQuery<CompanyEntity> queryFindAll() {
+        return jpaQueryFactory.selectFrom(Q_COMPANY_ENTITY).orderBy(Q_COMPANY_ENTITY.name.asc());
     }
 
     @PersistenceContext
