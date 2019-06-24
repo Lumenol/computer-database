@@ -52,7 +52,7 @@ public final class Utils {
     }
 
     public static long indexLastPage(long numberOfEntities, long pageSize) {
-        return (long) Math.ceil(numberOfEntities / pageSize) + 1;
+        return (long) Math.ceil(numberOfEntities / pageSize) + numberOfEntities % pageSize > 0 ? 1 : 0;
     }
 
 }
