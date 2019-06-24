@@ -99,8 +99,8 @@ public class ComputerController {
     }
 
     @GetMapping("/count")
-    public long count() {
-        return computerService.count();
+    public long count(@RequestParam(required = false) String search) {
+        return Optional.ofNullable(search).map(computerService::countByNameOrCompanyName).orElseGet(computerService::count);
     }
 
     @GetMapping("/exist/{id}")
