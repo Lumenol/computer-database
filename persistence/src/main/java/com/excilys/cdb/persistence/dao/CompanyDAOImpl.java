@@ -84,6 +84,14 @@ public class CompanyDAOImpl implements CompanyDAO {
         company.setId(companyEntity.getId());
     }
 
+    @Override
+    @LogAndWrapException(logger = CompanyDAO.class, exception = CompanyDAOException.class)
+    @Transactional
+    public void update(Company company) {
+        final CompanyEntity companyEntity = companyToCompanyEntityMapper.map(company);
+        entityManager.merge(companyEntity);
+    }
+
     private List<Company> mapAll(List<CompanyEntity> list) {
         return list.stream().map(companyEntityToCompanyMapper::map).collect(Collectors.toList());
     }

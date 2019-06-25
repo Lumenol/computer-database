@@ -20,4 +20,7 @@ public interface CompanyDAO {
     Optional<Company> findById(long id);
 
     void create(Company company);
+
+    void update(Company company);
+
 }
