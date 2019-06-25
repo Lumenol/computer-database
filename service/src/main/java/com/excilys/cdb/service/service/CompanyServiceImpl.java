@@ -62,4 +62,18 @@ public class CompanyServiceImpl implements CompanyService, CompanyExistById, Fin
         computerDAO.deleteBymanufacturerId(id);
         companyDAO.deleteById(id);
     }
+
+    @Override
+    @Transactional
+    @LogAndWrapException(logger = CompanyService.class, exception = CompanyServiceException.class)
+    public void update(Company company) {
+        companyDAO.update(company);
+    }
+
+    @Override
+    @Transactional
+    @LogAndWrapException(logger = CompanyService.class, exception = CompanyServiceException.class)
+    public void create(Company company) {
+        companyDAO.create(company);
+    }
 }

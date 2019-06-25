@@ -24,12 +24,14 @@ public class CompanyDAOImpl implements CompanyDAO {
 
     public static final QCompanyEntity Q_COMPANY_ENTITY = QCompanyEntity.companyEntity;
     private final Mapper<CompanyEntity, Company> companyEntityToCompanyMapper;
+    private final Mapper<Company, CompanyEntity> companyToCompanyEntityMapper;
     private EntityManager entityManager;
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public CompanyDAOImpl(Mapper<CompanyEntity, Company> companyEntityToCompanyMapper, JPAQueryFactory jpaQueryFactory) {
+    public CompanyDAOImpl(Mapper<CompanyEntity, Company> companyEntityToCompanyMapper, Mapper<Company, CompanyEntity> companyToCompanyEntityMapper, JPAQueryFactory jpaQueryFactory) {
         this.companyEntityToCompanyMapper = companyEntityToCompanyMapper;
+        this.companyToCompanyEntityMapper = companyToCompanyEntityMapper;
         this.jpaQueryFactory = jpaQueryFactory;
     }
 
@@ -71,6 +73,23 @@ public class CompanyDAOImpl implements CompanyDAO {
     public Optional<Company> findById(long id) {
         return Optional.ofNullable(entityManager.find(CompanyEntity.class, id))
                 .map(companyEntityToCompanyMapper::map);
+    }
+
+    @Override
+    @LogAndWrapException(logger = CompanyDAO.class, exception = CompanyDAOException.class)
+    @Transactional
+    public void create(Company company) {
+        CompanyEntity companyEntity = companyToCompanyEntityMapper.map(company);
+        entityManager.persist(companyEntity);
+        company.setId(companyEntity.getId());
+    }
+
+    @Override
+    @LogAndWrapException(logger = CompanyDAO.class, exception = CompanyDAOException.class)
+    @Transactional
+    public void update(Company company) {
+        final CompanyEntity companyEntity = companyToCompanyEntityMapper.map(company);
+        entityManager.merge(companyEntity);
     }
 
     private List<Company> mapAll(List<CompanyEntity> list) {

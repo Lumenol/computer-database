@@ -19,5 +19,14 @@ public interface CompanyService {
 
     List<Company> findAll();
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     void delete(long id);
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    void update(Company company);
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    void create(Company company);
+
+
 }
