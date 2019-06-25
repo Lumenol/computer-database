@@ -1,5 +1,6 @@
 package com.excilys.cdb.persistence.dao;
 
+import com.excilys.cdb.model.Role;
 import com.excilys.cdb.model.User;
 import com.excilys.cdb.persistence.configuration.PersistenceConfigurationTest;
 import com.excilys.cdb.persistence.exception.UserDAOException;
@@ -93,5 +94,15 @@ class UserDAOTest {
         assertFalse(apres.isPresent());
     }
 
+    @Test
+    public void update() {
+        final User cree = User.builder().login("usersueruser").password("password").build();
+        userDAO.create(cree);
+        final User before = userDAO.findById(cree.getId()).get();
+        before.getRoles().add(Role.ADMIN);
+        userDAO.update(before);
+        final User actual = userDAO.findById(cree.getId()).get();
+        assertEquals(before, actual);
+    }
 
 }
