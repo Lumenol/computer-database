@@ -9,6 +9,12 @@ import java.util.Objects;
 @Component
 public class CreateCompanyValidator implements Validator<CreateCompanyDTO> {
 
+    private final CompanyValidatorUtils companyValidatorUtils;
+
+    public CreateCompanyValidator(CompanyValidatorUtils companyValidatorUtils) {
+        this.companyValidatorUtils = companyValidatorUtils;
+    }
+
     @Override
     public boolean supports(Class<?> clazz) {
         return CreateCompanyDTO.class.isAssignableFrom(clazz);
@@ -18,14 +24,7 @@ public class CreateCompanyValidator implements Validator<CreateCompanyDTO> {
     public void validate(Object target, Errors errors) {
         Objects.requireNonNull(target);
         final CreateCompanyDTO toValidate = (CreateCompanyDTO) target;
-        checkName(toValidate.getName(), errors);
-    }
-
-
-    private void checkName(String name, Errors errors) {
-        if (Objects.isNull(name) || name.trim().isEmpty()) {
-            errors.rejectValue("name", "validation.name.blank");
-        }
+        companyValidatorUtils.checkName(toValidate.getName(), errors);
     }
 
 }
