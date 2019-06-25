@@ -8,6 +8,7 @@ import com.excilys.cdb.shared.mapper.Mapper;
 import com.excilys.cdb.shared.validator.Validator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Objects;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/users")
@@ -33,6 +35,7 @@ public class UserController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity create(@RequestBody CreateUserDTO createUserDTO) throws BindException {
         if (Objects.isNull(createUserDTO.getPasswordCheck())) {
             createUserDTO.setPasswordCheck(createUserDTO.getPassword());
@@ -56,5 +59,12 @@ public class UserController {
     public void deleteById(@PathVariable long id) {
         userService.deleteById(id);
     }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void updateRoles(@PathVariable Long id, @RequestBody Set<Role> roles) {
+        userService.updateRoles(id, roles);
+    }
+
 
 }
