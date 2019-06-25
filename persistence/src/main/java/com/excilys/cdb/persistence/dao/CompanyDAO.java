@@ -18,4 +18,6 @@ public interface CompanyDAO {
     List<Company> findAll(Page page);
 
     Optional<Company> findById(long id);
+
+    void create(Company company);
 }

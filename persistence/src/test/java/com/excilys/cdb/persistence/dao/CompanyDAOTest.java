@@ -91,4 +91,13 @@ public class CompanyDAOTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void create() {
+        final Company expected = Company.builder().name("The test company").build();
+        companyDAO.create(expected);
+
+        final Company actual = companyDAO.findById(expected.getId()).get();
+        assertEquals(expected, actual);
+    }
+
 }
