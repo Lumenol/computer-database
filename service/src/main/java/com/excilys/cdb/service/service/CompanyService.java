@@ -20,4 +20,10 @@ public interface CompanyService {
     List<Company> findAll();
 
     void delete(long id);
+
+    void update(Company company);
+
+    void create(Company company);
+
+
 }
