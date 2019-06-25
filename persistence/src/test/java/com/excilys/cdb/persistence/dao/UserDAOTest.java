@@ -1,5 +1,6 @@
 package com.excilys.cdb.persistence.dao;
 
+import com.excilys.cdb.model.Role;
 import com.excilys.cdb.model.User;
 import com.excilys.cdb.persistence.configuration.PersistenceConfigurationTest;
 import com.excilys.cdb.persistence.exception.UserDAOException;
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = PersistenceConfigurationTest.class)
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, statements = "DELETE FROM user;")
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, statements = "DELETE FROM UserEntity_roles;DELETE FROM user;")
 class UserDAOTest {
 
     private UserDAO userDAO;
@@ -93,5 +94,15 @@ class UserDAOTest {
         assertFalse(apres.isPresent());
     }
 
+    @Test
+    public void update() {
+        final User cree = User.builder().login("usersueruser").password("password").build();
+        userDAO.create(cree);
+        final User before = userDAO.findById(cree.getId()).get();
+        before.getRoles().add(Role.ADMIN);
+        userDAO.update(before);
+        final User actual = userDAO.findById(cree.getId()).get();
+        assertEquals(before, actual);
+    }
 
 }

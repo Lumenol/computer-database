@@ -43,6 +43,14 @@ public class UserDAOImpl implements UserDAO {
     @Override
     @LogAndWrapException(logger = UserDAO.class, exception = UserDAOException.class)
     @Transactional
+    public void update(User user) {
+        final UserEntity entity = userToUserEntityMapper.map(user);
+        entityManager.merge(entity);
+    }
+
+    @Override
+    @LogAndWrapException(logger = UserDAO.class, exception = UserDAOException.class)
+    @Transactional
     public void deleteByLogin(String login) {
         jpaQueryFactory.delete(Q_USER_ENTITY).where(Q_USER_ENTITY.login.eq(login)).execute();
     }

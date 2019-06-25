@@ -8,6 +8,8 @@ public interface UserDAO {
 
     void create(User user);
 
+    void update(User user);
+
     void deleteByLogin(String login);
 
     boolean existByLogin(String login);
