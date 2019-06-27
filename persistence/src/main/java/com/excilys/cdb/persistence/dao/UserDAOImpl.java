@@ -92,7 +92,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     private JPAQuery<UserEntity> queryFindAll() {
-        return jpaQueryFactory.selectFrom(Q_USER_ENTITY).leftJoin(Q_USER_ENTITY.roles);
+        return jpaQueryFactory.selectFrom(Q_USER_ENTITY);
     }
 
     @Override
