@@ -52,7 +52,7 @@ public class UserDAOImpl implements UserDAO {
     @LogAndWrapException(logger = UserDAO.class, exception = UserDAOException.class)
     @Transactional
     public void deleteByLogin(String login) {
-        jpaQueryFactory.delete(Q_USER_ENTITY).where(Q_USER_ENTITY.login.eq(login)).execute();
+        findByLogin(login).map(userToUserEntityMapper::map).map(entityManager::merge).ifPresent(entityManager::remove);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class UserDAOImpl implements UserDAO {
     @LogAndWrapException(logger = UserDAO.class, exception = UserDAOException.class)
     @Transactional
     public void deleteById(long id) {
-        jpaQueryFactory.delete(Q_USER_ENTITY).where(Q_USER_ENTITY.id.eq(id)).execute();
+        findById(id).map(userToUserEntityMapper::map).map(entityManager::merge).ifPresent(entityManager::remove);
     }
 
     @Override
