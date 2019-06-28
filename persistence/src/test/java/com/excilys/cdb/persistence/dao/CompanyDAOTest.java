@@ -91,4 +91,24 @@ public class CompanyDAOTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void create() {
+        final Company expected = Company.builder().name("The test company").build();
+        companyDAO.create(expected);
+
+        final Company actual = companyDAO.findById(expected.getId()).get();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void update() {
+        final long id = 5;
+        final Company before = companyDAO.findById(id).get();
+        final Company expected = Company.builder().id(id).name("Update").build();
+        assertNotEquals(expected, before);
+        companyDAO.update(expected);
+        final Company actual = companyDAO.findById(id).get();
+        assertEquals(expected, actual);
+    }
+
 }

@@ -97,8 +97,7 @@ class UTDatabase {
         final OrderBy.Field field = pageable.getOrderBy().getField();
         final OrderBy.Direction direction = pageable.getOrderBy().getDirection();
         final Comparator<Computer> byId = reverse(Comparator.comparingLong(Computer::getId), direction);
-        final Comparator<Computer> byName = reverse(Comparator.comparing(Computer::getName), direction)
-                .thenComparing(byId);
+        final Comparator<Computer> byName = reverse(Comparator.comparing(Computer::getName), direction).thenComparing(byId);
 
         switch (field) {
             case ID:
@@ -109,20 +108,17 @@ class UTDatabase {
                 break;
             case INTRODUCED: {
                 final Function<Computer, LocalDate> keyExtractor = Computer::getIntroduced;
-                comparator = reverse(comparatorComputer(keyExtractor, LocalDate::compareTo), direction)
-                        .thenComparing(byName);
+                comparator = comparatorComputer(keyExtractor, reverse(LocalDate::compareTo, direction)).thenComparing(byName);
             }
             break;
             case DISCONTINUED: {
                 final Function<Computer, LocalDate> keyExtractor = Computer::getDiscontinued;
-                comparator = reverse(comparatorComputer(keyExtractor, LocalDate::compareTo), direction)
-                        .thenComparing(byName);
+                comparator = comparatorComputer(keyExtractor, reverse(LocalDate::compareTo, direction)).thenComparing(byName);
             }
             break;
             case COMPANY: {
                 final Function<Computer, Company> keyExtractor = Computer::getManufacturer;
-                comparator = reverse(comparatorComputer(keyExtractor, Comparator.comparing(Company::getName)), direction)
-                        .thenComparing(byName);
+                comparator = comparatorComputer(keyExtractor, reverse(Comparator.comparing(Company::getName), direction)).thenComparing(byName);
             }
             break;
             default:
@@ -140,9 +136,9 @@ class UTDatabase {
             if (k1 == k2) {
                 return 0;
             } else if (Objects.isNull(k1)) {
-                return -1;
-            } else if (Objects.isNull(k2)) {
                 return 1;
+            } else if (Objects.isNull(k2)) {
+                return -1;
             } else {
                 return comparator.compare(k1, k2);
             }

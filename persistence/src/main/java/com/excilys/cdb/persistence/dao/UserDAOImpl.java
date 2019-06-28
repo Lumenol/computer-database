@@ -1,34 +1,38 @@
 package com.excilys.cdb.persistence.dao;
 
 import com.excilys.cdb.model.User;
+import com.excilys.cdb.persistence.entity.QUserEntity;
 import com.excilys.cdb.persistence.entity.UserEntity;
-import com.excilys.cdb.persistence.entity.UserEntity_;
 import com.excilys.cdb.persistence.exception.UserDAOException;
 import com.excilys.cdb.shared.logexception.LogAndWrapException;
 import com.excilys.cdb.shared.mapper.Mapper;
+import com.excilys.cdb.shared.pagination.Page;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 @Transactional(readOnly = true)
 public class UserDAOImpl implements UserDAO {
+    public static final QUserEntity Q_USER_ENTITY = QUserEntity.userEntity;
     private final Mapper<UserEntity, User> userEntityToUserMapper;
     private final Mapper<User, UserEntity> userToUserEntityMapper;
     private EntityManager entityManager;
+    private final JPAQueryFactory jpaQueryFactory;
+
 
     public UserDAOImpl(Mapper<UserEntity, User> userEntityToUserMapper,
-                       Mapper<User, UserEntity> userToUserEntityMapper) {
+                       Mapper<User, UserEntity> userToUserEntityMapper, JPAQueryFactory jpaQueryFactory) {
         this.userEntityToUserMapper = userEntityToUserMapper;
         this.userToUserEntityMapper = userToUserEntityMapper;
+        this.jpaQueryFactory = jpaQueryFactory;
     }
 
     @Override
@@ -43,12 +47,16 @@ public class UserDAOImpl implements UserDAO {
     @Override
     @LogAndWrapException(logger = UserDAO.class, exception = UserDAOException.class)
     @Transactional
+    public void update(User user) {
+        final UserEntity entity = userToUserEntityMapper.map(user);
+        entityManager.merge(entity);
+    }
+
+    @Override
+    @LogAndWrapException(logger = UserDAO.class, exception = UserDAOException.class)
+    @Transactional
     public void deleteByLogin(String login) {
-        final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
-        final CriteriaDelete<UserEntity> cQuery = cBuilder.createCriteriaDelete(UserEntity.class);
-        final Root<UserEntity> c = cQuery.from(UserEntity.class);
-        cQuery.where(cBuilder.equal(c.get(UserEntity_.LOGIN), login));
-        entityManager.createQuery(cQuery).executeUpdate();
+        findByLogin(login).map(userToUserEntityMapper::map).map(entityManager::merge).ifPresent(entityManager::remove);
     }
 
     @Override
@@ -60,25 +68,15 @@ public class UserDAOImpl implements UserDAO {
     @Override
     @LogAndWrapException(logger = UserDAO.class, exception = UserDAOException.class)
     public Optional<User> findByLogin(String login) {
-        final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<UserEntity> cQuery = cBuilder.createQuery(UserEntity.class);
-        final Root<UserEntity> c = cQuery.from(UserEntity.class);
-        cQuery.select(c).where(cBuilder.equal(c.get(UserEntity_.LOGIN), login));
-
-        return Optional.of(cQuery).map(entityManager::createQuery).map(TypedQuery::getResultList)
-                .filter(l -> !l.isEmpty()).map(l -> l.get(0))
-                .map(userEntityToUserMapper::map);
+        UserEntity userEntity = queryFindAll().where(Q_USER_ENTITY.login.eq(login)).fetchFirst();
+        return Optional.ofNullable(userEntity).map(userEntityToUserMapper::map);
     }
 
     @Override
     @LogAndWrapException(logger = UserDAO.class, exception = UserDAOException.class)
     @Transactional
     public void deleteById(long id) {
-        final CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
-        final CriteriaDelete<UserEntity> cQuery = cBuilder.createCriteriaDelete(UserEntity.class);
-        final Root<UserEntity> c = cQuery.from(UserEntity.class);
-        cQuery.where(cBuilder.equal(c.get(UserEntity_.ID), id));
-        entityManager.createQuery(cQuery).executeUpdate();
+        findById(id).map(userToUserEntityMapper::map).map(entityManager::merge).ifPresent(entityManager::remove);
     }
 
     @Override
@@ -87,9 +85,36 @@ public class UserDAOImpl implements UserDAO {
         return Optional.ofNullable(entityManager.find(UserEntity.class, id)).map(userEntityToUserMapper::map);
     }
 
+    @Override
+    @LogAndWrapException(logger = UserDAO.class, exception = UserDAOException.class)
+    public List<User> findAll() {
+        return mapAll(queryFindAll().fetch());
+    }
+
+    private JPAQuery<UserEntity> queryFindAll() {
+        return jpaQueryFactory.selectFrom(Q_USER_ENTITY);
+    }
+
+    @Override
+    @LogAndWrapException(logger = UserDAO.class, exception = UserDAOException.class)
+    public List<User> findAll(Page page) {
+        List<UserEntity> companyEntities = queryFindAll().offset(page.getOffset()).limit(page.getSize()).fetch();
+        return mapAll(companyEntities);
+    }
+
+    @Override
+    @LogAndWrapException(logger = UserDAO.class, exception = UserDAOException.class)
+    public long count() {
+        return jpaQueryFactory.from(Q_USER_ENTITY).fetchCount();
+    }
+
     @PersistenceContext
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
+
+    private List<User> mapAll(List<UserEntity> list) {
+        return list.stream().map(userEntityToUserMapper::map).collect(Collectors.toList());
+    }
 }

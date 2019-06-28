@@ -1,14 +1,19 @@
 package com.excilys.cdb.service.service;
 
+import com.excilys.cdb.model.Role;
 import com.excilys.cdb.model.User;
 import com.excilys.cdb.persistence.dao.UserDAO;
 import com.excilys.cdb.service.exception.UserServiceException;
 import com.excilys.cdb.shared.logexception.LogAndWrapException;
+import com.excilys.cdb.shared.pagination.Page;
 import com.excilys.cdb.shared.validator.UserExistByLogin;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,6 +30,19 @@ public class UserServiceImpl implements UserService, UserExistByLogin {
     @Transactional
     public void create(User user) {
         userDAO.create(user);
+    }
+
+    @Override
+    @LogAndWrapException(logger = UserService.class, exception = UserServiceException.class)
+    @Transactional
+    public void updateRoles(Long id, Set<Role> roles) {
+        Objects.nonNull(roles);
+        final Optional<User> user = userDAO.findById(id);
+        if (user.isPresent()) {
+            final User u = user.get();
+            u.setRoles(roles);
+            userDAO.update(u);
+        }
     }
 
     @Override
@@ -59,4 +77,21 @@ public class UserServiceImpl implements UserService, UserExistByLogin {
         return userDAO.findById(id);
     }
 
+    @Override
+    @LogAndWrapException(logger = UserService.class, exception = UserServiceException.class)
+    public List<User> findAll(Page page) {
+        return userDAO.findAll(page);
+    }
+
+    @Override
+    @LogAndWrapException(logger = UserService.class, exception = UserServiceException.class)
+    public long count() {
+        return userDAO.count();
+    }
+
+    @Override
+    @LogAndWrapException(logger = UserService.class, exception = UserServiceException.class)
+    public List<User> findAll() {
+        return userDAO.findAll();
+    }
 }
