@@ -347,6 +347,12 @@
                         <version>0.9</version>
                     </dependency>
                 </dependencies>
+                <configuration>
+                    <timeoutConstant>20000</timeoutConstant>
+                    <mutators>
+                        <mutator>STRONGER</mutator>
+                    </mutators>
+                </configuration>
             </plugin>
         </plugins>
     </build>
