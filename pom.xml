@@ -347,11 +347,6 @@
                         <version>0.9</version>
                     </dependency>
                 </dependencies>
-                <configuration>
-                    <targetTests>
-                        <param>com.excilys.cdb</param>
-                    </targetTests>
-                </configuration>
             </plugin>
         </plugins>
     </build>

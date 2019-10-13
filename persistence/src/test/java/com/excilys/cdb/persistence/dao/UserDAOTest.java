@@ -33,6 +33,7 @@ class UserDAOTest {
         final User user = User.builder().login(login).password("password").build();
         userDAO.create(user);
         assertTrue(userDAO.existByLogin(login));
+        assertNotNull(user.getId());
     }
 
     @Test
