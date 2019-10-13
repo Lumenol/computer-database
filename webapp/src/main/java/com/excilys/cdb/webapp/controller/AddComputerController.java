@@ -7,7 +7,7 @@ import com.excilys.cdb.shared.dto.CompanyDTO;
 import com.excilys.cdb.shared.dto.CreateComputerDTO;
 import com.excilys.cdb.shared.mapper.CompanyToCompanyDTOMapper;
 import com.excilys.cdb.shared.mapper.CreateComputerDTOToComputerMapper;
-import com.excilys.cdb.shared.validator.Validator;
+import com.excilys.cdb.shared.validator.CreateComputerValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -29,11 +29,11 @@ public class AddComputerController {
     private final CreateComputerDTOToComputerMapper createComputerDTOToComputerMapper;
     private final CompanyToCompanyDTOMapper companyToCompanyDTOMapper;
     private final ComputerService computerService;
-    private final Validator<CreateComputerDTO> createComputerValidator;
+    private final CreateComputerValidator createComputerValidator;
 
     public AddComputerController(CompanyService companyService,
                                  CreateComputerDTOToComputerMapper createComputerDTOToComputerMapper,
-                                 Validator<CreateComputerDTO> createComputerValidator, CompanyToCompanyDTOMapper companyToCompanyDTOMapper,
+                                 CreateComputerValidator createComputerValidator, CompanyToCompanyDTOMapper companyToCompanyDTOMapper,
                                  ComputerService computerService) {
         super();
         this.companyService = companyService;

@@ -7,7 +7,7 @@ import org.springframework.validation.Errors;
 import java.util.Objects;
 
 @Component
-public class CreateCompanyValidator implements Validator<CreateCompanyDTO> {
+public class CreateCompanyValidator implements org.springframework.validation.Validator {
 
     private final CompanyValidatorUtils companyValidatorUtils;
 

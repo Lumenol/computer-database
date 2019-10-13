@@ -18,11 +18,11 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = SharedConfigurationTest.class)
 class CreateUserValidatorTest {
 
-    private Validator<CreateUserDTO> createUserValidator;
+    private CreateUserValidator createUserValidator;
     private UserExistByLogin userExistByLoginMock;
 
     @Autowired
-    public void setCreateUserValidator(Validator<CreateUserDTO> createUserValidator) {
+    public void setCreateUserValidator(CreateUserValidator createUserValidator) {
         this.createUserValidator = createUserValidator;
     }
 

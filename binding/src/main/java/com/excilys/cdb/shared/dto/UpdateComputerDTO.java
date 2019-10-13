@@ -98,8 +98,8 @@ public class UpdateComputerDTO {
         UpdateComputerDTOBuilder() {
         }
 
-        public UpdateComputerDTOBuilder id(Long string) {
-            this.id = string;
+        public UpdateComputerDTOBuilder id(Long id) {
+            this.id = id;
             return this;
         }
 
@@ -117,7 +117,8 @@ public class UpdateComputerDTO {
             if (getClass() != obj.getClass())
                 return false;
             UpdateComputerDTOBuilder other = (UpdateComputerDTOBuilder) obj;
-            return Objects.equals(discontinued, other.discontinued) && id == other.id
+            return Objects.equals(discontinued, other.discontinued)
+                    && Objects.equals(id, other.id)
                     && Objects.equals(introduced, other.introduced)
                     && Objects.equals(manufacturerId, other.manufacturerId) && Objects.equals(name, other.name);
         }

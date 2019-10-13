@@ -9,7 +9,8 @@ import com.excilys.cdb.shared.dto.UpdateComputerDTO;
 import com.excilys.cdb.shared.mapper.Mapper;
 import com.excilys.cdb.shared.pagination.*;
 import com.excilys.cdb.shared.utils.Utils;
-import com.excilys.cdb.shared.validator.Validator;
+import com.excilys.cdb.shared.validator.CreateComputerValidator;
+import com.excilys.cdb.shared.validator.UpdateComputerValidator;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,14 +33,14 @@ public class ComputerController {
     private final Mapper<Computer, ComputerDTO> computerToDto;
     private final Mapper<CreateComputerDTO, Computer> createComputerDTOComputerMapper;
     private final Mapper<UpdateComputerDTO, Computer> updateComputerDTOComputerMapper;
-    private final Validator<UpdateComputerDTO> updateComputerValidator;
-    private final Validator<CreateComputerDTO> createComputerValidator;
+    private final UpdateComputerValidator updateComputerValidator;
+    private final CreateComputerValidator createComputerValidator;
     private final PagingParameters pagingParameters;
     private final SortingParameters sortingParameters;
 
     public ComputerController(ComputerService computerService, Mapper<Computer, ComputerDTO> computerToDto,
-                              Mapper<CreateComputerDTO, Computer> createComputerDTOComputerMapper, Mapper<UpdateComputerDTO, Computer> updateComputerDTOComputerMapper, Validator<UpdateComputerDTO> updateComputerValidator,
-                              Validator<CreateComputerDTO> createComputerValidator, PagingParameters pagingParameters, SortingParameters sortingParameters) {
+                              Mapper<CreateComputerDTO, Computer> createComputerDTOComputerMapper, Mapper<UpdateComputerDTO, Computer> updateComputerDTOComputerMapper, UpdateComputerValidator updateComputerValidator,
+                              CreateComputerValidator createComputerValidator, PagingParameters pagingParameters, SortingParameters sortingParameters) {
         this.computerService = computerService;
         this.computerToDto = computerToDto;
         this.createComputerDTOComputerMapper = createComputerDTOComputerMapper;

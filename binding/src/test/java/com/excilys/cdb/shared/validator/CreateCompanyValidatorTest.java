@@ -17,10 +17,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = SharedConfigurationTest.class)
 class CreateCompanyValidatorTest {
-    private Validator<CreateCompanyDTO> createCompanyDTOValidator;
+    private CreateCompanyValidator createCompanyDTOValidator;
 
     @Autowired
-    public void setCreateCompanyDTOValidator(Validator<CreateCompanyDTO> createCompanyDTOValidator) {
+    public void setCreateCompanyDTOValidator(CreateCompanyValidator createCompanyDTOValidator) {
         this.createCompanyDTOValidator = createCompanyDTOValidator;
     }
 

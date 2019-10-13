@@ -7,6 +7,7 @@ import org.springframework.validation.BindException;
 
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.function.LongConsumer;
 import java.util.function.LongSupplier;
@@ -24,7 +25,7 @@ public class Cli {
 
     public Cli(Controller controller, InputStream in, PrintStream out) {
         this.controller = controller;
-        this.in = new Scanner(in);
+        this.in = new Scanner(in, Charset.defaultCharset().name());
         this.out = out;
     }
 

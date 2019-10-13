@@ -5,7 +5,7 @@ import com.excilys.cdb.model.User;
 import com.excilys.cdb.service.service.UserService;
 import com.excilys.cdb.shared.dto.CreateUserDTO;
 import com.excilys.cdb.shared.mapper.Mapper;
-import com.excilys.cdb.shared.validator.Validator;
+import com.excilys.cdb.shared.validator.CreateUserValidator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -23,10 +23,10 @@ public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final Mapper<CreateUserDTO, User> createUserDtoToUserMapper;
-    private final Validator<CreateUserDTO> createUserValidator;
+    private final CreateUserValidator createUserValidator;
 
     public UserController(UserService userService, PasswordEncoder passwordEncoder,
-                          Mapper<CreateUserDTO, User> createUserDtoToUserMapper, Validator<CreateUserDTO> createUserValidator) {
+                          Mapper<CreateUserDTO, User> createUserDtoToUserMapper, CreateUserValidator createUserValidator) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.createUserDtoToUserMapper = createUserDtoToUserMapper;

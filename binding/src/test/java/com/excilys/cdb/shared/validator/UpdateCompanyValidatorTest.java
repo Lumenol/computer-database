@@ -18,12 +18,12 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = SharedConfigurationTest.class)
 class UpdateCompanyValidatorTest {
-    private Validator<UpdateCompanyDTO> updateCompanyDTOValidator;
+    private UpdateCompanyValidator updateCompanyDTOValidator;
     private CompanyExistById companyExistByIdMock;
 
 
     @Autowired
-    public void setUpdateCompanyDTOValidator(Validator<UpdateCompanyDTO> updateCompanyDTOValidator) {
+    public void setUpdateCompanyDTOValidator(UpdateCompanyValidator updateCompanyDTOValidator) {
         this.updateCompanyDTOValidator = updateCompanyDTOValidator;
     }
 

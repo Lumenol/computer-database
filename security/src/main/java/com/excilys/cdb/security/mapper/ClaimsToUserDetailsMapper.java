@@ -8,59 +8,61 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 public class ClaimsToUserDetailsMapper implements Mapper<Claims, UserDetails> {
     @Override
     public UserDetails map(Claims claims) {
-        return new UserDetails() {
-            @Override
-            public Collection<? extends GrantedAuthority> getAuthorities() {
-                final Object authorisation = claims.get(HttpHeaders.AUTHORIZATION);
-                Stream<Object> stream;
-                if (authorisation instanceof String[]) {
-                    stream = Arrays.stream((String[]) authorisation);
-                } else if (authorisation instanceof Collection) {
-                    stream = ((Collection) authorisation).stream();
-                } else {
-                    stream = Stream.empty();
-                }
-                return stream.map(Object::toString).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-            }
+        return new MyUserDetails(claims);
+    }
 
-            @Override
-            public String getPassword() {
-                return null;
-            }
+    private static class MyUserDetails implements UserDetails {
+        private static final long serialVersionUID = 2670639839044154452L;
+        private final Claims claims;
 
-            @Override
-            public String getUsername() {
-                return claims.getSubject();
-            }
+        public MyUserDetails(Claims claims) {
+            this.claims = claims;
+        }
 
-            @Override
-            public boolean isAccountNonExpired() {
-                return true;
+        @Override
+        public Collection<? extends GrantedAuthority> getAuthorities() {
+            final ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();
+            for (Object o : (Collection) claims.get(HttpHeaders.AUTHORIZATION)) {
+                authorities.add(new SimpleGrantedAuthority(o.toString()));
             }
+            return authorities;
+        }
 
-            @Override
-            public boolean isAccountNonLocked() {
-                return true;
-            }
+        @Override
+        public String getPassword() {
+            return null;
+        }
 
-            @Override
-            public boolean isCredentialsNonExpired() {
-                return true;
-            }
+        @Override
+        public String getUsername() {
+            return claims.getSubject();
+        }
 
-            @Override
-            public boolean isEnabled() {
-                return true;
-            }
-        };
+        @Override
+        public boolean isAccountNonExpired() {
+            return true;
+        }
+
+        @Override
+        public boolean isAccountNonLocked() {
+            return true;
+        }
+
+        @Override
+        public boolean isCredentialsNonExpired() {
+            return true;
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
     }
 }
