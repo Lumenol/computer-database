@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -25,9 +26,8 @@ public class CompanyDAOImpl implements CompanyDAO {
     public static final QCompanyEntity Q_COMPANY_ENTITY = QCompanyEntity.companyEntity;
     private final Mapper<CompanyEntity, Company> companyEntityToCompanyMapper;
     private final Mapper<Company, CompanyEntity> companyToCompanyEntityMapper;
-    private EntityManager entityManager;
-
     private final JPAQueryFactory jpaQueryFactory;
+    private EntityManager entityManager;
 
     public CompanyDAOImpl(Mapper<CompanyEntity, Company> companyEntityToCompanyMapper, Mapper<Company, CompanyEntity> companyToCompanyEntityMapper, JPAQueryFactory jpaQueryFactory) {
         this.companyEntityToCompanyMapper = companyEntityToCompanyMapper;
@@ -71,7 +71,7 @@ public class CompanyDAOImpl implements CompanyDAO {
     @Override
     @LogAndWrapException(logger = CompanyDAO.class, exception = CompanyDAOException.class)
     public Optional<Company> findById(long id) {
-        return Optional.ofNullable(entityManager.find(CompanyEntity.class, id))
+        return Optional.ofNullable(entityManager).map(em -> em.find(CompanyEntity.class, id))
                 .map(companyEntityToCompanyMapper::map);
     }
 
@@ -80,7 +80,7 @@ public class CompanyDAOImpl implements CompanyDAO {
     @Transactional
     public void create(Company company) {
         CompanyEntity companyEntity = companyToCompanyEntityMapper.map(company);
-        entityManager.persist(companyEntity);
+        Objects.requireNonNull(entityManager).persist(companyEntity);
         company.setId(companyEntity.getId());
     }
 
@@ -89,7 +89,7 @@ public class CompanyDAOImpl implements CompanyDAO {
     @Transactional
     public void update(Company company) {
         final CompanyEntity companyEntity = companyToCompanyEntityMapper.map(company);
-        entityManager.merge(companyEntity);
+        Objects.requireNonNull(entityManager).merge(companyEntity);
     }
 
     private List<Company> mapAll(List<CompanyEntity> list) {

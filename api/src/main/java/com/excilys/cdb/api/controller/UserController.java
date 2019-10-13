@@ -9,7 +9,7 @@ import com.excilys.cdb.shared.mapper.Mapper;
 import com.excilys.cdb.shared.pagination.Page;
 import com.excilys.cdb.shared.pagination.PagingParameters;
 import com.excilys.cdb.shared.utils.Utils;
-import com.excilys.cdb.shared.validator.Validator;
+import com.excilys.cdb.shared.validator.CreateUserValidator;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,13 +32,13 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserService userService;
-    private final Validator<CreateUserDTO> createUserDTOValidator;
+    private final CreateUserValidator createUserDTOValidator;
     private final Mapper<CreateUserDTO, User> createUserDTOUserMapper;
     private final PasswordEncoder passwordEncoder;
     private final Mapper<User, UserDTO> userToDto;
     private final PagingParameters pagingParameters;
 
-    public UserController(UserService userService, Validator<CreateUserDTO> createUserDTOValidator, Mapper<CreateUserDTO, User> createUserDTOUserMapper, PasswordEncoder passwordEncoder, Mapper<User, UserDTO> userToDto, PagingParameters pagingParameters) {
+    public UserController(UserService userService, CreateUserValidator createUserDTOValidator, Mapper<CreateUserDTO, User> createUserDTOUserMapper, PasswordEncoder passwordEncoder, Mapper<User, UserDTO> userToDto, PagingParameters pagingParameters) {
         this.userService = userService;
         this.createUserDTOValidator = createUserDTOValidator;
         this.createUserDTOUserMapper = createUserDTOUserMapper;

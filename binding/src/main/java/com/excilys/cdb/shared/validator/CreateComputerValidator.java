@@ -7,7 +7,7 @@ import org.springframework.validation.Errors;
 import java.util.Objects;
 
 @Component
-public class CreateComputerValidator implements Validator<CreateComputerDTO> {
+public class CreateComputerValidator implements org.springframework.validation.Validator {
 
     private final ComputerValidatorUtils computerValidatorUtils;
 

@@ -7,7 +7,7 @@ import org.springframework.validation.Errors;
 import java.util.Objects;
 
 @Component
-public class CreateUserValidator implements Validator<CreateUserDTO> {
+public class CreateUserValidator implements org.springframework.validation.Validator {
 
     private final UserExistByLogin userExistByLogin;
 

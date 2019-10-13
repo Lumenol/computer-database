@@ -8,7 +8,7 @@ import org.springframework.validation.Validator;
 import java.util.Objects;
 
 @Component
-public class UpdateComputerValidator implements Validator, com.excilys.cdb.shared.validator.Validator<UpdateComputerDTO> {
+public class UpdateComputerValidator implements Validator {
     private final ComputerValidatorUtils computerValidatorUtils;
     private final ComputerExistById computerExistById;
 

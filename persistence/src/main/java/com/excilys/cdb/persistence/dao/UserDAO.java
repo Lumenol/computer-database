@@ -3,6 +3,7 @@ package com.excilys.cdb.persistence.dao;
 import com.excilys.cdb.model.User;
 import com.excilys.cdb.shared.pagination.Page;
 
+import javax.annotation.CheckReturnValue;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +21,7 @@ public interface UserDAO {
 
     void deleteById(long id);
 
+    @CheckReturnValue
     Optional<User> findById(long id);
 
     List<User> findAll();

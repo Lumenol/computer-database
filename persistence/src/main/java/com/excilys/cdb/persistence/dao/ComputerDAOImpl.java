@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
@@ -30,8 +31,8 @@ public class ComputerDAOImpl implements ComputerDAO {
     public static final QComputerEntity Q_COMPUTER_ENTITY = QComputerEntity.computerEntity;
     private final Mapper<ComputerEntity, Computer> computerEntityToComputerMapper;
     private final Mapper<Computer, ComputerEntity> computerToComputerEntityMapper;
-    private EntityManager entityManager;
     private final JPAQueryFactory jpaQueryFactory;
+    private EntityManager entityManager;
 
     public ComputerDAOImpl(Mapper<ComputerEntity, Computer> computerEntityToComputerMapper,
                            Mapper<Computer, ComputerEntity> computerToComputerEntityMapper, JPAQueryFactory jpaQueryFactory) {
@@ -54,7 +55,7 @@ public class ComputerDAOImpl implements ComputerDAO {
     }
 
     private Long countWithNameOrCompanyNameLike(String name) {
-        final String pattern = "%" + name.toUpperCase() + "%";
+        final String pattern = "%" + name.toUpperCase(Locale.ENGLISH) + "%";
         return jpaQueryFactory.from(Q_COMPUTER_ENTITY).leftJoin(Q_COMPUTER_ENTITY.manufacturer).where(Q_COMPUTER_ENTITY.name.toUpperCase().like(pattern).or(Q_COMPUTER_ENTITY.manufacturer.name.toUpperCase().like(pattern))).fetchCount();
     }
 
@@ -63,7 +64,7 @@ public class ComputerDAOImpl implements ComputerDAO {
     @Transactional
     public void create(Computer computer) {
         final ComputerEntity cEntity = computerToComputerEntityMapper.map(computer);
-        entityManager.persist(cEntity);
+        Objects.requireNonNull(entityManager).persist(cEntity);
         computer.setId(cEntity.getId());
     }
 
@@ -94,7 +95,7 @@ public class ComputerDAOImpl implements ComputerDAO {
     }
 
     private List<Computer> findAllWithNameOrCompanyNameLike(String name, Pageable pageable) {
-        final String pattern = "%" + name.toUpperCase() + "%";
+        final String pattern = "%" + name.toUpperCase(Locale.ENGLISH) + "%";
         return jpaQueryFactory.selectFrom(Q_COMPUTER_ENTITY).leftJoin(Q_COMPUTER_ENTITY.manufacturer)
                 .where(Q_COMPUTER_ENTITY.name.toUpperCase().like(pattern).or(Q_COMPUTER_ENTITY.manufacturer.name.toUpperCase().like(pattern)))
                 .offset(pageable.getPage().getOffset()).limit(pageable.getPage().getSize())
@@ -106,7 +107,7 @@ public class ComputerDAOImpl implements ComputerDAO {
     @Override
     @LogAndWrapException(logger = ComputerDAO.class, exception = ComputerDAOException.class)
     public Optional<Computer> findById(long id) {
-        return Optional.ofNullable(entityManager.find(ComputerEntity.class, id))
+        return Optional.ofNullable(entityManager).map(em -> em.find(ComputerEntity.class, id))
                 .map(computerEntityToComputerMapper::map);
     }
 
@@ -134,9 +135,9 @@ public class ComputerDAOImpl implements ComputerDAO {
                 break;
         }
         if (orderBy.getDirection() == OrderBy.Direction.DESC) {
-            direction = f -> f.desc();
+            direction = ComparableExpressionBase::desc;
         } else {
-            direction = f -> f.asc();
+            direction = ComparableExpressionBase::asc;
         }
 
         return new OrderSpecifier[]{direction.apply(field).nullsLast(), direction.apply(name), direction.apply(id)};
@@ -159,6 +160,6 @@ public class ComputerDAOImpl implements ComputerDAO {
     @Transactional
     public void update(Computer computer) {
         final ComputerEntity entity = computerToComputerEntityMapper.map(computer);
-        entityManager.merge(entity);
+        Objects.requireNonNull(entityManager).merge(entity);
     }
 }

@@ -21,11 +21,11 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = SharedConfigurationTest.class)
 public class CreateComputerValidatorTest {
 
-    private Validator<CreateComputerDTO> createComputerValidator;
+    private CreateComputerValidator createComputerValidator;
     private CompanyExistById companyExistByIdMock;
 
     @Autowired
-    public void setCreateComputerValidator(Validator<CreateComputerDTO> createComputerValidator) {
+    public void setCreateComputerValidator(CreateComputerValidator createComputerValidator) {
         this.createComputerValidator = createComputerValidator;
     }
 

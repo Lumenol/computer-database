@@ -10,7 +10,8 @@ import com.excilys.cdb.shared.mapper.Mapper;
 import com.excilys.cdb.shared.pagination.Page;
 import com.excilys.cdb.shared.pagination.PagingParameters;
 import com.excilys.cdb.shared.utils.Utils;
-import com.excilys.cdb.shared.validator.Validator;
+import com.excilys.cdb.shared.validator.CreateCompanyValidator;
+import com.excilys.cdb.shared.validator.UpdateCompanyValidator;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,10 +34,10 @@ public class CompanyController {
     private final PagingParameters pagingParameters;
     private final Mapper<CreateCompanyDTO, Company> createCompanyDTOCompanyMapper;
     private final Mapper<UpdateCompanyDTO, Company> updateCompanyDTOCompanyMapper;
-    private final Validator<UpdateCompanyDTO> updateCompanyDTOValidator;
-    private final Validator<CreateCompanyDTO> createCompanyDTOValidator;
+    private final UpdateCompanyValidator updateCompanyDTOValidator;
+    private final CreateCompanyValidator createCompanyDTOValidator;
 
-    public CompanyController(CompanyService companyService, Mapper<Company, CompanyDTO> companyToDto, PagingParameters pagingParameters, Mapper<CreateCompanyDTO, Company> createCompanyDTOCompanyMapper, Mapper<UpdateCompanyDTO, Company> updateCompanyDTOCompanyMapper, Validator<UpdateCompanyDTO> updateCompanyDTOValidator, Validator<CreateCompanyDTO> createCompanyDTOValidator) {
+    public CompanyController(CompanyService companyService, Mapper<Company, CompanyDTO> companyToDto, PagingParameters pagingParameters, Mapper<CreateCompanyDTO, Company> createCompanyDTOCompanyMapper, Mapper<UpdateCompanyDTO, Company> updateCompanyDTOCompanyMapper, UpdateCompanyValidator updateCompanyDTOValidator, CreateCompanyValidator createCompanyDTOValidator) {
         this.companyService = companyService;
         this.companyToDto = companyToDto;
         this.pagingParameters = pagingParameters;

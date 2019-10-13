@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -36,13 +35,10 @@ public class UserServiceImpl implements UserService, UserExistByLogin {
     @LogAndWrapException(logger = UserService.class, exception = UserServiceException.class)
     @Transactional
     public void updateRoles(Long id, Set<Role> roles) {
-        Objects.nonNull(roles);
-        final Optional<User> user = userDAO.findById(id);
-        if (user.isPresent()) {
-            final User u = user.get();
-            u.setRoles(roles);
-            userDAO.update(u);
-        }
+        userDAO.findById(id).ifPresent(user -> {
+            user.setRoles(roles);
+            userDAO.update(user);
+        });
     }
 
     @Override
